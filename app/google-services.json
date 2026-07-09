@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "784862520502",
+    "project_id": "englishai-7b0b3",
+    "storage_bucket": "englishai-7b0b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784862520502:android:85ea95bde6840fb7b07217",
+        "android_client_info": {
+          "package_name": "adu.nttu.englishai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCWclDaUlEhQsV7IXJovPBulkcCFFMXuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
