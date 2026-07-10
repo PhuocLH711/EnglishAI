@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#F9F9F9">
+
+    <FrameLayout
+        android:id="@+id/cardContainer"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:background="@drawable/bg_button_quiz"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/tvCardBack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Từ vựng\n(Danh từ)"
+            android:textSize="32sp"
+            android:textColor="#E53935"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:alpha="0"
+            android:rotationY="180" />
+
+        <TextView
+            android:id="@+id/tvCardFront"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Vocabulary"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:gravity="center" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="👆 Chạm vào thẻ để lật"
+        android:textSize="16sp"
+        android:textColor="#757575"
+        android:textStyle="italic"/>
+</RelativeLayout>

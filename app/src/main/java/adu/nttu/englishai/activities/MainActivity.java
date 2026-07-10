@@ -1,45 +1,56 @@
 package adu.nttu.englishai.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import adu.nttu.englishai.R;
+import adu.nttu.englishai.fragments.FlashcardFragment;
+import adu.nttu.englishai.fragments.GameFragment;
+import adu.nttu.englishai.fragments.HomeFragment;
+import adu.nttu.englishai.fragments.SpeakingFragment;
+import adu.nttu.englishai.fragments.VocabularyFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnLogout;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        btnLogout = findViewById(R.id.btnLogout);
+        db = FirebaseFirestore.getInstance();
 
-        btnLogout.setOnClickListener(view -> logoutUser());
-    }
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
-    private void logoutUser() {
-        firebaseAuth.signOut();
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
 
-        Intent intent = new Intent(
-                MainActivity.this,
-                LoginActivity.class
-        );
+            if (itemId == R.id.nav_home) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment())
+                        .commit();
+                return true;
+            } else if (itemId == R.id.nav_vocabulary) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SpeakingFragment())
+                        .commit();
+                return true;
+            } else if (itemId == R.id.nav_game) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new GameFragment())
+                        .commit();
+                return true;
+            }
+            return false;
+        });
 
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
-
-        startActivity(intent);
-        finish();
+        // Mở HomeFragment đầu tiên khi vào app
+        if (savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_home);
+        }
     }
 }
