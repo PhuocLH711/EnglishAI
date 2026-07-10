@@ -5,14 +5,17 @@ plugins {
 
 android {
     namespace = "adu.nttu.englishai"
+
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
         applicationId = "adu.nttu.englishai"
-        minSdk = 37
+
+        minSdk = 26
         targetSdk = 37
+
         versionCode = 1
         versionName = "1.0"
 
@@ -26,13 +29,14 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-dependencies {
 
+dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
