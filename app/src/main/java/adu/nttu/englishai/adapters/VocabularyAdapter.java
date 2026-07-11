@@ -5,7 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.content.Intent;
 
+import adu.nttu.englishai.activities.VocabularyDetailActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,12 +40,15 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
         Vocabulary vocabulary = vocabularyList.get(position);
 
         holder.tvEnglish.setText(vocabulary.getEnglishWord());
-
         holder.tvVietnamese.setText(vocabulary.getVietnameseMeaning());
-
         holder.tvPronunciation.setText(vocabulary.getPronunciation());
-
         holder.tvCategory.setText(vocabulary.getCategory());
+
+        if (vocabulary.isLearned()) {
+            holder.tvLearnedStatus.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvLearnedStatus.setVisibility(View.GONE);
+        }
         if (vocabulary.isFavorite()) {
             holder.btnFavorite.setImageResource(
                     android.R.drawable.btn_star_big_on
@@ -54,10 +59,40 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
             );
         }
 
+        // Bấm ngôi sao để đổi trạng thái yêu thích
         holder.btnFavorite.setOnClickListener(view -> {
             vocabulary.setFavorite(!vocabulary.isFavorite());
 
-            notifyItemChanged(holder.getBindingAdapterPosition());
+            int currentPosition = holder.getBindingAdapterPosition();
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                notifyItemChanged(currentPosition);
+            }
+        });
+
+        // Bấm vào thẻ từ vựng để mở trang chi tiết
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(
+                    view.getContext(),
+                    VocabularyDetailActivity.class
+            );
+
+            intent.putExtra("id", vocabulary.getId());
+            intent.putExtra("englishWord", vocabulary.getEnglishWord());
+            intent.putExtra(
+                    "vietnameseMeaning",
+                    vocabulary.getVietnameseMeaning()
+            );
+            intent.putExtra(
+                    "pronunciation",
+                    vocabulary.getPronunciation()
+            );
+            intent.putExtra("example", vocabulary.getExample());
+            intent.putExtra("category", vocabulary.getCategory());
+            intent.putExtra("level", vocabulary.getLevel());
+            intent.putExtra("favorite", vocabulary.isFavorite());
+
+            view.getContext().startActivity(intent);
         });
     }
 
@@ -67,7 +102,7 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
+        TextView tvLearnedStatus;
         TextView tvEnglish;
         TextView tvVietnamese;
         TextView tvPronunciation;
@@ -76,7 +111,7 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            tvLearnedStatus = itemView.findViewById(R.id.tvLearnedStatus);
             tvEnglish = itemView.findViewById(R.id.tvEnglishWord);
             tvVietnamese = itemView.findViewById(R.id.tvVietnameseMeaning);
             tvPronunciation = itemView.findViewById(R.id.tvPronunciation);

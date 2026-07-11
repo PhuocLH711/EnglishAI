@@ -19,9 +19,13 @@ import java.util.Locale;
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.adapters.VocabularyAdapter;
 import adu.nttu.englishai.models.Vocabulary;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class VocabularyFragment extends Fragment {
-
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
     private RecyclerView recyclerVocabulary;
     private SearchView searchVocabulary;
 
@@ -32,6 +36,15 @@ public class VocabularyFragment extends Fragment {
 
     public VocabularyFragment() {
         // Constructor rỗng bắt buộc cho Fragment
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (firebaseAuth != null && firestore != null) {
+            loadLearnedStatus();
+        }
     }
 
     @Override
@@ -53,7 +66,8 @@ public class VocabularyFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         super.onViewCreated(view, savedInstanceState);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         recyclerVocabulary = view.findViewById(R.id.recyclerVocabulary);
         searchVocabulary = view.findViewById(R.id.searchVocabulary);
         searchVocabulary.setIconifiedByDefault(false);
@@ -73,8 +87,39 @@ public class VocabularyFragment extends Fragment {
         recyclerVocabulary.setAdapter(vocabularyAdapter);
 
         setupSearch();
+        loadLearnedStatus();
     }
+    private void loadLearnedStatus() {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
+        if (currentUser == null) {
+            return;
+        }
+
+        firestore.collection("users")
+                .document(currentUser.getUid())
+                .collection("learnedWords")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for (Vocabulary vocabulary : vocabularyList) {
+                        vocabulary.setLearned(false);
+                    }
+
+                    queryDocumentSnapshots.getDocuments().forEach(document -> {
+                        String learnedId = document.getId();
+
+                        for (Vocabulary vocabulary : vocabularyList) {
+                            if (vocabulary.getId().equals(learnedId)) {
+                                vocabulary.setLearned(true);
+                                break;
+                            }
+                        }
+                    });
+
+                    vocabularyAdapter.notifyDataSetChanged();
+                });
+    }
     private void createSampleVocabulary() {
         vocabularyList.clear();
 
