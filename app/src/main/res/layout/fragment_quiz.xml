@@ -1,60 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="#FFFFFF">
+    android:background="#F5F7FA"
+    android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tvQuestion"
+    <!-- Khung nội dung câu hỏi và đáp án -->
+    <LinearLayout
+        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nghĩa của từ 'Vocabulary' là gì?"
-        android:textColor="#333333"
-        android:textSize="24sp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn đáp án đúng nhất"
+            android:textSize="16sp"
+            android:textColor="#757575"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Thẻ chứa Câu hỏi có đổ bóng xịn sò -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="28dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡 CÂU HỎI"
+                    android:textSize="12sp"
+                    android:textColor="#1A73E8"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nghĩa của từ 'Apple' là gì?"
+                    android:textColor="#1A1A1A"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 4 Nút đáp án bo góc, có đổ bóng elevation -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAnswer1"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#FFFFFF"
+            android:text="A. Quả chuối"
+            android:textColor="#333333"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAnswer2"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#FFFFFF"
+            android:text="B. Quả táo"
+            android:textColor="#333333"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAnswer3"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#FFFFFF"
+            android:text="C. Con mèo"
+            android:textColor="#333333"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAnswer4"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#FFFFFF"
+            android:text="D. Ngữ pháp"
+            android:textColor="#333333"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+    </LinearLayout>
+
+    <!-- Nút "Câu tiếp theo" nhỏ gọn nằm ở góc dưới bên phải -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNextQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_quiz"
+        android:backgroundTint="#1A73E8"
+        android:text="Tiếp theo ➡️"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        android:layout_marginBottom="40dp" />
+        android:paddingHorizontal="20dp"
+        android:visibility="gone"
+        android:elevation="6dp"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAnswer1"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="A. Ngữ pháp"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
+    <!-- Khung chứa hiệu ứng bắn pháo hoa lúc trả lời đúng -->
+    <TextView
+        android:id="@+id/tvConfetti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="🏆"
+        android:textSize="48sp"
+        android:visibility="gone"
+        android:elevation="10dp"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAnswer2"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="B. Phát âm"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAnswer3"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="C. Từ vựng"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAnswer4"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="D. Trò chơi"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
-</LinearLayout>
+</RelativeLayout>

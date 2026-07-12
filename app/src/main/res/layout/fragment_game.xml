@@ -1,41 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="#FFFFFF">
+    android:background="#F5F7FA"
+    android:padding="20dp"
+    android:gravity="center_horizontal">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chọn Trò Chơi"
-        android:textColor="#333333"
-        android:textSize="28sp"
+        android:text="🎮 Khu Vực Trò Chơi"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        android:layout_marginBottom="40dp" />
+        android:textColor="#1A1A1A"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnOpenQuiz"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="📝 Trắc nghiệm (Quiz)"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content"
+        android:text="Vừa học vừa chơi, nhớ từ vựng cực lâu!"
+        android:textSize="15sp"
+        android:textColor="#757575"
+        android:layout_marginBottom="28dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnOpenFlashcard"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardQuiz"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/bg_button_quiz"
-        android:text="🎴 Thẻ lật (Flashcard)"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#FFFFFF"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:text="📝"
+                android:textSize="36sp"
+                android:gravity="center"
+                android:background="#E8F0FE"
+                android:layout_marginEnd="16dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trắc Nghiệm (Quiz)"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thử thách chọn đáp án đúng với câu hỏi ngẫu nhiên."
+                    android:textSize="13sp"
+                    android:textColor="#757575"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOpenQuiz"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Chơi ngay"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_quiz"
+                android:backgroundTint="#1A73E8"
+                android:paddingHorizontal="16dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardFlashcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#FFFFFF"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:text="🎴"
+                android:textSize="36sp"
+                android:gravity="center"
+                android:background="#E6F4EA"
+                android:layout_marginEnd="16dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thẻ Lật (Flashcard)"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lật thẻ ghi nhớ mặt chữ và phản xạ nghĩa nhanh chóng."
+                    android:textSize="13sp"
+                    android:textColor="#757575"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOpenFlashcard"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Học ngay"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_quiz"
+                android:backgroundTint="#188038"
+                android:paddingHorizontal="16dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

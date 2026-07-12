@@ -30,6 +30,9 @@ public class VocabularyFragment extends Fragment {
     private RecyclerView recyclerVocabulary;
     private SearchView searchVocabulary;
 
+    // 1. Khai báo thêm biến khung thông báo Empty State
+    private View emptyStateLayout;
+
     private VocabularyAdapter vocabularyAdapter;
 
     private final List<Vocabulary> vocabularyList = new ArrayList<>();
@@ -71,6 +74,10 @@ public class VocabularyFragment extends Fragment {
         firestore = FirebaseFirestore.getInstance();
         recyclerVocabulary = view.findViewById(R.id.recyclerVocabulary);
         searchVocabulary = view.findViewById(R.id.searchVocabulary);
+
+        // 2. Ánh xạ ID từ file XML
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
+
         searchVocabulary.setIconifiedByDefault(false);
         searchVocabulary.setIconified(false);
         searchVocabulary.clearFocus();
@@ -89,7 +96,11 @@ public class VocabularyFragment extends Fragment {
 
         setupSearch();
         loadLearningStatus();
+
+        // Kiểm tra trạng thái hiển thị lần đầu
+        updateEmptyStateVisibility();
     }
+
     private void loadLearningStatus() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -126,6 +137,7 @@ public class VocabularyFragment extends Fragment {
                     }
 
                     vocabularyAdapter.notifyDataSetChanged();
+                    updateEmptyStateVisibility();
                 })
                 .addOnFailureListener(exception -> {
                     for (Vocabulary vocabulary : vocabularyList) {
@@ -133,8 +145,10 @@ public class VocabularyFragment extends Fragment {
                     }
 
                     vocabularyAdapter.notifyDataSetChanged();
+                    updateEmptyStateVisibility();
                 });
     }
+
     private void createSampleVocabulary() {
         vocabularyList.clear();
 
@@ -291,5 +305,21 @@ public class VocabularyFragment extends Fragment {
         }
 
         vocabularyAdapter.notifyDataSetChanged();
+
+        // 3. Cập nhật ẩn/hiện kính lúp khi tìm kiếm
+        updateEmptyStateVisibility();
+    }
+
+    // Hàm phụ trợ để ẩn/hiện Empty State UI
+    private void updateEmptyStateVisibility() {
+        if (emptyStateLayout != null && recyclerVocabulary != null) {
+            if (filteredList.isEmpty()) {
+                recyclerVocabulary.setVisibility(View.GONE);
+                emptyStateLayout.setVisibility(View.VISIBLE);
+            } else {
+                recyclerVocabulary.setVisibility(View.VISIBLE);
+                emptyStateLayout.setVisibility(View.GONE);
+            }
+        }
     }
 }

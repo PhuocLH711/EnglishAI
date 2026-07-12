@@ -1,25 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="40dp">
+    android:background="#F5F7FA"
+    android:paddingTop="16dp">
 
-    <SearchView
-        android:id="@+id/searchVocabulary"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
+        android:text="📚 Khám Phá Từ Vựng"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#1A1A1A"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt" />
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#FFFFFF">
 
+        <SearchView
+            android:id="@+id/searchVocabulary"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@android:color/transparent"
+            android:queryHint="Tìm từ tiếng Anh, nghĩa tiếng Việt..." />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔍"
+            android:textSize="64sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không tìm thấy từ vựng nào!"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#555555" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn thử kiểm tra lại chính tả xem sao nhé"
+            android:textSize="14sp"
+            android:textColor="#888888"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerVocabulary"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingTop="8dp"
+        android:paddingBottom="16dp"
         android:clipToPadding="false" />
 
 </LinearLayout>
