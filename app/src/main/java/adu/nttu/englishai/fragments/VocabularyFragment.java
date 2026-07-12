@@ -21,6 +21,7 @@ import adu.nttu.englishai.adapters.VocabularyAdapter;
 import adu.nttu.englishai.models.Vocabulary;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class VocabularyFragment extends Fragment {
@@ -43,7 +44,7 @@ public class VocabularyFragment extends Fragment {
         super.onResume();
 
         if (firebaseAuth != null && firestore != null) {
-            loadLearnedStatus();
+            loadLearningStatus();
         }
     }
 
@@ -87,9 +88,9 @@ public class VocabularyFragment extends Fragment {
         recyclerVocabulary.setAdapter(vocabularyAdapter);
 
         setupSearch();
-        loadLearnedStatus();
+        loadLearningStatus();
     }
-    private void loadLearnedStatus() {
+    private void loadLearningStatus() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
         if (currentUser == null) {
@@ -98,24 +99,38 @@ public class VocabularyFragment extends Fragment {
 
         firestore.collection("users")
                 .document(currentUser.getUid())
-                .collection("learnedWords")
+                .collection("wordProgress")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
                     for (Vocabulary vocabulary : vocabularyList) {
-                        vocabulary.setLearned(false);
+                        vocabulary.setLearningStatus("NOT_STARTED");
                     }
 
-                    queryDocumentSnapshots.getDocuments().forEach(document -> {
-                        String learnedId = document.getId();
+                    for (DocumentSnapshot document
+                            : queryDocumentSnapshots.getDocuments()) {
+
+                        String vocabularyId = document.getId();
+                        String status = document.getString("status");
 
                         for (Vocabulary vocabulary : vocabularyList) {
-                            if (vocabulary.getId().equals(learnedId)) {
-                                vocabulary.setLearned(true);
+                            if (vocabulary.getId().equals(vocabularyId)) {
+                                vocabulary.setLearningStatus(
+                                        status != null
+                                                ? status
+                                                : "NOT_STARTED"
+                                );
                                 break;
                             }
                         }
-                    });
+                    }
+
+                    vocabularyAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(exception -> {
+                    for (Vocabulary vocabulary : vocabularyList) {
+                        vocabulary.setLearningStatus("NOT_STARTED");
+                    }
 
                     vocabularyAdapter.notifyDataSetChanged();
                 });

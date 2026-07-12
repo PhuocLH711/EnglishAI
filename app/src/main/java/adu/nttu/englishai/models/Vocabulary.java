@@ -1,7 +1,7 @@
 package adu.nttu.englishai.models;
 
 public class Vocabulary {
-
+    private String learningStatus;
     private String id;
     private String englishWord;
     private String vietnameseMeaning;
@@ -16,6 +16,14 @@ public class Vocabulary {
     public Vocabulary() {
     }
 
+    public String getLearningStatus() {
+        return learningStatus;
+    }
+
+    public void setLearningStatus(String learningStatus) {
+        this.learningStatus = learningStatus;
+
+    }
     public Vocabulary(
             String id,
             String englishWord,
@@ -32,8 +40,11 @@ public class Vocabulary {
         this.example = example;
         this.category = category;
         this.level = level;
+
         this.favorite = false;
         this.learned = false;
+
+        this.learningStatus = "NOT_STARTED";
     }
 
     public String getId() {

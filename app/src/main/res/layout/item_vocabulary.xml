@@ -23,18 +23,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="#D9F7E8"
             android:paddingStart="10dp"
             android:paddingTop="4dp"
             android:paddingEnd="10dp"
             android:paddingBottom="4dp"
-            android:text="Đã học"
             android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvCategory"
             app:layout_constraintStart_toEndOf="@id/tvCategory"
             app:layout_constraintTop_toTopOf="@id/tvCategory" />
-
         <TextView
             android:id="@+id/tvEnglishWord"
             android:layout_width="0dp"

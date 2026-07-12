@@ -4,12 +4,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Nơi hiển thị các Fragment -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation" />
 
+    <!-- Khung nhân vật AI nổi -->
+    <LinearLayout
+        android:id="@+id/layoutAiTutor"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/bg_ai_tutor"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imgAiTutor"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:contentDescription="Giáo viên AI"
+            android:scaleType="centerCrop"
+            android:src="@drawable/teacher_jack" />
+
+        <TextView
+            android:id="@+id/tvAiTutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Emma AI"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAiTutorHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chạm để hỏi"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

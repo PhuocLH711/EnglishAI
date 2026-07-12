@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
-
+import android.graphics.Color;
 import adu.nttu.englishai.activities.VocabularyDetailActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,8 +44,22 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
         holder.tvPronunciation.setText(vocabulary.getPronunciation());
         holder.tvCategory.setText(vocabulary.getCategory());
 
-        if (vocabulary.isLearned()) {
+        String status = vocabulary.getLearningStatus();
+
+        if ("LEARNING".equals(status)) {
             holder.tvLearnedStatus.setVisibility(View.VISIBLE);
+            holder.tvLearnedStatus.setText("🟡 Đang học");
+            holder.tvLearnedStatus.setBackgroundColor(
+                    android.graphics.Color.parseColor("#FFF3CD")
+            );
+
+        } else if ("LEARNED".equals(status)) {
+            holder.tvLearnedStatus.setVisibility(View.VISIBLE);
+            holder.tvLearnedStatus.setText("🟢 Đã học");
+            holder.tvLearnedStatus.setBackgroundColor(
+                    android.graphics.Color.parseColor("#D9F7E8")
+            );
+
         } else {
             holder.tvLearnedStatus.setVisibility(View.GONE);
         }

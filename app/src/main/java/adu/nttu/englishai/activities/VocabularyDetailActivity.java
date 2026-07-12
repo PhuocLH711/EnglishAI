@@ -23,7 +23,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
-
+    private String learningStatus = "NOT_STARTED";
     private TextView tvEnglishWord;
     private TextView tvPronunciation;
     private TextView tvMeaning;
@@ -97,7 +97,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         tvCategory.setText("Chủ đề: " + category);
         tvLevel.setText("Mức độ: " + level);
 
-        checkFavoriteFromFirestore();
+        checkLearningStatusFromFirestore();
     }
 
     private void setupTextToSpeech() {
@@ -129,10 +129,9 @@ public class VocabularyDetailActivity extends AppCompatActivity {
     }
 
     private void setupEvents() {
-        btnLearned.setOnClickListener(view -> toggleLearned());
         btnSpeak.setOnClickListener(view -> speakWord());
-
         btnFavoriteDetail.setOnClickListener(view -> toggleFavorite());
+        btnLearned.setOnClickListener(view -> changeLearningStatus());
     }
 
     private void speakWord() {
@@ -150,7 +149,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
 
     }
 
-    private void toggleLearned() {
+    private void changeLearningStatus() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
         if (currentUser == null) {
@@ -171,13 +170,15 @@ public class VocabularyDetailActivity extends AppCompatActivity {
             return;
         }
 
-        btnLearned.setEnabled(false);
-
-        if (isLearned) {
-            removeLearnedWord(currentUser.getUid());
+        if ("NOT_STARTED".equals(learningStatus)) {
+            learningStatus = "LEARNING";
+        } else if ("LEARNING".equals(learningStatus)) {
+            learningStatus = "LEARNED";
         } else {
-            saveLearnedWord(currentUser.getUid());
+            learningStatus = "NOT_STARTED";
         }
+
+        saveLearningStatus(currentUser.getUid());
     }
     private void saveLearnedWord(String userId) {
         Map<String, Object> learnedData = new HashMap<>();
@@ -222,6 +223,131 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                     ).show();
                 });
     }
+
+    private void saveLearningStatus(String userId) {
+        btnLearned.setEnabled(false);
+
+        if ("NOT_STARTED".equals(learningStatus)) {
+            firestore.collection("users")
+                    .document(userId)
+                    .collection("wordProgress")
+                    .document(vocabularyId)
+                    .delete()
+                    .addOnSuccessListener(unused -> {
+                        updateLearningButton();
+                        btnLearned.setEnabled(true);
+
+                        Toast.makeText(
+                                this,
+                                "Đã chuyển về chưa học",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    })
+                    .addOnFailureListener(exception -> {
+                        btnLearned.setEnabled(true);
+
+                        Toast.makeText(
+                                this,
+                                "Cập nhật thất bại: "
+                                        + exception.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    });
+
+            return;
+        }
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("id", vocabularyId);
+        data.put("englishWord", englishWord);
+        data.put("vietnameseMeaning", tvMeaning.getText().toString());
+        data.put("pronunciation", tvPronunciation.getText().toString());
+        data.put("status", learningStatus);
+        data.put("updatedAt", System.currentTimeMillis());
+
+        firestore.collection("users")
+                .document(userId)
+                .collection("wordProgress")
+                .document(vocabularyId)
+                .set(data)
+                .addOnSuccessListener(unused -> {
+                    updateLearningButton();
+                    btnLearned.setEnabled(true);
+
+                    Toast.makeText(
+                            this,
+                            "Đã cập nhật trạng thái",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                })
+                .addOnFailureListener(exception -> {
+                    btnLearned.setEnabled(true);
+
+                    Toast.makeText(
+                            this,
+                            "Cập nhật thất bại: "
+                                    + exception.getMessage(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                });
+    }
+
+    private void checkLearningStatusFromFirestore() {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser == null
+                || vocabularyId == null
+                || vocabularyId.isEmpty()) {
+
+            learningStatus = "NOT_STARTED";
+            updateLearningButton();
+            return;
+        }
+
+        firestore.collection("users")
+                .document(currentUser.getUid())
+                .collection("wordProgress")
+                .document(vocabularyId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String status =
+                                documentSnapshot.getString("status");
+
+                        if (status != null) {
+                            learningStatus = status;
+                        } else {
+                            learningStatus = "NOT_STARTED";
+                        }
+                    } else {
+                        learningStatus = "NOT_STARTED";
+                    }
+
+                    updateLearningButton();
+                })
+                .addOnFailureListener(exception -> {
+                    learningStatus = "NOT_STARTED";
+                    updateLearningButton();
+                });
+    }
+
+    private void updateLearningButton() {
+        switch (learningStatus) {
+            case "LEARNING":
+                btnLearned.setText("🟡 Đang học");
+                break;
+
+            case "LEARNED":
+                btnLearned.setText("🟢 Đã học");
+                break;
+
+            default:
+                btnLearned.setText("⚪ Chưa học");
+                break;
+        }
+    }
+
     private void removeLearnedWord(String userId) {
         firestore.collection("users")
                 .document(userId)
