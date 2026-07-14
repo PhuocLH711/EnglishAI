@@ -35,17 +35,30 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
-    implementation("com.airbnb.android:lottie:6.6.7")
-    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
+
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
+
+    // Firebase AI Logic
+    implementation("com.google.firebase:firebase-ai")
+
+    // App Check cho lúc chạy máy ảo/debug
+    implementation("com.google.firebase:firebase-appcheck-debug")
+
+    // Firebase AI Logic Java cần Guava
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // Dùng cho phản hồi dạng streaming
+    implementation("org.reactivestreams:reactive-streams:1.0.4")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
