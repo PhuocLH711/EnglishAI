@@ -13,7 +13,9 @@ import com.google.firebase.ai.type.Content;
 import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerationConfig;
 import com.google.firebase.ai.type.GenerativeBackend;
+import java.util.List;
 
+import adu.nttu.englishai.models.AiMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -181,6 +183,84 @@ public class GeminiManager {
             default:
                 return 0.45f;
         }
+    }
+
+    public void restoreConversation(
+            @NonNull String topic,
+            @NonNull List<AiMessage> savedMessages
+    ) {
+        currentTopic = topic;
+
+        GenerationConfig generationConfig =
+                GenerationConfig.builder()
+                        .setCandidateCount(1)
+                        .setMaxOutputTokens(700)
+                        .setTemperature(getTemperature(topic))
+                        .build();
+
+        GenerativeModel generativeModel =
+                FirebaseAI.getInstance(
+                        GenerativeBackend.googleAI()
+                ).generativeModel(
+                        "gemini-3.1-flash-lite",
+                        generationConfig
+                );
+
+        model = GenerativeModelFutures.from(generativeModel);
+
+        List<Content> history = new ArrayList<>();
+
+        // Prompt điều khiển AI theo chủ đề
+        history.add(
+                new Content.Builder()
+                        .setRole("user")
+                        .addText(buildInitialInstruction(topic))
+                        .build()
+        );
+
+        history.add(
+                new Content.Builder()
+                        .setRole("model")
+                        .addText(
+                                "Đã hiểu. Tôi sẽ hỗ trợ theo đúng chủ đề này."
+                        )
+                        .build()
+        );
+
+        /*
+         * Chỉ khôi phục tối đa 30 tin nhắn gần nhất
+         * để tránh lịch sử quá dài.
+         */
+        int startIndex = Math.max(
+                savedMessages.size() - 30,
+                0
+        );
+
+        for (int index = startIndex;
+             index < savedMessages.size();
+             index++) {
+
+            AiMessage message = savedMessages.get(index);
+
+            if (message == null
+                    || message.getContent() == null
+                    || message.getContent().trim().isEmpty()) {
+                continue;
+            }
+
+            String role = message.isUser()
+                    ? "user"
+                    : "model";
+
+            history.add(
+                    new Content.Builder()
+                            .setRole(role)
+                            .addText(message.getContent().trim())
+                            .build()
+            );
+        }
+
+        chat = model.startChat(history);
     }
 
     private String buildMessagePrompt(String question) {

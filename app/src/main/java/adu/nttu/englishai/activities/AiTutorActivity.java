@@ -18,21 +18,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.adapters.ChatMessageAdapter;
 import adu.nttu.englishai.ai.AiTopicManager;
+import adu.nttu.englishai.ai.ChatRepository;
+import adu.nttu.englishai.ai.ConversationManager;
 import adu.nttu.englishai.ai.GeminiManager;
 import adu.nttu.englishai.models.AiMessage;
 import adu.nttu.englishai.utils.SpeechRecognitionManager;
 
 public class AiTutorActivity extends AppCompatActivity {
 
+    private ActivityResultLauncher<Intent> historyLauncher;
+    private ActivityResultLauncher<Intent> speechLauncher;
+
     private TextView tvAiGuideMessage;
     private TextView tvSelectedTopic;
-
     private EditText edtAiQuestion;
 
     private ImageButton btnBackAi;
@@ -47,9 +54,9 @@ public class AiTutorActivity extends AppCompatActivity {
 
     private ChatMessageAdapter messageAdapter;
     private GeminiManager geminiManager;
+    private ChatRepository chatRepository;
+    private ConversationManager conversationManager;
     private SpeechRecognitionManager speechManager;
-
-    private ActivityResultLauncher<Intent> speechLauncher;
 
     private String selectedTopic = AiTopicManager.GENERAL;
     private String selectedTopicName =
@@ -67,87 +74,132 @@ public class AiTutorActivity extends AppCompatActivity {
         initViews();
         setupRecyclerView();
         setupGemini();
+        setupChatRepository();
         setupSpeechRecognition();
+        setupHistoryLauncher();
         setupEvents();
         updateTopicUI();
-
-        updateAiGuideMessage(
-                "Xin chào! Hôm nay bạn muốn học gì?"
-        );
+        startEmptyConversation();
     }
 
     private void initViews() {
-        tvAiGuideMessage =
-                findViewById(R.id.tvAiGuideMessage);
+        tvAiGuideMessage = findViewById(R.id.tvAiGuideMessage);
+        tvSelectedTopic = findViewById(R.id.tvSelectedTopic);
+        edtAiQuestion = findViewById(R.id.edtAiQuestion);
 
-        tvSelectedTopic =
-                findViewById(R.id.tvSelectedTopic);
+        btnBackAi = findViewById(R.id.btnBackAi);
+        btnAiMenu = findViewById(R.id.btnAiMenu);
+        btnSpeakToAi = findViewById(R.id.btnSpeakToAi);
+        btnSendAi = findViewById(R.id.btnSendAi);
 
-        edtAiQuestion =
-                findViewById(R.id.edtAiQuestion);
-
-        btnBackAi =
-                findViewById(R.id.btnBackAi);
-
-        btnAiMenu =
-                findViewById(R.id.btnAiMenu);
-
-        btnSpeakToAi =
-                findViewById(R.id.btnSpeakToAi);
-
-        btnSendAi =
-                findViewById(R.id.btnSendAi);
-
-        recyclerAiMessages =
-                findViewById(R.id.recyclerAiMessages);
+        recyclerAiMessages = findViewById(R.id.recyclerAiMessages);
     }
 
     private void setupRecyclerView() {
-        messageAdapter =
-                new ChatMessageAdapter(messageList);
+        messageAdapter = new ChatMessageAdapter(messageList);
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this);
 
         layoutManager.setStackFromEnd(true);
 
-        recyclerAiMessages.setLayoutManager(
-                layoutManager
-        );
-
-        recyclerAiMessages.setAdapter(
-                messageAdapter
-        );
+        recyclerAiMessages.setLayoutManager(layoutManager);
+        recyclerAiMessages.setAdapter(messageAdapter);
     }
 
     private void setupGemini() {
         geminiManager = new GeminiManager();
     }
 
+    private void setupChatRepository() {
+        chatRepository = new ChatRepository();
+
+        conversationManager =
+                new ConversationManager(
+                        chatRepository,
+                        new ConversationManager.ConversationListener() {
+                            @Override
+                            public void onConversationCreated(
+                                    String conversationId
+                            ) {
+                                // Đã tạo cuộc trò chuyện.
+                            }
+
+                            @Override
+                            public void onSaveError(
+                                    String errorMessage
+                            ) {
+                                runOnUiThread(() ->
+                                        Toast.makeText(
+                                                AiTutorActivity.this,
+                                                "Không thể lưu lịch sử: "
+                                                        + errorMessage,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                                );
+                            }
+                        }
+                );
+    }
+
     private void setupSpeechRecognition() {
         speechLauncher = registerForActivityResult(
-                new ActivityResultContracts
-                        .StartActivityForResult(),
+                new ActivityResultContracts.StartActivityForResult(),
                 result -> handleSpeechResult(
                         result.getResultCode(),
                         result.getData()
                 )
         );
 
-        speechManager = new SpeechRecognitionManager(
-                this,
-                speechLauncher
+        speechManager =
+                new SpeechRecognitionManager(
+                        this,
+                        speechLauncher
+                );
+    }
+
+    private void setupHistoryLauncher() {
+        historyLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() != RESULT_OK
+                            || result.getData() == null) {
+                        return;
+                    }
+
+                    Intent data = result.getData();
+
+                    String conversationId =
+                            data.getStringExtra(
+                                    ChatHistoryActivity.EXTRA_CONVERSATION_ID
+                            );
+
+                    String topicCode =
+                            data.getStringExtra(
+                                    ChatHistoryActivity.EXTRA_TOPIC_CODE
+                            );
+
+                    String topicName =
+                            data.getStringExtra(
+                                    ChatHistoryActivity.EXTRA_TOPIC_NAME
+                            );
+
+                    if (conversationId != null
+                            && !conversationId.isEmpty()) {
+
+                        openConversation(
+                                conversationId,
+                                topicCode,
+                                topicName
+                        );
+                    }
+                }
         );
     }
 
     private void setupEvents() {
-        btnBackAi.setOnClickListener(
-                view -> finish()
-        );
-
-        btnAiMenu.setOnClickListener(
-                this::showAiMenu
-        );
+        btnBackAi.setOnClickListener(view -> finish());
+        btnAiMenu.setOnClickListener(this::showAiMenu);
 
         btnSendAi.setOnClickListener(view -> {
             String question =
@@ -199,9 +251,7 @@ public class AiTutorActivity extends AppCompatActivity {
         String spokenText = matches.get(0);
 
         edtAiQuestion.setText(spokenText);
-        edtAiQuestion.setSelection(
-                spokenText.length()
-        );
+        edtAiQuestion.setSelection(spokenText.length());
 
         sendQuestionToGemini(
                 spokenText,
@@ -213,7 +263,9 @@ public class AiTutorActivity extends AppCompatActivity {
             String question,
             boolean isFromVoice
     ) {
-        if (question == null || question.trim().isEmpty()) {
+        if (question == null
+                || question.trim().isEmpty()) {
+
             edtAiQuestion.setError(
                     "Vui lòng nhập tin nhắn"
             );
@@ -231,12 +283,15 @@ public class AiTutorActivity extends AppCompatActivity {
             return;
         }
 
+        String cleanedQuestion =
+                question.trim();
+
         hideKeyboard();
         setSendingState(true);
 
         addMessage(
                 AiMessage.ROLE_USER,
-                question.trim()
+                cleanedQuestion
         );
 
         edtAiQuestion.setText("");
@@ -247,9 +302,8 @@ public class AiTutorActivity extends AppCompatActivity {
         );
 
         geminiManager.sendMessage(
-                question.trim(),
+                cleanedQuestion,
                 new GeminiManager.GeminiCallback() {
-
                     @Override
                     public void onSuccess(String response) {
                         runOnUiThread(() -> {
@@ -268,7 +322,9 @@ public class AiTutorActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(String errorMessage) {
+                    public void onError(
+                            String errorMessage
+                    ) {
                         runOnUiThread(() -> {
                             setSendingState(false);
 
@@ -311,27 +367,18 @@ public class AiTutorActivity extends AppCompatActivity {
         recyclerAiMessages.scrollToPosition(
                 newPosition
         );
+
+        conversationManager.saveMessage(message);
     }
 
     private void showAiMenu(View anchor) {
         PopupMenu popupMenu =
                 new PopupMenu(this, anchor);
 
-        popupMenu.getMenu().add(
-                "＋ Cuộc trò chuyện mới"
-        );
-
-        popupMenu.getMenu().add(
-                "🕘 Lịch sử gần đây"
-        );
-
-        popupMenu.getMenu().add(
-                "📚 Chọn chủ đề"
-        );
-
-        popupMenu.getMenu().add(
-                "🗑 Xóa nội dung hiện tại"
-        );
+        popupMenu.getMenu().add("＋ Cuộc trò chuyện mới");
+        popupMenu.getMenu().add("🕘 Lịch sử gần đây");
+        popupMenu.getMenu().add("📚 Chọn chủ đề");
+        popupMenu.getMenu().add("🗑 Làm trống màn hình chat");
 
         popupMenu.setOnMenuItemClickListener(item -> {
             String title =
@@ -352,7 +399,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 return true;
             }
 
-            if (title.contains("Xóa nội dung")) {
+            if (title.contains("Làm trống")) {
                 confirmClearCurrentChat();
                 return true;
             }
@@ -392,15 +439,16 @@ public class AiTutorActivity extends AppCompatActivity {
                             );
 
                             updateTopicUI();
-
-                            updateAiGuideMessage(
-                                    AiTopicManager
-                                            .getWelcomeMessage(
-                                                    selectedTopic
-                                            )
-                            );
+                            startEmptyConversation();
 
                             dialog.dismiss();
+
+                            Toast.makeText(
+                                    this,
+                                    "Đã chuyển sang "
+                                            + selectedTopicName,
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
                 )
                 .setNegativeButton("Hủy", null)
@@ -408,18 +456,7 @@ public class AiTutorActivity extends AppCompatActivity {
     }
 
     private void startNewConversation() {
-        geminiManager.resetCurrentChat();
-
-        messageList.clear();
-        messageAdapter.notifyDataSetChanged();
-
-        edtAiQuestion.setText("");
-
-        updateAiGuideMessage(
-                AiTopicManager.getWelcomeMessage(
-                        selectedTopic
-                )
-        );
+        startEmptyConversation();
 
         Toast.makeText(
                 this,
@@ -428,14 +465,42 @@ public class AiTutorActivity extends AppCompatActivity {
         ).show();
     }
 
+    private void startEmptyConversation() {
+        conversationManager.startNewConversation(
+                selectedTopic,
+                selectedTopicName
+        );
+
+        messageList.clear();
+
+        if (messageAdapter != null) {
+            messageAdapter.notifyDataSetChanged();
+        }
+
+        if (geminiManager != null) {
+            geminiManager.resetCurrentChat();
+        }
+
+        if (edtAiQuestion != null) {
+            edtAiQuestion.setText("");
+        }
+
+        updateAiGuideMessage(
+                AiTopicManager.getWelcomeMessage(
+                        selectedTopic
+                )
+        );
+    }
+
     private void confirmClearCurrentChat() {
         new AlertDialog.Builder(this)
-                .setTitle("Xóa nội dung hiện tại?")
+                .setTitle("Làm trống màn hình chat?")
                 .setMessage(
-                        "Các tin nhắn trên màn hình sẽ bị xóa."
+                        "Cuộc trò chuyện hiện tại vẫn được giữ "
+                                + "trong lịch sử gần đây."
                 )
                 .setPositiveButton(
-                        "Xóa",
+                        "Làm trống",
                         (dialog, which) ->
                                 startNewConversation()
                 )
@@ -444,12 +509,120 @@ public class AiTutorActivity extends AppCompatActivity {
     }
 
     private void openRecentHistory() {
-        Toast.makeText(
+        if (historyLauncher == null) {
+            Toast.makeText(
+                    this,
+                    "Lịch sử trò chuyện chưa được khởi tạo",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+
+        Intent intent = new Intent(
                 this,
-                "Màn hình lịch sử sẽ được làm "
-                        + "ở bước tiếp theo",
-                Toast.LENGTH_SHORT
-        ).show();
+                ChatHistoryActivity.class
+        );
+
+        historyLauncher.launch(intent);
+    }
+
+    private void openConversation(
+            String conversationId,
+            String topicCode,
+            String topicName
+    ) {
+        selectedTopic =
+                topicCode != null
+                        ? topicCode
+                        : AiTopicManager.GENERAL;
+
+        selectedTopicName =
+                topicName != null
+                        ? topicName
+                        : AiTopicManager.getTopicName(
+                        selectedTopic
+                );
+
+        conversationManager.openExistingConversation(
+                conversationId,
+                selectedTopic,
+                selectedTopicName
+        );
+
+        geminiManager.changeTopic(selectedTopic);
+        updateTopicUI();
+
+        messageList.clear();
+        messageAdapter.notifyDataSetChanged();
+
+        updateAiGuideMessage(
+                "Mình đang mở lại cuộc trò chuyện..."
+        );
+
+        chatRepository.loadMessages(
+                conversationId,
+                new ChatRepository.MessagesCallback() {
+                    @Override
+                    public void onSuccess(
+                            QuerySnapshot snapshots
+                    ) {
+                        loadConversation(snapshots);
+                    }
+
+                    @Override
+                    public void onError(
+                            String errorMessage
+                    ) {
+                        runOnUiThread(() ->
+                                updateAiGuideMessage(
+                                        "Không thể tải lịch sử: "
+                                                + errorMessage
+                                )
+                        );
+                    }
+                }
+        );
+    }
+
+    private void loadConversation(
+            QuerySnapshot snapshots
+    ) {
+        runOnUiThread(() -> {
+            messageList.clear();
+
+            if (snapshots != null) {
+                for (DocumentSnapshot document
+                        : snapshots.getDocuments()) {
+
+                    AiMessage message =
+                            document.toObject(
+                                    AiMessage.class
+                            );
+
+                    if (message != null) {
+                        messageList.add(message);
+                    }
+                }
+            }
+
+            messageAdapter.notifyDataSetChanged();
+
+            if (!messageList.isEmpty()) {
+                recyclerAiMessages.scrollToPosition(
+                        messageList.size() - 1
+                );
+            }
+
+            geminiManager.restoreConversation(
+                    selectedTopic,
+                    messageList
+            );
+
+            updateAiGuideMessage(
+                    "Đã mở lại cuộc trò chuyện. "
+                            + "Bạn có thể tiếp tục hỏi bên dưới."
+            );
+        });
     }
 
     private void updateTopicUI() {
@@ -480,7 +653,8 @@ public class AiTutorActivity extends AppCompatActivity {
     }
 
     private void hideKeyboard() {
-        View currentView = getCurrentFocus();
+        View currentView =
+                getCurrentFocus();
 
         if (currentView == null) {
             return;

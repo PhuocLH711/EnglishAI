@@ -1,80 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F7FA"
-    android:paddingTop="25dp">
+    android:background="#F6F8FF"
+    android:fitsSystemWindows="true"
+    android:paddingTop="50dp">
 
-    <TextView
-        android:layout_width="match_parent"
+    <!-- Phần tiêu đề -->
+    <LinearLayout
+        android:id="@+id/layoutVocabularyHeader"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="📚 Khám Phá Từ Vựng"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#1A1A1A"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="12dp" />
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="14dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvVocabularyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khám phá từ vựng"
+            android:textColor="#20233A"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvVocabularySubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Học từ mới mỗi ngày theo cách thật thú vị"
+            android:textColor="#72758C"
+            android:textSize="14sp" />
+
+        <!-- Thẻ thống kê -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardBackgroundColor="#EDE9FF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#D8D0FF"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:background="@drawable/bg_vocabulary_icon"
+                    android:gravity="center"
+                    android:text="📚"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvVocabularySummary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 từ vựng đang chờ bạn"
+                        android:textColor="#3E356B"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Chọn chủ đề hoặc mức độ phù hợp để bắt đầu"
+                        android:textColor="#756E97"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- Thanh tìm kiếm và nút lọc -->
+    <LinearLayout
+        android:id="@+id/layoutVocabularySearch"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="2dp"
-        app:strokeWidth="0dp"
-        app:cardBackgroundColor="#FFFFFF">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/layoutVocabularyHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <SearchView
-            android:id="@+id/searchVocabulary"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:iconifiedByDefault="false"
-            android:queryBackground="@android:color/transparent"
-            android:queryHint="Tìm từ tiếng Anh, nghĩa tiếng Việt..." />
-    </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
+            app:strokeColor="#E3E5F2"
+            app:strokeWidth="1dp">
 
-    <LinearLayout
-        android:id="@+id/emptyStateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+            <SearchView
+                android:id="@+id/searchVocabulary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt..."
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🔍"
-            android:textSize="64sp"
-            android:layout_marginBottom="16dp"/>
+        </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Không tìm thấy từ vựng nào!"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#555555" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFilterVocabulary"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Lọc từ vựng"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:text=""
+            app:backgroundTint="#6C5CE7"
+            app:cornerRadius="18dp"
+            app:icon="@android:drawable/ic_menu_sort_by_size"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@android:color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bạn thử kiểm tra lại chính tả xem sao nhé"
-            android:textSize="14sp"
-            android:textColor="#888888"
-            android:layout_marginTop="4dp"/>
     </LinearLayout>
+
+    <!-- Chip lọc nhanh -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupQuickFilter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:chipSpacingHorizontal="8dp"
+        app:singleLine="true"
+        app:singleSelection="true"
+        app:layout_constraintTop_toBottomOf="@id/layoutVocabularySearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipAllLevels"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Tất cả"
+            android:textColor="#383253"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="#EDE9FF"
+            app:chipCornerRadius="16dp"
+            app:chipStrokeColor="#D4CCFF"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipEasy"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌱 Dễ"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="#E8F8EE"
+            app:chipCornerRadius="16dp"
+            app:chipStrokeColor="#BFE8CD"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMedium"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⭐ Trung bình"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="#FFF5DA"
+            app:chipCornerRadius="16dp"
+            app:chipStrokeColor="#F1DDA8"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHard"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥 Khó"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="#FFE7E7"
+            app:chipCornerRadius="16dp"
+            app:chipStrokeColor="#F2BDBD"
+            app:chipStrokeWidth="1dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Trạng thái lọc -->
+    <TextView
+        android:id="@+id/tvFilterStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:text="Chủ đề: Food • Độ khó: Easy"
+        android:textColor="#6E648E"
+        android:textSize="13sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupQuickFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Danh sách từ vựng -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerVocabulary"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tvFilterStatus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+    <!-- Trạng thái rỗng -->
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tvFilterStatus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:background="@drawable/bg_empty_vocabulary"
+            android:gravity="center"
+            android:text="🔍"
+            android:textSize="42sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Chưa tìm thấy từ phù hợp"
+            android:textColor="#34354A"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:text="Bạn thử đổi từ khóa, chủ đề hoặc mức độ để khám phá thêm nhé."
+            android:textColor="#818397"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearVocabularyFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="18dp"
+            android:text="Xóa bộ lọc"
+            android:textAllCaps="false"
+            app:backgroundTint="#6C5CE7"
+            app:cornerRadius="16dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
