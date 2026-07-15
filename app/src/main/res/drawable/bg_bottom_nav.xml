@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Nền trắng tinh khôi -->
+    <solid android:color="#FFFFFF" />
+
+    <!-- Bo tròn 2 góc phía trên tạo cảm giác mềm mại cho bé -->
+    <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />
+
+    <!-- Viền trên màu xanh nhạt giúp tách biệt khỏi nội dung -->
+    <stroke android:width="2dp" android:color="#E8F0FE" />
+</shape>

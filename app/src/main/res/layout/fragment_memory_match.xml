@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FA"
+    android:padding="16dp">
+
+    <!-- Header: Điểm số & Số cặp đã tìm -->
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🧩 Lật Thẻ Tìm Cặp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"/>
+            <TextView
+                android:id="@+id/tvPairsFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đã tìm thấy: 0/6 cặp"
+                android:textSize="14sp"
+                android:textColor="#757575"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#FFF3CD"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp">
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚡ 0 XP"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#856404"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Lưới 12 thẻ (3 cột x 4 hàng) được tạo tự động bằng Java -->
+    <GridLayout
+        android:id="@+id/gridCards"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutHeader"
+        android:layout_above="@id/btnPlayAgain"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:alignmentMode="alignBounds"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Nút Chơi ván mới (Mặc định ẩn, thắng mới hiện) -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPlayAgain"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_button_quiz"
+        android:backgroundTint="#9C27B0"
+        android:text="🔄 Chơi ván mới ngay!"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:elevation="4dp"/>
+
+</RelativeLayout>

@@ -1,49 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="#F9F9F9">
+    android:background="#F5F7FA"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎴 Thẻ Ghi Nhớ (Flashcard)"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chạm vào thẻ để lật xem nghĩa tiếng Việt"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/cardContainer"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:background="@drawable/bg_button_quiz"
-        android:elevation="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_below="@id/layoutHeader"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:clickable="true"
+        android:focusable="true">
 
-        <TextView
-            android:id="@+id/tvCardBack"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Từ vựng\n(Danh từ)"
-            android:textSize="32sp"
-            android:textColor="#E53935"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:alpha="0"
-            android:rotationY="180" />
+            app:cardCornerRadius="28dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#E8F0FE">
 
-        <TextView
-            android:id="@+id/tvCardFront"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Vocabulary"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:gravity="center" />
+            <TextView
+                android:id="@+id/tvCardFront"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Apple"
+                android:textSize="38sp"
+                android:textStyle="bold"
+                android:textColor="#1A73E8"
+                android:padding="24dp"/>
 
+            <TextView
+                android:id="@+id/tvCardBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Quả táo\n\n/ˈæp.əl/"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#D32F2F"
+                android:padding="24dp"
+                android:alpha="0"/>
+
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNextCard"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_below="@id/cardContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_button_quiz"
+        android:backgroundTint="#188038"
+        android:text="Từ tiếp theo ➡️"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingHorizontal="20dp"
+        android:elevation="6dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cardContainer"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="👆 Chạm vào thẻ để lật"
-        android:textSize="16sp"
-        android:textColor="#757575"
-        android:textStyle="italic"/>
+        android:text="💡 Mẹo: Lật thẻ để kiểm tra trí nhớ của bạn"
+        android:textSize="13sp"
+        android:textColor="#9E9E9E"
+        android:textStyle="italic"
+        android:layout_marginBottom="12dp"/>
+
 </RelativeLayout>

@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@android:drawable/ic_dialog_info"
         android:title="Trang chủ" />
 
     <item
         android:id="@+id/nav_vocabulary"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@android:drawable/ic_menu_sort_alphabetically"
         android:title="Từ vựng" />
 
     <item
-        android:id="@+id/nav_progress"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Tiến độ" />
+        android:id="@+id/nav_game"
+        android:icon="@android:drawable/ic_media_play"
+        android:title="Trò chơi" />
 
     <item
-        android:id="@+id/nav_game"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Trò chơi" />
+        android:id="@+id/nav_progress"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Hồ sơ" />
 
 </menu>

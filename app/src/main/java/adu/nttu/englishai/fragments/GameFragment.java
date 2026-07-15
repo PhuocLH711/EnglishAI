@@ -35,6 +35,21 @@ public class GameFragment extends Fragment {
                     .commit();
         });
 
+        // Ánh xạ thẻ Lật Thẻ Tìm Cặp từ fragment_game.xml
+        View cardMemoryMatch = view.findViewById(R.id.cardMemoryMatch);
+        View btnOpenMemoryMatch = view.findViewById(R.id.btnOpenMemoryMatch);
+
+        View.OnClickListener openMemory = v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new MemoryMatchFragment())
+                    .addToBackStack(null)
+                    .commit();
+        };
+
+        if (cardMemoryMatch != null) cardMemoryMatch.setOnClickListener(openMemory);
+        if (btnOpenMemoryMatch != null) btnOpenMemoryMatch.setOnClickListener(openMemory);
+
         return view;
     }
 }

@@ -2,39 +2,50 @@ package adu.nttu.englishai.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import adu.nttu.englishai.R;
+import adu.nttu.englishai.models.DataRepository;
+import adu.nttu.englishai.models.Vocabulary;
 
 public class SpeakingFragment extends Fragment {
 
-    private Button btnMic;
-    private TextView tvTargetWord, tvSpokenText, tvAccuracy;
+    private TextView tvWordToSpeak, tvPhoneticSpeaking, tvMeaningSpeaking, tvSpeakingResult;
+    private ImageButton btnRecord;
+    private Button btnNextWord;
+    private MaterialCardView cardResult;
+
+    private List<Vocabulary> vocabularyList;
+    private int currentIndex = 0;
     private ActivityResultLauncher<Intent> speechLauncher;
 
-    public SpeakingFragment() {
-        // Required empty public constructor
-    }
+    public SpeakingFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Đăng ký cổng lắng nghe kết quả trả về từ bộ thu âm của Google
+        // Đăng ký bộ lắng nghe Google Speech-to-Text
         speechLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -42,55 +53,88 @@ public class SpeakingFragment extends Fragment {
                         ArrayList<String> matches = result.getData()
                                 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                         if (matches != null && !matches.isEmpty()) {
-                            String spokenText = matches.get(0);
-                            tvSpokenText.setText(spokenText);
-                            checkPronunciation(spokenText);
+                            checkPronunciation(matches.get(0));
                         }
+                    } else {
+                        tvSpeakingResult.setText("💡 Bạn chưa nói gì cả, thử lại nhé!");
                     }
                 }
         );
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_speaking, container, false);
 
-        btnMic = view.findViewById(R.id.btnMic);
-        tvTargetWord = view.findViewById(R.id.tvTargetWord);
-        tvSpokenText = view.findViewById(R.id.tvSpokenText);
-        tvAccuracy = view.findViewById(R.id.tvAccuracy);
+        tvWordToSpeak = view.findViewById(R.id.tvWordToSpeak);
+        tvPhoneticSpeaking = view.findViewById(R.id.tvPhoneticSpeaking);
+        tvMeaningSpeaking = view.findViewById(R.id.tvMeaningSpeaking);
+        tvSpeakingResult = view.findViewById(R.id.tvSpeakingResult);
+        btnRecord = view.findViewById(R.id.btnRecord);
+        btnNextWord = view.findViewById(R.id.btnNextWord);
+        cardResult = view.findViewById(R.id.cardResult);
 
-        btnMic.setOnClickListener(v -> startSpeechToText());
+        vocabularyList = DataRepository.getInstance().getVocabularyList();
+        showCurrentWord();
+
+        // Bấm Mic -> Mở khung thu âm của Google
+        btnRecord.setOnClickListener(v -> startVoiceRecognition());
+
+        // Bấm Từ tiếp theo -> Chuyển sang từ mới
+        btnNextWord.setOnClickListener(v -> nextWord());
 
         return view;
     }
 
-    // Hàm kích hoạt hộp thoại thu âm tiếng Anh của Google
-    private void startSpeechToText() {
+    private void showCurrentWord() {
+        if (vocabularyList != null && !vocabularyList.isEmpty()) {
+            Vocabulary currentWord = vocabularyList.get(currentIndex);
+            tvWordToSpeak.setText(currentWord.getEnglishWord());
+            tvPhoneticSpeaking.setText(currentWord.getPronunciation());
+            tvMeaningSpeaking.setText("(" + currentWord.getVietnameseMeaning() + ")");
+
+            // Reset thẻ kết quả về màu trắng ban đầu
+            cardResult.setCardBackgroundColor(Color.WHITE);
+            tvSpeakingResult.setTextColor(Color.parseColor("#555555"));
+            tvSpeakingResult.setText("👆 Chạm vào Mic ở trên để bắt đầu kiểm tra");
+        }
+    }
+
+    private void startVoiceRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toString()); // Ép nhận diện giọng tiếng Anh chuẩn US
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy đọc to từ trên màn hình...");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toString());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy phát âm từ: " + tvWordToSpeak.getText().toString());
 
         try {
             speechLauncher.launch(intent);
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Thiết bị không hỗ trợ nhận diện giọng nói!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Thiết bị không hỗ trợ thu âm!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Hàm so sánh chuỗi chữ phát âm
     private void checkPronunciation(String spokenText) {
-        String target = tvTargetWord.getText().toString().trim();
+        String targetWord = tvWordToSpeak.getText().toString().trim();
 
-        // So sánh không phân biệt chữ hoa hay chữ thường
-        if (spokenText.equalsIgnoreCase(target)) {
-            tvAccuracy.setText("Chính xác! 100% 🌟");
-            tvAccuracy.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+        // So sánh từ bạn nói với từ mục tiêu (không phân biệt hoa thường)
+        if (spokenText.equalsIgnoreCase(targetWord)) {
+            // ĐÚNG: Nền xanh lá pastel (#E8F5E9), Chữ xanh đậm (#1B5E20)
+            cardResult.setCardBackgroundColor(Color.parseColor("#E8F5E9"));
+            tvSpeakingResult.setTextColor(Color.parseColor("#1B5E20"));
+            tvSpeakingResult.setText("🎉 Xuất sắc! Bạn vừa phát âm chuẩn từ \"" + targetWord + "\"");
+            Toast.makeText(getContext(), "Phát âm chuẩn 100%! 🏆", Toast.LENGTH_SHORT).show();
         } else {
-            tvAccuracy.setText("Chưa chuẩn rồi, thử lại nhé! ❌");
-            tvAccuracy.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            // SAI: Nền đỏ hồng pastel (#FFEBEE), Chữ đỏ đậm (#B71C1C)
+            cardResult.setCardBackgroundColor(Color.parseColor("#FFEBEE"));
+            tvSpeakingResult.setTextColor(Color.parseColor("#B71C1C"));
+            tvSpeakingResult.setText("😅 Bạn vừa nói là: \"" + spokenText + "\"\nHãy nghe kỹ lại và bấm Mic thử lại nhé!");
+            Toast.makeText(getContext(), "Chưa chuẩn lắm, thử lại nào!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void nextWord() {
+        if (vocabularyList == null || vocabularyList.isEmpty()) return;
+        currentIndex = (currentIndex + 1) % vocabularyList.size();
+        showCurrentWord();
     }
 }

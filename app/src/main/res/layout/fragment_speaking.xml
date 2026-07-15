@@ -1,64 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
-    android:background="#FFFFFF">
+    android:background="#F5F7FA"
+    android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hãy phát âm từ dưới đây:"
-        android:textSize="18sp"
-        android:textColor="#757575"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="20dp">
 
-    <TextView
-        android:id="@+id/tvTargetWord"
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎤 Luyện Phát Âm Chuẩn"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bấm vào Mic và đọc to từ bên dưới"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWord"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Developer"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:textColor="#1E88E5"
-        android:layout_marginBottom="40dp"/>
+        android:layout_below="@id/layoutHeader"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💡 TỪ CẦN ĐỌC"
+                android:textSize="12sp"
+                android:textColor="#1A73E8"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvWordToSpeak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apple"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"/>
+
+            <TextView
+                android:id="@+id/tvPhoneticSpeaking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/ˈæp.əl/"
+                android:textSize="20sp"
+                android:textColor="#1A73E8"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvMeaningSpeaking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(Quả táo)"
+                android:textSize="16sp"
+                android:textColor="#757575"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageButton
+        android:id="@+id/btnRecord"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/cardWord"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_button_quiz"
+        android:backgroundTint="#D32F2F"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:elevation="6dp"
+        android:contentDescription="Bấm để nói"
+        app:tint="#FFFFFF"
+        android:layout_marginBottom="20dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnRecord"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:strokeWidth="1dp"
+        app:strokeColor="#E0E0E0">
+
+        <TextView
+            android:id="@+id/tvSpeakingResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="👆 Chạm vào Mic ở trên để bắt đầu kiểm tra"
+            android:textSize="15sp"
+            android:textColor="#555555"
+            android:textAlignment="center"
+            android:padding="16dp"/>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnMic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/btnNextWord"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:background="@drawable/bg_button_quiz"
-        android:text="🎙️"
-        android:textSize="40sp"
-        android:layout_marginBottom="40dp"/>
+        android:backgroundTint="#1A73E8"
+        android:text="Từ tiếp theo ➡️"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingHorizontal="20dp"
+        android:elevation="6dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Máy nghe được bạn nói:"
-        android:textSize="16sp"
-        android:textColor="#757575"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/tvSpokenText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="..."
-        android:textSize="22sp"
-        android:textStyle="italic"
-        android:textColor="#333333"
-        android:layout_marginBottom="24dp"
-        android:textAlignment="center"/>
-
-    <TextView
-        android:id="@+id/tvAccuracy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-</LinearLayout>
+</RelativeLayout>

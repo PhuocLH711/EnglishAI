@@ -6,48 +6,93 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import adu.nttu.englishai.R;
-import adu.nttu.englishai.activities.LoginActivity;
+// Nếu file LoginActivity của bạn nằm ở gói activities thì import vào, ví dụ:
+// import adu.nttu.englishai.activities.LoginActivity;
 
 public class HomeFragment extends Fragment {
 
-    private Button btnLogout;
-    private FirebaseAuth firebaseAuth;
+    private Button btnStartDaily, btnLogout;
+    private MaterialCardView cardStage1, cardStage2, cardStage3;
 
     public HomeFragment() {
-        // Required empty public constructor
+        // Constructor rỗng bắt buộc cho Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Ánh xạ layout của Fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        // 1. Ánh xạ toàn bộ ID từ file XML mới
+        btnStartDaily = view.findViewById(R.id.btnStartDaily);
+        cardStage1 = view.findViewById(R.id.cardStage1);
+        cardStage2 = view.findViewById(R.id.cardStage2);
+        cardStage3 = view.findViewById(R.id.cardStage3);
 
-        // Phải dùng view.findViewById khi ở trong Fragment
-        btnLogout = view.findViewById(R.id.btnLogout);
+        // 2. Nút "Học ngay 🚀" & Chặng 3 -> Mở thẳng màn chơi Trắc nghiệm (Quiz)
+        View.OnClickListener openQuiz = v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuizFragment())
+                    .addToBackStack(null)
+                    .commit();
+        };
+        if (btnStartDaily != null) btnStartDaily.setOnClickListener(openQuiz);
+        if (cardStage3 != null) cardStage3.setOnClickListener(openQuiz);
 
-        btnLogout.setOnClickListener(v -> logoutUser());
+        // 3. Chặng 1: Từ vựng -> Tự động chuyển sáng Tab Từ vựng bên dưới BottomNav
+        if (cardStage1 != null) {
+            cardStage1.setOnClickListener(v -> {
+                BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_navigation);
+                if (bottomNav != null) {
+                    bottomNav.setSelectedItemId(R.id.nav_vocabulary); // Tự động nhảy tab
+                } else {
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, new VocabularyFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
+        // 4. Chặng 2: Luyện phát âm -> Mở thẳng màn Luyện nói (Speaking)
+        if (cardStage2 != null) {
+            cardStage2.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new SpeakingFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+
+        // 5. Nút Đăng xuất tài khoản
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(requireContext(), "Đã đăng xuất tài khoản!", Toast.LENGTH_SHORT).show();
+
+                // Đóng Activity hiện tại để quay về màn hình Đăng nhập / Splash
+                requireActivity().finish();
+
+                // (Tùy chọn) Nếu muốn mở trang LoginActivity cụ thể thì dùng 2 dòng dưới:
+                // Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                // startActivity(intent);
+            });
+        }
 
         return view;
-    }
-
-    private void logoutUser() {
-        firebaseAuth.signOut();
-
-        // Dùng getActivity() để lấy context chuyển trang
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
     }
 }
