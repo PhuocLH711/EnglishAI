@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4F8"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="100dp">
+
+        <!-- ================= 1. NÚT QUAY LẠI TRANG CHỦ (TOP BAR) ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnBackToHome"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_button_quiz"
+                android:backgroundTint="#ECEFF1"
+                android:text="⬅️ Về Bản Đồ"
+                android:textColor="#37474F"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="16dp"
+                android:elevation="0dp"/>
+        </LinearLayout>
+
+        <!-- ================= 2. TIÊU ĐỀ ẢI & ĐỘ KHÓ ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvStageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ải 1: Khởi Động"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#0D47A1"/>
+
+            <TextView
+                android:id="@+id/tvStageDifficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔥 Cấp độ: Dễ (Easy)"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#E65100"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_button_quiz"
+                android:backgroundTint="#FFE0B2"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hoàn thành đủ 4 kỹ năng dưới đây để qua ải nhé!"
+                android:textSize="13sp"
+                android:textColor="#546E7A"
+                android:layout_marginTop="12dp"/>
+        </LinearLayout>
+
+        <!-- ================= 3. NHIỆM VỤ 1: HỌC TỪ VỰNG ================= -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMissionVocab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#4CAF50"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="📚"
+                    android:textSize="32sp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_button_quiz"
+                    android:backgroundTint="#E8F5E9"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bước 1: Nạp Từ Vựng"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1B5E20"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ghi nhớ các từ mới cốt lõi của ải"
+                        android:textSize="13sp"
+                        android:textColor="#757575"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GO ➔"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ================= 4. NHIỆM VỤ 2: LUYỆN PHÁT ÂM ================= -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMissionSpeaking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#2196F3"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="🎤"
+                    android:textSize="32sp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_button_quiz"
+                    android:backgroundTint="#E3F2FD"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bước 2: Luyện Phát Âm"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#0D47A1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nói chuẩn giọng bản xứ cùng AI"
+                        android:textSize="13sp"
+                        android:textColor="#757575"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GO ➔"
+                    android:textStyle="bold"
+                    android:textColor="#2196F3"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ================= 5. NHIỆM VỤ 3: TRẮC NGHIỆM ĐỐ VUI ================= -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMissionQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#FF9800"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="🎮"
+                    android:textSize="32sp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_button_quiz"
+                    android:backgroundTint="#FFF3E0"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bước 3: Đố Vui Trí Tuệ"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#E65100"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thử thách trắc nghiệm kiểm tra phản xạ"
+                        android:textSize="13sp"
+                        android:textColor="#757575"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GO ➔"
+                    android:textStyle="bold"
+                    android:textColor="#FF9800"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ================= 6. NHIỆM VỤ 4: SIÊU GHÉP CẶP LẬT THẺ ================= -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMissionMemory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#9C27B0"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="🧩"
+                    android:textSize="32sp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_button_quiz"
+                    android:backgroundTint="#F3E5F5"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bước 4: Siêu Ghép Cặp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#4A148C"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trò chơi lật thẻ nhớ tìm từ đồng nghĩa"
+                        android:textSize="13sp"
+                        android:textColor="#757575"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GO ➔"
+                    android:textStyle="bold"
+                    android:textColor="#9C27B0"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

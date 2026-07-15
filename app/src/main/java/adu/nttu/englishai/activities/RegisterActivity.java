@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -96,11 +97,20 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
                         if (firebaseUser != null) {
-                            saveUserToFirestore(
-                                    firebaseUser.getUid(),
-                                    name,
-                                    email
-                            );
+
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name) // Gán tên người dùng vừa nhập vào đây
+                                    .build();
+
+                            firebaseUser.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(updateTask -> {
+                                        // Sau khi cập nhật profile xong thì mới tiếp tục lưu vào Firestore và chuyển trang
+                                        saveUserToFirestore(
+                                                firebaseUser.getUid(),
+                                                name,
+                                                email
+                                        );
+                                    });
                         } else {
                             resetButton();
 

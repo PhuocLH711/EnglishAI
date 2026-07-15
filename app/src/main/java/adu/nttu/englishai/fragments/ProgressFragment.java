@@ -48,16 +48,6 @@ public class ProgressFragment extends Fragment {
         tvLearningCount = view.findViewById(R.id.tvLearningCount);
         tvNotStartedCount = view.findViewById(R.id.tvNotStartedCount);
 
-        tvFoodProgress = view.findViewById(R.id.tvFoodProgress);
-        tvAnimalProgress = view.findViewById(R.id.tvAnimalProgress);
-        tvSchoolProgress = view.findViewById(R.id.tvSchoolProgress);
-        tvTechProgress = view.findViewById(R.id.tvTechProgress);
-
-        progressFood = view.findViewById(R.id.progressFood);
-        progressAnimal = view.findViewById(R.id.progressAnimal);
-        progressSchool = view.findViewById(R.id.progressSchool);
-        progressTech = view.findViewById(R.id.progressTech);
-
         btnLogoutProfile = view.findViewById(R.id.btnLogoutProfile);
 
         vocabularyList = DataRepository.getInstance().getVocabularyList();
