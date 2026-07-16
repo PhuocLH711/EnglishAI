@@ -33,6 +33,14 @@ public class FlashcardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flashcard, container, false);
 
+        // Xử lý nút Back: Bấm vào là trượt mượt mà về lại trang Danh Sách Nhiệm Vụ Ải
+        View btnBackToStage = view.findViewById(R.id.btnBackToStage);
+        if (btnBackToStage != null) {
+            btnBackToStage.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            });
+        }
+
         cardContainer = view.findViewById(R.id.cardContainer);
         tvCardFront = view.findViewById(R.id.tvCardFront);
         tvCardBack = view.findViewById(R.id.tvCardBack);

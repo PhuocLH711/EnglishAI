@@ -3,17 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
+    android:background="#F0F4F8"
     android:padding="16dp">
 
-    <!-- Header: Điểm số & Số cặp đã tìm -->
+    <LinearLayout
+        android:id="@+id/layoutBackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="12dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBackToStage"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#ECEFF1"
+            android:text="⬅️ Chọn trò khác"
+            android:textColor="#37474F"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="14dp"
+            android:elevation="0dp"/>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/layoutBackBtn"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp">
 
         <LinearLayout
@@ -55,7 +75,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Lưới 12 thẻ (3 cột x 4 hàng) được tạo tự động bằng Java -->
     <GridLayout
         android:id="@+id/gridCards"
         android:layout_width="match_parent"
@@ -67,7 +86,6 @@
         android:alignmentMode="alignBounds"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Nút Chơi ván mới (Mặc định ẩn, thắng mới hiện) -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPlayAgain"
         android:layout_width="match_parent"

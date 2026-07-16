@@ -4,11 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FF"
-    android:fitsSystemWindows="true"
-    android:paddingTop="50dp">
+    android:background="#F6F8FF">
 
-    <!-- Phần tiêu đề -->
+    <!-- ================= 1. PHẦN TIÊU ĐỀ (Ghim lên top màn hình) ================= -->
     <LinearLayout
         android:id="@+id/layoutVocabularyHeader"
         android:layout_width="0dp"
@@ -98,7 +96,7 @@
 
     </LinearLayout>
 
-    <!-- Thanh tìm kiếm và nút lọc -->
+    <!-- ================= 2. THANH TÌM KIẾM VÀ NÚT LỌC ================= -->
     <LinearLayout
         android:id="@+id/layoutVocabularySearch"
         android:layout_width="0dp"
@@ -154,7 +152,7 @@
 
     </LinearLayout>
 
-    <!-- Chip lọc nhanh -->
+    <!-- ================= 3. CHIP LỌC NHANH ================= -->
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupQuickFilter"
         android:layout_width="0dp"
@@ -221,7 +219,7 @@
 
     </com.google.android.material.chip.ChipGroup>
 
-    <!-- Trạng thái lọc -->
+    <!-- ================= 4. TRẠNG THÁI LỌC ================= -->
     <TextView
         android:id="@+id/tvFilterStatus"
         android:layout_width="0dp"
@@ -237,7 +235,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Danh sách từ vựng -->
+    <!-- ================= 5. DANH SÁCH TỪ VỰNG ================= -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerVocabulary"
         android:layout_width="0dp"
@@ -252,7 +250,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Trạng thái rỗng -->
+    <!-- ================= 6. TRẠNG THÁI RỖNG ================= -->
     <LinearLayout
         android:id="@+id/emptyStateLayout"
         android:layout_width="0dp"

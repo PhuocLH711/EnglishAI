@@ -37,6 +37,14 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
 
+        // Xử lý nút Back: Bấm vào là trượt mượt mà về lại trang Danh Sách Nhiệm Vụ Ải
+        View btnBackToStage = view.findViewById(R.id.btnBackToStage);
+        if (btnBackToStage != null) {
+            btnBackToStage.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            });
+        }
+
         tvQuestion = view.findViewById(R.id.tvQuestion);
         tvConfetti = view.findViewById(R.id.tvConfetti);
         btnAnswer1 = view.findViewById(R.id.btnAnswer1);

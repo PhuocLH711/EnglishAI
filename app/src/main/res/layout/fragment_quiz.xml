@@ -14,6 +14,28 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- ================= NÚT BACK QUAY LẠI DANH SÁCH ẢI ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnBackToStage"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_button_quiz"
+                android:backgroundTint="#ECEFF1"
+                android:text="⬅️ Quay lại"
+                android:textColor="#37474F"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="14dp"
+                android:elevation="0dp"/>
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

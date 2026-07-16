@@ -7,9 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -44,36 +48,78 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
 
         String status = vocabulary.getLearningStatus();
 
-        // 🎨 TỐI ƯU UI: Đổi cả màu nền lẫn màu chữ cho nhãn trạng thái
-        if ("LEARNING".equals(status)) {
+        // 🎨 TỐI ƯU UI: Nhãn trạng thái
+        if ("LEARNING".equalsIgnoreCase(status)) {
             holder.tvLearnedStatus.setVisibility(View.VISIBLE);
             holder.tvLearnedStatus.setText("🟡 Đang học");
-            holder.tvLearnedStatus.setBackgroundColor(Color.parseColor("#FFF3CD")); // Nền vàng nhạt
-            holder.tvLearnedStatus.setTextColor(Color.parseColor("#856404"));       // Chữ vàng cam đậm
-        } else if ("LEARNED".equals(status)) {
+            holder.tvLearnedStatus.setBackgroundColor(Color.parseColor("#FFF3CD"));
+            holder.tvLearnedStatus.setTextColor(Color.parseColor("#856404"));
+        } else if ("LEARNED".equalsIgnoreCase(status) || "mastered".equalsIgnoreCase(status)) {
             holder.tvLearnedStatus.setVisibility(View.VISIBLE);
             holder.tvLearnedStatus.setText("🟢 Đã học");
-            holder.tvLearnedStatus.setBackgroundColor(Color.parseColor("#D4EDDA")); // Nền xanh lá nhạt
-            holder.tvLearnedStatus.setTextColor(Color.parseColor("#155724"));       // Chữ xanh lá đậm
+            holder.tvLearnedStatus.setBackgroundColor(Color.parseColor("#D4EDDA"));
+            holder.tvLearnedStatus.setTextColor(Color.parseColor("#155724"));
         } else {
             holder.tvLearnedStatus.setVisibility(View.GONE);
         }
 
-        // 🎨 TỐI ƯU UI: Ngôi sao yêu thích màu vàng óng
+        // 🎨 TỐI ƯU UI: Ngôi sao yêu thích
         if (vocabulary.isFavorite()) {
             holder.btnFavorite.setImageResource(android.R.drawable.btn_star_big_on);
-            holder.btnFavorite.setColorFilter(Color.parseColor("#FFC107")); // Màu vàng óng
+            holder.btnFavorite.setColorFilter(Color.parseColor("#FFC107"));
         } else {
             holder.btnFavorite.setImageResource(android.R.drawable.btn_star_big_off);
-            holder.btnFavorite.setColorFilter(Color.parseColor("#B0BEC5")); // Màu xám nhạt
+            holder.btnFavorite.setColorFilter(Color.parseColor("#B0BEC5"));
         }
 
-        // Bấm ngôi sao để đổi trạng thái yêu thích
+        // =========================================================================
+        // 👈 CƠ CHẾ QUÉT LƯỚI BAO DÍNH: KHÔNG PHÂN BIỆT HOA/THƯỜNG NÊN 100% LƯU ĐƯỢC
+        // =========================================================================
         holder.btnFavorite.setOnClickListener(view -> {
-            vocabulary.setFavorite(!vocabulary.isFavorite());
+            boolean newState = !vocabulary.isFavorite();
+            vocabulary.setFavorite(newState);
+
             int currentPosition = holder.getBindingAdapterPosition();
             if (currentPosition != RecyclerView.NO_POSITION) {
                 notifyItemChanged(currentPosition);
+            }
+
+            String wordToSearch = vocabulary.getEnglishWord();
+            if (wordToSearch != null && !wordToSearch.trim().isEmpty()) {
+                String target = wordToSearch.trim();
+                FirebaseFirestore.getInstance().collection("vocabulary")
+                        .get()
+                        .addOnSuccessListener(snapshots -> {
+                            boolean foundAndUpdated = false;
+                            for (DocumentSnapshot doc : snapshots) {
+                                // Lấy tất cả các cột có khả năng chứa tiếng Anh trên Firebase của bạn
+                                String w1 = doc.getString("englishWord");
+                                String w2 = doc.getString("word");
+                                String w3 = doc.getString("english");
+                                String w4 = doc.getString("name");
+
+                                // So sánh KHÔNG PHÂN BIỆT chữ hoa hay chữ thường (Apple == apple == APPLE)
+                                if ((w1 != null && w1.equalsIgnoreCase(target)) ||
+                                        (w2 != null && w2.equalsIgnoreCase(target)) ||
+                                        (w3 != null && w3.equalsIgnoreCase(target)) ||
+                                        (w4 != null && w4.equalsIgnoreCase(target))) {
+
+                                    // Tìm thấy -> Khắc tim lên cả 3 tên cột phổ biến để không bao giờ trượt
+                                    doc.getReference().update(
+                                            "isFavorite", newState,
+                                            "favorite", newState,
+                                            "isFav", newState
+                                    );
+                                    foundAndUpdated = true;
+                                }
+                            }
+                            if (!foundAndUpdated) {
+                                Toast.makeText(view.getContext(), "⚠️ Không tìm thấy từ '" + target + "' trên Firebase!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(view.getContext(), "Lỗi mạng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
             }
         });
 

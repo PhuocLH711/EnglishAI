@@ -7,13 +7,37 @@
     android:padding="20dp">
 
     <LinearLayout
+        android:id="@+id/layoutBackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBackToStage"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#ECEFF1"
+            android:text="⬅️ Chọn trò khác"
+            android:textColor="#37474F"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="14dp"
+            android:elevation="0dp"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/layoutBackBtn"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="24dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"

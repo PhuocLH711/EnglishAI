@@ -58,6 +58,14 @@ public class MemoryMatchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_memory_match, container, false);
 
+        // Xử lý nút Back: Bấm vào là trượt mượt mà về lại trang Danh Sách Nhiệm Vụ Ải
+        View btnBackToStage = view.findViewById(R.id.btnBackToStage);
+        if (btnBackToStage != null) {
+            btnBackToStage.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            });
+        }
+
         gridCards = view.findViewById(R.id.gridCards);
         tvPairsFound = view.findViewById(R.id.tvPairsFound);
         tvScore = view.findViewById(R.id.tvScore);
