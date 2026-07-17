@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F4F8"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
+    <!-- ========================================================================= -->
+    <!-- 1. PHẦN HEADER CỐ ĐỊNH (ĐÃ BỎ ĐỔ BÓNG - PHẢNG PHIU LIỀN MẠCH)             -->
+    <!-- ========================================================================= -->
     <LinearLayout
+        android:id="@+id/layoutFixedHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="24dp"
-        android:paddingBottom="120dp"
-        android:gravity="center_horizontal">
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:background="#F0F4F8"
+        android:elevation="0dp">
 
-        <!-- ================= 1. BANNER THÀNH TÍCH RỰC RỠ ================= -->
+        <!-- Banner Thành Tích Rực Rỡ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="24dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -83,11 +89,11 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ================= 2. BANNER NHIỆM VỤ & LINH VẬT KHÍCH LỆ ================= -->
+        <!-- Banner Nhiệm Vụ & Linh Vật Khích Lệ -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="28dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="#1976D2"
@@ -169,7 +175,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ================= 3. BẢN ĐỒ LEO THÁP THEO CẤP ĐỘ KHÓ ================= -->
+        <!-- Tiêu Đề Bản Đồ Cố Định -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -177,235 +183,258 @@
             android:textSize="19sp"
             android:textStyle="bold"
             android:textColor="#0D47A1"
-            android:layout_marginBottom="28dp"/>
-
-        <!-- ẢI 1: KHỞI ĐỘNG (DỄ - Lệch Trái) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="start"
-            android:layout_marginStart="36dp"
-            android:layout_marginBottom="32dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStage1"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                app:cardCornerRadius="41dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeWidth="4.5dp"
-                app:strokeColor="#4CAF50"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="⭐"
-                    android:textSize="34sp"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackground"/>
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ải 1: Khởi Động"
-                android:layout_marginTop="6dp"
-                android:textStyle="bold"
-                android:textColor="#2E7D32"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Cấp độ Dễ)"
-                android:textColor="#66BB6A"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- ẢI 2: TĂNG TỐC (VỪA - Chính Giữa) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStage2"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                app:cardCornerRadius="41dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeWidth="4.5dp"
-                app:strokeColor="#2196F3"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="⚡"
-                    android:textSize="34sp"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackground"/>
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ải 2: Tăng Tốc"
-                android:layout_marginTop="6dp"
-                android:textStyle="bold"
-                android:textColor="#1565C0"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Cấp độ Vừa)"
-                android:textColor="#42A5F5"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- ẢI 3: BỨT PHÁ (KHÓ - Lệch Phải) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="end"
-            android:layout_marginEnd="36dp"
-            android:layout_marginBottom="32dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStage3"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                app:cardCornerRadius="41dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeWidth="4.5dp"
-                app:strokeColor="#FF9800"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="🔥"
-                    android:textSize="34sp"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackground"/>
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ải 3: Bứt Phá"
-                android:layout_marginTop="6dp"
-                android:textStyle="bold"
-                android:textColor="#EF6C00"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Cấp độ Khó)"
-                android:textColor="#FFA726"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- ẢI 4: TRÙM CUỐI (SIÊU KHÓ - Quay về Giữa) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStage4"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                app:cardCornerRadius="41dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeWidth="4.5dp"
-                app:strokeColor="#9C27B0"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="👑"
-                    android:textSize="34sp"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackground"/>
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ải 4: Trùm Cuối"
-                android:layout_marginTop="6dp"
-                android:textStyle="bold"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Siêu Khó)"
-                android:textColor="#AB47BC"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- ẢI 5: RƯƠNG BÁU CHIẾN THẮNG (Lệch Trái - Đích đến) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="start"
-            android:layout_marginStart="36dp"
-            android:layout_marginBottom="20dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStageChest"
-                android:layout_width="86dp"
-                android:layout_height="86dp"
-                app:cardCornerRadius="43dp"
-                app:cardElevation="8dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeWidth="4.5dp"
-                app:strokeColor="#FFD54F"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="🎁"
-                    android:textSize="36sp"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackground"/>
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rương Báu"
-                android:layout_marginTop="6dp"
-                android:textStyle="bold"
-                android:textColor="#F57F17"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Phần Thưởng)"
-                android:textColor="#FFB300"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
+            android:layout_marginTop="4dp"/>
 
     </LinearLayout>
-</ScrollView>
+
+    <!-- ========================================================================= -->
+    <!-- 2. PHẦN BẢN ĐỒ CÁC ẢI (CUỘN MƯỢT MÀ BÊN DƯỚI)                            -->
+    <!-- ========================================================================= -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="120dp"
+            android:gravity="center_horizontal">
+
+            <!-- ẢI 1: KHỞI ĐỘNG (DỄ - Lệch Trái) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="start"
+                android:layout_marginStart="36dp"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStage1"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:cardCornerRadius="41dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="4.5dp"
+                    app:strokeColor="#4CAF50"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="⭐"
+                        android:textSize="34sp"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackground"/>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ải 1: Khởi Động"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    android:textColor="#2E7D32"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Cấp độ Dễ)"
+                    android:textColor="#66BB6A"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- ẢI 2: TĂNG TỐC (VỪA - Chính Giữa) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStage2"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:cardCornerRadius="41dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="4.5dp"
+                    app:strokeColor="#2196F3"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="⚡"
+                        android:textSize="34sp"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackground"/>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ải 2: Tăng Tốc"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    android:textColor="#1565C0"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Cấp độ Vừa)"
+                    android:textColor="#42A5F5"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- ẢI 3: BỨT PHÁ (KHÓ - Lệch Phải) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="end"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStage3"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:cardCornerRadius="41dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="4.5dp"
+                    app:strokeColor="#FF9800"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="🔥"
+                        android:textSize="34sp"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackground"/>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ải 3: Bứt Phá"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    android:textColor="#EF6C00"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Cấp độ Khó)"
+                    android:textColor="#FFA726"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- ẢI 4: TRÙM CUỐI (SIÊU KHÓ - Quay về Giữa) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStage4"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:cardCornerRadius="41dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="4.5dp"
+                    app:strokeColor="#9C27B0"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="👑"
+                        android:textSize="34sp"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackground"/>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ải 4: Trùm Cuối"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Siêu Khó)"
+                    android:textColor="#AB47BC"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- ẢI 5: RƯƠNG BÁU CHIẾN THẮNG (Lệch Trái - Đích đến) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="start"
+                android:layout_marginStart="36dp"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStageChest"
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    app:cardCornerRadius="43dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="4.5dp"
+                    app:strokeColor="#FFD54F"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="🎁"
+                        android:textSize="36sp"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackground"/>
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rương Báu"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    android:textColor="#F57F17"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Phần Thưởng)"
+                    android:textColor="#FFB300"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
