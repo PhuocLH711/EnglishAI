@@ -33,11 +33,16 @@ import adu.nttu.englishai.ai.GeminiManager;
 import adu.nttu.englishai.models.AiMessage;
 import adu.nttu.englishai.utils.SpeechRecognitionManager;
 
+// =========================================================================
+// AI TUTOR ACTIVITY: Màn hình Gia sư AI tích hợp Gemini & Nhận diện giọng nói
+// =========================================================================
 public class AiTutorActivity extends AppCompatActivity {
 
+    // Bộ lắng nghe kết quả trả về từ màn hình Lịch sử và thu âm giọng nói (Thay thế cho startActivityForResult cũ)
     private ActivityResultLauncher<Intent> historyLauncher;
     private ActivityResultLauncher<Intent> speechLauncher;
 
+    // Các thành phần hiển thị trên giao diện (UI Components)
     private TextView tvAiGuideMessage;
     private TextView tvSelectedTopic;
     private EditText edtAiQuestion;
@@ -49,21 +54,25 @@ public class AiTutorActivity extends AppCompatActivity {
 
     private RecyclerView recyclerAiMessages;
 
+    // Danh sách lưu trữ các tin nhắn (Người dùng hỏi + AI trả lời) để hiển thị lên màn hình
     private final ArrayList<AiMessage> messageList =
             new ArrayList<>();
 
+    // Các bộ quản lý logic nghiệp vụ (Controllers/Managers)
     private ChatMessageAdapter messageAdapter;
-    private GeminiManager geminiManager;
-    private ChatRepository chatRepository;
-    private ConversationManager conversationManager;
-    private SpeechRecognitionManager speechManager;
+    private GeminiManager geminiManager;               // Xử lý gọi API Gemini AI
+    private ChatRepository chatRepository;             // Giao tiếp với Firebase Firestore (Lưu/Tải tin nhắn)
+    private ConversationManager conversationManager;   // Quản lý phiên hội thoại hiện tại
+    private SpeechRecognitionManager speechManager;    // Xử lý nhận diện giọng nói (Speech-to-Text)
 
+    // Biến lưu trạng thái chủ đề hiện tại (Mặc định là GENERAL - Giao tiếp chung)
     private String selectedTopic = AiTopicManager.GENERAL;
     private String selectedTopicName =
             AiTopicManager.getTopicName(
                     AiTopicManager.GENERAL
             );
 
+    // Cờ đánh dấu AI đang trả lời hay không (Dùng để khóa nút bấm, tránh gửi liên tục gây spam API)
     private boolean isSendingMessage = false;
 
     @Override
@@ -71,6 +80,7 @@ public class AiTutorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai_tutor);
 
+        // Khởi tạo tuần tự: Giao diện -> Danh sách -> API Gemini -> Cloud Database -> Giọng nói -> Sự kiện
         initViews();
         setupRecyclerView();
         setupGemini();
@@ -79,9 +89,10 @@ public class AiTutorActivity extends AppCompatActivity {
         setupHistoryLauncher();
         setupEvents();
         updateTopicUI();
-        startEmptyConversation();
+        startEmptyConversation(); // Bắt đầu vào app là tạo sẵn một phòng chat trắng mới
     }
 
+    // Ánh xạ các biến Java với ID các thẻ trong file giao diện XML
     private void initViews() {
         tvAiGuideMessage = findViewById(R.id.tvAiGuideMessage);
         tvSelectedTopic = findViewById(R.id.tvSelectedTopic);
@@ -95,22 +106,26 @@ public class AiTutorActivity extends AppCompatActivity {
         recyclerAiMessages = findViewById(R.id.recyclerAiMessages);
     }
 
+    // Cấu hình RecyclerView hiển thị đoạn chat
     private void setupRecyclerView() {
         messageAdapter = new ChatMessageAdapter(messageList);
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this);
 
+        // setStackFromEnd(true): Đẩy danh sách trượt xuống dưới cùng (Giống Zalo, Messenger, khi mở lên thấy tin mới nhất)
         layoutManager.setStackFromEnd(true);
 
         recyclerAiMessages.setLayoutManager(layoutManager);
         recyclerAiMessages.setAdapter(messageAdapter);
     }
 
+    // Khởi tạo bộ xử lý AI Gemini
     private void setupGemini() {
         geminiManager = new GeminiManager();
     }
 
+    // Khởi tạo kết nối cơ sở dữ liệu và quản lý phiên hội thoại
     private void setupChatRepository() {
         chatRepository = new ChatRepository();
 
@@ -122,13 +137,15 @@ public class AiTutorActivity extends AppCompatActivity {
                             public void onConversationCreated(
                                     String conversationId
                             ) {
-                                // Đã tạo cuộc trò chuyện.
+                                // Đã tạo cuộc trò chuyện trên Cloud.
                             }
 
                             @Override
                             public void onSaveError(
                                     String errorMessage
                             ) {
+                                // runOnUiThread: Đảm bảo khi có lỗi từ luồng mạng (Background Thread),
+                                // việc hiện thông báo Toast phải được chạy trên luồng giao diện (UI Thread) để không bị crash
                                 runOnUiThread(() ->
                                         Toast.makeText(
                                                 AiTutorActivity.this,
@@ -142,7 +159,9 @@ public class AiTutorActivity extends AppCompatActivity {
                 );
     }
 
+    // Cấu hình tính năng nhận diện giọng nói tiếng Anh
     private void setupSpeechRecognition() {
+        // Đăng ký nhận kết quả trả về từ bộ thu âm của Google
         speechLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> handleSpeechResult(
@@ -158,10 +177,12 @@ public class AiTutorActivity extends AppCompatActivity {
                 );
     }
 
+    // Cấu hình nhận kết quả khi người dùng chọn một cuộc trò chuyện cũ từ màn hình Lịch sử (ChatHistoryActivity)
     private void setupHistoryLauncher() {
         historyLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    // Nếu bấm Hủy hoặc không có dữ liệu thì bỏ qua
                     if (result.getResultCode() != RESULT_OK
                             || result.getData() == null) {
                         return;
@@ -169,6 +190,7 @@ public class AiTutorActivity extends AppCompatActivity {
 
                     Intent data = result.getData();
 
+                    // Lấy mã ID cuộc trò chuyện và chủ đề mà người dùng vừa chọn bên trang Lịch sử
                     String conversationId =
                             data.getStringExtra(
                                     ChatHistoryActivity.EXTRA_CONVERSATION_ID
@@ -187,6 +209,7 @@ public class AiTutorActivity extends AppCompatActivity {
                     if (conversationId != null
                             && !conversationId.isEmpty()) {
 
+                        // Tải lại toàn bộ đoạn chat cũ lên màn hình
                         openConversation(
                                 conversationId,
                                 topicCode,
@@ -197,10 +220,12 @@ public class AiTutorActivity extends AppCompatActivity {
         );
     }
 
+    // Gán sự kiện click cho các nút bấm trên màn hình
     private void setupEvents() {
-        btnBackAi.setOnClickListener(view -> finish());
-        btnAiMenu.setOnClickListener(this::showAiMenu);
+        btnBackAi.setOnClickListener(view -> finish()); // Đóng màn hình hiện tại, quay lại trang trước
+        btnAiMenu.setOnClickListener(this::showAiMenu); // Mở menu 3 chấm góc phải
 
+        // Bấm nút Gửi tin nhắn
         btnSendAi.setOnClickListener(view -> {
             String question =
                     edtAiQuestion.getText()
@@ -209,19 +234,22 @@ public class AiTutorActivity extends AppCompatActivity {
 
             sendQuestionToGemini(
                     question,
-                    false
+                    false // false: Gửi bằng văn bản gõ phím
             );
         });
 
+        // Bấm nút Micro thu âm giọng nói
         btnSpeakToAi.setOnClickListener(view -> {
             updateAiGuideMessage(
                     "Mình đang nghe bạn nói..."
             );
 
+            // Bật khung nhận diện giọng nói tiếng Anh (Speech-to-Text)
             speechManager.startEnglishRecognition();
         });
     }
 
+    // Xử lý dữ liệu văn bản sau khi Google chuyển đổi giọng nói thành chữ
     private void handleSpeechResult(
             int resultCode,
             Intent resultData
@@ -236,6 +264,7 @@ public class AiTutorActivity extends AppCompatActivity {
             return;
         }
 
+        // Lấy danh sách các câu từ mà Google nghe và đoán được
         ArrayList<String> matches =
                 resultData.getStringArrayListExtra(
                         RecognizerIntent.EXTRA_RESULTS
@@ -248,21 +277,26 @@ public class AiTutorActivity extends AppCompatActivity {
             return;
         }
 
+        // Lấy kết quả có độ chính xác cao nhất (đứng đầu danh sách index 0)
         String spokenText = matches.get(0);
 
+        // Hiển thị câu vừa nói lên ô nhập liệu và đưa con trỏ chuột về cuối câu
         edtAiQuestion.setText(spokenText);
         edtAiQuestion.setSelection(spokenText.length());
 
+        // Tự động gửi câu vừa nói lên cho AI Gemini luôn mà không cần bấm nút Gửi
         sendQuestionToGemini(
                 spokenText,
-                true
+                true // true: Đánh dấu tin nhắn này gửi từ giọng nói
         );
     }
 
+    // HÀM QUAN TRỌNG NHẤT: Gửi câu hỏi lên AI Gemini và xử lý phản hồi
     private void sendQuestionToGemini(
             String question,
             boolean isFromVoice
     ) {
+        // Kiểm tra rỗng: Không cho gửi tin nhắn trống
         if (question == null
                 || question.trim().isEmpty()) {
 
@@ -274,6 +308,7 @@ public class AiTutorActivity extends AppCompatActivity {
             return;
         }
 
+        // Khóa chặn: Nếu AI đang suy nghĩ trả lời thì không cho gửi tiếp để tránh lỗi xung đột
         if (isSendingMessage) {
             Toast.makeText(
                     this,
@@ -286,29 +321,33 @@ public class AiTutorActivity extends AppCompatActivity {
         String cleanedQuestion =
                 question.trim();
 
-        hideKeyboard();
-        setSendingState(true);
+        hideKeyboard();         // Ẩn bàn phím đi cho thoáng màn hình
+        setSendingState(true);  // Chuyển giao diện sang trạng thái "Đang gửi" (Làm mờ nút bấm)
 
+        // 1. Hiển thị ngay câu hỏi của NGƯỜI DÙNG lên khung chat
         addMessage(
                 AiMessage.ROLE_USER,
                 cleanedQuestion
         );
 
-        edtAiQuestion.setText("");
+        edtAiQuestion.setText(""); // Xóa trắng ô nhập liệu
 
         updateAiGuideMessage(
                 "Được rồi, để mình giải thích "
                         + "dễ hiểu cho bạn nhé!"
         );
 
+        // 2. Gọi hàm gửi câu hỏi qua cho Gemini AI (Chạy ngầm không gây đơ giao diện)
         geminiManager.sendMessage(
                 cleanedQuestion,
                 new GeminiManager.GeminiCallback() {
                     @Override
                     public void onSuccess(String response) {
+                        // Khi AI trả lời thành công -> Đưa về luồng UI (runOnUiThread) để hiển thị lên màn hình
                         runOnUiThread(() -> {
-                            setSendingState(false);
+                            setSendingState(false); // Mở khóa các nút bấm
 
+                            // Hiển thị câu trả lời của AI lên khung chat
                             addMessage(
                                     AiMessage.ROLE_AI,
                                     response
@@ -325,6 +364,7 @@ public class AiTutorActivity extends AppCompatActivity {
                     public void onError(
                             String errorMessage
                     ) {
+                        // Khi lỗi (mất mạng, hết hạn hạn ngạch API...) -> Báo lỗi cho người dùng biết
                         runOnUiThread(() -> {
                             setSendingState(false);
 
@@ -344,10 +384,12 @@ public class AiTutorActivity extends AppCompatActivity {
         );
     }
 
+    // Hàm thêm 1 tin nhắn vào danh sách, vẽ lên màn hình và lưu lên Firebase Cloud
     private void addMessage(
             String role,
             String content
     ) {
+        // Tạo đối tượng tin nhắn mới với mã UUID ngẫu nhiên và thời gian hiện tại
         AiMessage message = new AiMessage(
                 UUID.randomUUID().toString(),
                 role,
@@ -355,22 +397,27 @@ public class AiTutorActivity extends AppCompatActivity {
                 System.currentTimeMillis()
         );
 
+        // Thêm vào danh sách bộ nhớ tạm
         messageList.add(message);
 
         int newPosition =
                 messageList.size() - 1;
 
+        // Báo cho Adapter biết có 1 dòng mới vừa thêm vào để nó vẽ hiệu ứng hiện ra
         messageAdapter.notifyItemInserted(
                 newPosition
         );
 
+        // Tự động cuộn màn hình xuống tin nhắn mới nhất
         recyclerAiMessages.scrollToPosition(
                 newPosition
         );
 
+        // Lưu tin nhắn này vào cơ sở dữ liệu Firebase Firestore
         conversationManager.saveMessage(message);
     }
 
+    // Hiển thị menu tùy chọn góc trên bên phải (PopupMenu)
     private void showAiMenu(View anchor) {
         PopupMenu popupMenu =
                 new PopupMenu(this, anchor);
@@ -410,6 +457,7 @@ public class AiTutorActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
+    // Hiển thị hộp thoại (Dialog) chọn chủ đề học (Giao tiếp, Ngữ pháp, IELTS, TOEIC...)
     private void showTopicDialog() {
         String[] topicNames =
                 AiTopicManager.getTopicNames();
@@ -428,18 +476,20 @@ public class AiTutorActivity extends AppCompatActivity {
                         topicNames,
                         checkedItem,
                         (dialog, which) -> {
+                            // Cập nhật chủ đề được chọn
                             selectedTopic =
                                     topicCodes[which];
 
                             selectedTopicName =
                                     topicNames[which];
 
+                            // Đổi ngữ cảnh prompt cho AI Gemini theo chủ đề mới
                             geminiManager.changeTopic(
                                     selectedTopic
                             );
 
                             updateTopicUI();
-                            startEmptyConversation();
+                            startEmptyConversation(); // Tạo đoạn chat mới cho chủ đề mới
 
                             dialog.dismiss();
 
@@ -455,6 +505,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 .show();
     }
 
+    // Bắt đầu một phiên trò chuyện mới toanh
     private void startNewConversation() {
         startEmptyConversation();
 
@@ -465,18 +516,22 @@ public class AiTutorActivity extends AppCompatActivity {
         ).show();
     }
 
+    // Xóa sạch danh sách hiện tại trên màn hình để chuẩn bị cho cuộc trò chuyện mới
     private void startEmptyConversation() {
+        // Tạo ID phòng chat mới trên Firebase
         conversationManager.startNewConversation(
                 selectedTopic,
                 selectedTopicName
         );
 
+        // Xóa trắng bộ nhớ tạm
         messageList.clear();
 
         if (messageAdapter != null) {
             messageAdapter.notifyDataSetChanged();
         }
 
+        // Xóa bộ nhớ ngữ cảnh trò chuyện cũ của AI
         if (geminiManager != null) {
             geminiManager.resetCurrentChat();
         }
@@ -485,6 +540,7 @@ public class AiTutorActivity extends AppCompatActivity {
             edtAiQuestion.setText("");
         }
 
+        // Hiển thị lời chào theo chủ đề
         updateAiGuideMessage(
                 AiTopicManager.getWelcomeMessage(
                         selectedTopic
@@ -492,6 +548,7 @@ public class AiTutorActivity extends AppCompatActivity {
         );
     }
 
+    // Hộp thoại xác nhận trước khi làm trống màn hình chat
     private void confirmClearCurrentChat() {
         new AlertDialog.Builder(this)
                 .setTitle("Làm trống màn hình chat?")
@@ -508,6 +565,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 .show();
     }
 
+    // Mở màn hình xem Lịch sử trò chuyện gần đây
     private void openRecentHistory() {
         if (historyLauncher == null) {
             Toast.makeText(
@@ -523,9 +581,11 @@ public class AiTutorActivity extends AppCompatActivity {
                 ChatHistoryActivity.class
         );
 
+        // Dùng launcher để khi người dùng chọn xong 1 lịch sử, nó sẽ trả kết quả về hàm setupHistoryLauncher()
         historyLauncher.launch(intent);
     }
 
+    // Hàm tải và mở lại một phiên hội thoại cũ từ Cloud Firestore
     private void openConversation(
             String conversationId,
             String topicCode,
@@ -543,6 +603,7 @@ public class AiTutorActivity extends AppCompatActivity {
                         selectedTopic
                 );
 
+        // Cập nhật bộ quản lý sang ID của phiên trò chuyện cũ
         conversationManager.openExistingConversation(
                 conversationId,
                 selectedTopic,
@@ -559,6 +620,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 "Mình đang mở lại cuộc trò chuyện..."
         );
 
+        // Gọi Firebase Firestore tải toàn bộ tin nhắn cũ về
         chatRepository.loadMessages(
                 conversationId,
                 new ChatRepository.MessagesCallback() {
@@ -584,6 +646,7 @@ public class AiTutorActivity extends AppCompatActivity {
         );
     }
 
+    // Xử lý vẽ danh sách tin nhắn cũ tải từ Firebase lên màn hình
     private void loadConversation(
             QuerySnapshot snapshots
     ) {
@@ -591,6 +654,7 @@ public class AiTutorActivity extends AppCompatActivity {
             messageList.clear();
 
             if (snapshots != null) {
+                // Quét qua từng Document trên Firestore và ép kiểu về object AiMessage
                 for (DocumentSnapshot document
                         : snapshots.getDocuments()) {
 
@@ -605,6 +669,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 }
             }
 
+            // Vẽ lại toàn bộ danh sách
             messageAdapter.notifyDataSetChanged();
 
             if (!messageList.isEmpty()) {
@@ -613,6 +678,7 @@ public class AiTutorActivity extends AppCompatActivity {
                 );
             }
 
+            // QUAN TRỌNG: Nạp lại lịch sử này vào bộ nhớ của Gemini để AI nhớ ngữ cảnh đang nói chuyện gì trước đó
             geminiManager.restoreConversation(
                     selectedTopic,
                     messageList
@@ -625,18 +691,21 @@ public class AiTutorActivity extends AppCompatActivity {
         });
     }
 
+    // Cập nhật dòng chữ hiển thị tên chủ đề ở góc trên màn hình
     private void updateTopicUI() {
         tvSelectedTopic.setText(
                 "Chủ đề: " + selectedTopicName
         );
     }
 
+    // Cập nhật lời dẫn của nhân vật hướng dẫn AI
     private void updateAiGuideMessage(
             String message
     ) {
         tvAiGuideMessage.setText(message);
     }
 
+    // Khóa/Mở khóa giao diện trong lúc chờ AI trả lời (Tránh việc bấm liên tục gây lỗi)
     private void setSendingState(
             boolean isSending
     ) {
@@ -647,11 +716,13 @@ public class AiTutorActivity extends AppCompatActivity {
         btnAiMenu.setEnabled(!isSending);
         edtAiQuestion.setEnabled(!isSending);
 
+        // Làm mờ nút gửi (alpha 0.5) khi đang gửi, sáng lại (alpha 1) khi xong
         btnSendAi.setAlpha(
                 isSending ? 0.5f : 1f
         );
     }
 
+    // Hàm ẩn bàn phím ảo trên Android
     private void hideKeyboard() {
         View currentView =
                 getCurrentFocus();

@@ -19,24 +19,36 @@ import java.util.Map;
 
 import adu.nttu.englishai.R;
 
+// =========================================================================
+// VOCABULARY DETAIL ACTIVITY: Màn hình chi tiết từ vựng, luyện phát âm & lưu tiến độ
+// =========================================================================
 public class VocabularyDetailActivity extends AppCompatActivity {
 
+    // Đối tượng kết nối Firebase Authentication và cơ sở dữ liệu Cloud Firestore
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+
+    // Biến lưu trạng thái học tập hiện tại của từ (Mặc định là "NOT_STARTED" - Chưa học)
     private String learningStatus = "NOT_STARTED";
+
+    // Các thẻ hiển thị thông tin chi tiết trên màn hình (UI Components)
     private TextView tvEnglishWord;
     private TextView tvPronunciation;
     private TextView tvMeaning;
     private TextView tvExample;
     private TextView tvCategory;
     private TextView tvLevel;
+
+    // Các nút thao tác và cờ trạng thái
     private Button btnLearned;
     private boolean isLearned;
     private Button btnSpeak;
     private Button btnFavoriteDetail;
 
+    // Bộ máy chuyển đổi văn bản thành giọng nói (Text-To-Speech Engine)
     private TextToSpeech textToSpeech;
 
+    // Biến lưu trữ dữ liệu của từ vựng được truyền từ màn hình danh sách sang
     private String vocabularyId;
     private String englishWord;
     private boolean isFavorite;
@@ -46,18 +58,22 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vocabulary_detail);
 
+        // Khởi tạo các dịch vụ Firebase
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        // Cấu hình thanh tiêu đề (Toolbar) và nút Mũi tên quay lại -> Gọi finish() để đóng màn hình
         MaterialToolbar toolbarDetail = findViewById(R.id.toolbarDetail);
         toolbarDetail.setNavigationOnClickListener(view -> finish());
 
+        // Khởi tạo tuần tự: Giao diện -> Lấy dữ liệu Intent -> Bộ phát âm TTS -> Sự kiện nút bấm
         initViews();
         getVocabularyData();
         setupTextToSpeech();
         setupEvents();
     }
 
+    // Ánh xạ các biến Java với ID thẻ trong file layout XML
     private void initViews() {
         tvEnglishWord = findViewById(R.id.tvDetailEnglishWord);
         tvPronunciation = findViewById(R.id.tvDetailPronunciation);
@@ -71,7 +87,9 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         btnLearned = findViewById(R.id.btnLearned);
     }
 
+    // HÀM QUAN TRỌNG: Nhận dữ liệu từ vựng được truyền qua từ màn hình danh sách (VocabularyFragment)
     private void getVocabularyData() {
+        // getIntent().getStringExtra(): Lấy các chuỗi dữ liệu đã được đóng gói trong Intent ở màn hình trước
         vocabularyId = getIntent().getStringExtra("id");
         englishWord = getIntent().getStringExtra("englishWord");
 
@@ -90,6 +108,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         String level =
                 getIntent().getStringExtra("level");
 
+        // Đẩy dữ liệu vừa lấy được hiển thị lên các thẻ TextView trên giao diện
         tvEnglishWord.setText(englishWord);
         tvPronunciation.setText(pronunciation);
         tvMeaning.setText(meaning);
@@ -97,17 +116,21 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         tvCategory.setText("Chủ đề: " + category);
         tvLevel.setText("Mức độ: " + level);
 
+        // Kiểm tra xem từ này người dùng đã học hay chưa từ cơ sở dữ liệu đám mây
         checkLearningStatusFromFirestore();
     }
 
+    // Cấu hình bộ máy đọc giọng nói tiếng Anh (Text-to-Speech)
     private void setupTextToSpeech() {
-
         textToSpeech = new TextToSpeech(
                 this,
                 status -> {
+                    // Kiểm tra xem hệ thống Android có khởi tạo bộ TTS thành công hay không
                     if (status == TextToSpeech.SUCCESS) {
+                        // Thiết lập ngôn ngữ đọc là Tiếng Anh chuẩn Mỹ (Locale.US)
                         int result = textToSpeech.setLanguage(Locale.US);
 
+                        // Nếu điện thoại người dùng chưa tải gói ngôn ngữ Anh hoặc không hỗ trợ -> Báo lỗi
                         if (result == TextToSpeech.LANG_MISSING_DATA
                                 || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 
@@ -128,17 +151,20 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         );
     }
 
+    // Gán sự kiện click cho các nút bấm trên giao diện
     private void setupEvents() {
-        btnSpeak.setOnClickListener(view -> speakWord());
-        btnFavoriteDetail.setOnClickListener(view -> toggleFavorite());
-        btnLearned.setOnClickListener(view -> changeLearningStatus());
+        btnSpeak.setOnClickListener(view -> speakWord());             // Bấm loa để phát âm
+        btnFavoriteDetail.setOnClickListener(view -> toggleFavorite()); // Thêm/Bỏ yêu thích
+        btnLearned.setOnClickListener(view -> changeLearningStatus()); // Chuyển đổi trạng thái học
     }
 
+    // Hàm thực hiện đọc từ tiếng Anh ra loa điện thoại
     private void speakWord() {
         if (textToSpeech != null
                 && englishWord != null
                 && !englishWord.isEmpty()) {
 
+            // QUEUE_FLUSH: Nếu đang đọc từ trước đó, lập tức dừng lại và xóa hàng đợi để đọc ngay từ mới này
             textToSpeech.speak(
                     englishWord,
                     TextToSpeech.QUEUE_FLUSH,
@@ -146,9 +172,9 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                     "vocabulary_word"
             );
         }
-
     }
 
+    // HÀM QUAN TRỌNG: Chuyển đổi vòng lặp trạng thái học (Chưa học -> Đang học -> Đã học)
     private void changeLearningStatus() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -170,16 +196,20 @@ public class VocabularyDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // State Machine: Logic xoay vòng trạng thái mỗi lần người dùng bấm nút
         if ("NOT_STARTED".equals(learningStatus)) {
-            learningStatus = "LEARNING";
+            learningStatus = "LEARNING";     // Chưa học -> Chuyển thành Đang học
         } else if ("LEARNING".equals(learningStatus)) {
-            learningStatus = "LEARNED";
+            learningStatus = "LEARNED";      // Đang học -> Chuyển thành Đã học
         } else {
-            learningStatus = "NOT_STARTED";
+            learningStatus = "NOT_STARTED";  // Đã học -> Reset về Chưa học
         }
 
+        // Lưu trạng thái mới lên cơ sở dữ liệu Cloud Firestore
         saveLearningStatus(currentUser.getUid());
     }
+
+    // Hàm phụ: Lưu từ vựng vào bộ sưu tập "learnedWords" (Hệ thống tracking song song)
     private void saveLearnedWord(String userId) {
         Map<String, Object> learnedData = new HashMap<>();
 
@@ -196,6 +226,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         learnedData.put("learned", true);
         learnedData.put("learnedAt", System.currentTimeMillis());
 
+        // Lưu vào đường dẫn: users -> {userId} -> learnedWords -> {vocabularyId}
         firestore.collection("users")
                 .document(userId)
                 .collection("learnedWords")
@@ -224,9 +255,12 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // HÀM QUAN TRỌNG: Ghi hoặc xóa trạng thái học tập trong bộ sưu tập "wordProgress" trên Cloud
     private void saveLearningStatus(String userId) {
-        btnLearned.setEnabled(false);
+        btnLearned.setEnabled(false); // Khóa nút trong lúc chờ mạng, tránh bấm liên tục
 
+        // TỐI ƯU CƠ SỞ DỮ LIỆU: Nếu chuyển về trạng thái "Chưa học" -> Xóa luôn tài liệu khỏi Firestore
+        // Giúp giải phóng dung lượng đám mây, không lưu trữ những dữ liệu không cần thiết
         if ("NOT_STARTED".equals(learningStatus)) {
             firestore.collection("users")
                     .document(userId)
@@ -257,6 +291,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // Nếu là "LEARNING" hoặc "LEARNED" -> Đóng gói dữ liệu và ghi lên Firestore
         Map<String, Object> data = new HashMap<>();
 
         data.put("id", vocabularyId);
@@ -266,6 +301,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         data.put("status", learningStatus);
         data.put("updatedAt", System.currentTimeMillis());
 
+        // Ghi đè hoặc tạo mới tài liệu tại đường dẫn: users -> {userId} -> wordProgress -> {vocabularyId}
         firestore.collection("users")
                 .document(userId)
                 .collection("wordProgress")
@@ -293,6 +329,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Truy vấn Cloud Firestore xem trước đó người dùng đã học từ này tới giai đoạn nào rồi
     private void checkLearningStatusFromFirestore() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -305,6 +342,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // Gọi truy vấn vào subcollection wordProgress của user hiện tại
         firestore.collection("users")
                 .document(currentUser.getUid())
                 .collection("wordProgress")
@@ -324,7 +362,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                         learningStatus = "NOT_STARTED";
                     }
 
-                    updateLearningButton();
+                    updateLearningButton(); // Vẽ lại nút bấm theo dữ liệu tải về
                 })
                 .addOnFailureListener(exception -> {
                     learningStatus = "NOT_STARTED";
@@ -332,6 +370,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Cập nhật giao diện của nút Trạng thái học (Đổi chữ và màu sắc icon)
     private void updateLearningButton() {
         switch (learningStatus) {
             case "LEARNING":
@@ -348,6 +387,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         }
     }
 
+    // Hàm phụ: Xóa từ khỏi bộ sưu tập "learnedWords"
     private void removeLearnedWord(String userId) {
         firestore.collection("users")
                 .document(userId)
@@ -376,6 +416,8 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                     ).show();
                 });
     }
+
+    // Xử lý logic đảo ngược trạng thái Yêu thích (Đang thích thì bỏ, chưa thích thì thêm)
     private void toggleFavorite() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -400,12 +442,13 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         btnFavoriteDetail.setEnabled(false);
 
         if (isFavorite) {
-            removeFavorite(currentUser.getUid());
+            removeFavorite(currentUser.getUid()); // Nếu đang yêu thích -> Gọi hàm xóa
         } else {
-            saveFavorite(currentUser.getUid());
+            saveFavorite(currentUser.getUid());   // Nếu chưa -> Gọi hàm lưu lên Cloud
         }
     }
 
+    // Lưu từ vựng vào danh sách Yêu thích trên Cloud Firestore
     private void saveFavorite(String userId) {
         Map<String, Object> favoriteData = new HashMap<>();
 
@@ -422,6 +465,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         favoriteData.put("favorite", true);
         favoriteData.put("savedAt", System.currentTimeMillis());
 
+        // Lưu vào đường dẫn: users -> {userId} -> favorites -> {vocabularyId}
         firestore.collection("users")
                 .document(userId)
                 .collection("favorites")
@@ -450,6 +494,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Xóa từ khỏi danh sách Yêu thích trên Cloud Firestore
     private void removeFavorite(String userId) {
         firestore.collection("users")
                 .document(userId)
@@ -479,6 +524,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Kiểm tra trạng thái yêu thích từ Firestore (Dành cho tracking hệ favorites)
     private void checkFavoriteFromFirestore() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -497,7 +543,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 .document(vocabularyId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    isFavorite = documentSnapshot.exists();
+                    isFavorite = documentSnapshot.exists(); // Nếu tài liệu tồn tại -> đã yêu thích
                     updateFavoriteButton();
                 })
                 .addOnFailureListener(exception -> {
@@ -506,6 +552,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Cập nhật câu chữ hiển thị trên nút Yêu thích
     private void updateFavoriteButton() {
         if (isFavorite) {
             btnFavoriteDetail.setText("★ Đã yêu thích");
@@ -514,6 +561,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         }
     }
 
+    // Kiểm tra trạng thái đã học từ Firestore (Dành cho tracking hệ learnedWords)
     private void checkLearnedFromFirestore() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -541,6 +589,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // Cập nhật giao diện nút đã học (của hệ thống tracking song song)
     private void updateLearnedButton() {
         if (isLearned) {
             btnLearned.setText("✓ Đã học");
@@ -548,8 +597,14 @@ public class VocabularyDetailActivity extends AppCompatActivity {
             btnLearned.setText("✓ Đánh dấu đã học");
         }
     }
+
+    // =========================================================================
+    // VÒNG ĐỜI ACTIVITY (LIFECYCLE) - CỰC KỲ QUAN TRỌNG ĐỂ CHỐNG LỖI BỘ NHỚ
+    // =========================================================================
     @Override
     protected void onDestroy() {
+        // Khi người dùng thoát khỏi màn hình chi tiết này -> Dừng lập tức bộ đọc giọng nói
+        // Giải phóng bộ nhớ RAM và ngăn lỗi âm thanh vẫn tự phát ngầm khi đã thoát app
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
@@ -557,5 +612,4 @@ public class VocabularyDetailActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
-
 }
