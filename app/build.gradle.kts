@@ -34,12 +34,22 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src\\main\\assets", "src\\main\\assets")
+            }
+        }
+    }
 }
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+
+    implementation("com.google.code.gson:gson:2.11.0")
+
     implementation("androidx.recyclerview:recyclerview:1.4.0")
 
     implementation(platform("com.google.firebase:firebase-bom:34.15.0"))

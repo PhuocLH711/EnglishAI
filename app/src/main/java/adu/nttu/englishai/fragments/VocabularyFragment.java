@@ -4,62 +4,62 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import adu.nttu.englishai.R;
-import adu.nttu.englishai.adapters.VocabularyAdapter;
-import adu.nttu.englishai.models.Vocabulary;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import adu.nttu.englishai.R;
+import adu.nttu.englishai.adapters.VocabularyAdapter;
+import adu.nttu.englishai.models.Vocabulary;
 
 public class VocabularyFragment extends Fragment {
+
     private Button btnFilterVocabulary;
     private TextView tvFilterStatus;
-
-    private String selectedCategory = "Tất cả";
-    private String selectedLevel = "Tất cả";
-    private String currentKeyword = "";
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firestore;
+    private TextView tvVocabularySummary;
     private RecyclerView recyclerVocabulary;
     private SearchView searchVocabulary;
-
-    // 1. Khai báo thêm biến khung thông báo Empty State
     private View emptyStateLayout;
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
 
     private VocabularyAdapter vocabularyAdapter;
 
     private final List<Vocabulary> vocabularyList = new ArrayList<>();
     private final List<Vocabulary> filteredList = new ArrayList<>();
 
+    private String selectedCategory = "Tất cả";
+    private String selectedLevel = "Tất cả";
+    private String currentKeyword = "";
+
     public VocabularyFragment() {
-        // Constructor rỗng bắt buộc cho Fragment
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (firebaseAuth != null && firestore != null) {
-            loadLearningStatus();
-        }
+        // Constructor rỗng bắt buộc.
     }
 
     @Override
@@ -81,27 +81,57 @@ public class VocabularyFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         super.onViewCreated(view, savedInstanceState);
+
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        recyclerVocabulary = view.findViewById(R.id.recyclerVocabulary);
-        searchVocabulary = view.findViewById(R.id.searchVocabulary);
 
-        // 2. Ánh xạ ID từ file XML
-        emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
+        recyclerVocabulary =
+                view.findViewById(R.id.recyclerVocabulary);
+
+        searchVocabulary =
+                view.findViewById(R.id.searchVocabulary);
+
+        emptyStateLayout =
+                view.findViewById(R.id.emptyStateLayout);
+
         btnFilterVocabulary =
                 view.findViewById(R.id.btnFilterVocabulary);
 
         tvFilterStatus =
                 view.findViewById(R.id.tvFilterStatus);
 
+        tvVocabularySummary =
+                view.findViewById(R.id.tvVocabularySummary);
+
+        setupRecyclerView();
+        setupSearch();
+        setupFilterButton();
+
         searchVocabulary.setIconifiedByDefault(false);
         searchVocabulary.setIconified(false);
         searchVocabulary.clearFocus();
-        createSampleVocabulary();
 
-        filteredList.addAll(vocabularyList);
+        updateEmptyStateVisibility();
+        loadVocabularyFromFirestore();
+    }
 
-        vocabularyAdapter = new VocabularyAdapter(filteredList);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (firebaseAuth != null
+                && firestore != null
+                && !vocabularyList.isEmpty()) {
+
+            loadUserProgress();
+        }
+    }
+
+    private void setupRecyclerView() {
+        vocabularyAdapter = new VocabularyAdapter(
+                filteredList,
+                this::saveFavoriteStatus
+        );
 
         recyclerVocabulary.setLayoutManager(
                 new LinearLayoutManager(requireContext())
@@ -109,19 +139,149 @@ public class VocabularyFragment extends Fragment {
 
         recyclerVocabulary.setHasFixedSize(true);
         recyclerVocabulary.setAdapter(vocabularyAdapter);
-
-        setupSearch();
-        loadLearningStatus();
-        setupFilterButton();
-
-        // Kiểm tra trạng thái hiển thị lần đầu
-        updateEmptyStateVisibility();
     }
 
-    private void loadLearningStatus() {
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+    private void loadVocabularyFromFirestore() {
+        firestore.collection("vocabularies")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    vocabularyList.clear();
+
+                    for (DocumentSnapshot document
+                            : snapshot.getDocuments()) {
+
+                        Vocabulary vocabulary =
+                                createVocabularyFromDocument(document);
+
+                        String englishWord =
+                                vocabulary.getEnglishWord();
+
+                        if (englishWord != null
+                                && !englishWord.trim().isEmpty()) {
+
+                            vocabularyList.add(vocabulary);
+                        }
+                    }
+
+                    Collections.sort(
+                            vocabularyList,
+                            (first, second) ->
+                                    safeLower(first.getEnglishWord())
+                                            .compareTo(
+                                                    safeLower(
+                                                            second.getEnglishWord()
+                                                    )
+                                            )
+                    );
+
+                    loadUserProgress();
+                })
+                .addOnFailureListener(exception -> {
+                    vocabularyList.clear();
+                    filteredList.clear();
+
+                    vocabularyAdapter.notifyDataSetChanged();
+                    updateVocabularySummary();
+                    updateEmptyStateVisibility();
+
+                    Toast.makeText(
+                            requireContext(),
+                            "Không tải được từ vựng: "
+                                    + exception.getMessage(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                });
+    }
+
+    private Vocabulary createVocabularyFromDocument(
+            DocumentSnapshot document
+    ) {
+        Vocabulary vocabulary = new Vocabulary();
+
+        vocabulary.setId(document.getId());
+
+        vocabulary.setEnglishWord(
+                firstNonEmpty(
+                        document.getString("englishWord"),
+                        document.getString("word"),
+                        document.getString("english"),
+                        document.getString("name")
+                )
+        );
+
+        vocabulary.setVietnameseMeaning(
+                firstNonEmpty(
+                        document.getString("vietnameseMeaning"),
+                        document.getString("meaning"),
+                        document.getString("vietnamese")
+                )
+        );
+
+        vocabulary.setPronunciation(
+                firstNonEmpty(
+                        document.getString("pronunciation"),
+                        document.getString("phonetic")
+                )
+        );
+
+        vocabulary.setWordType(
+                firstNonEmpty(
+                        document.getString("wordType"),
+                        document.getString("type"),
+                        document.getString("partOfSpeech")
+                )
+        );
+
+        vocabulary.setExample(
+                firstNonEmpty(
+                        document.getString("example"),
+                        document.getString("exampleSentence")
+                )
+        );
+
+        vocabulary.setExampleMeaning(
+                firstNonEmpty(
+                        document.getString("exampleMeaning"),
+                        document.getString("exampleVietnamese")
+                )
+        );
+
+        vocabulary.setCategory(
+                firstNonEmpty(
+                        document.getString("category"),
+                        "Khác"
+                )
+        );
+
+        vocabulary.setLevel(
+                firstNonEmpty(
+                        document.getString("level"),
+                        "Easy"
+                )
+        );
+
+        vocabulary.setImageUrl(
+                firstNonEmpty(
+                        document.getString("imageUrl"),
+                        document.getString("image")
+                )
+        );
+
+        vocabulary.setFavorite(false);
+        vocabulary.setLearningStatus(
+                Vocabulary.STATUS_NOT_STARTED
+        );
+
+        return vocabulary;
+    }
+
+    private void loadUserProgress() {
+        FirebaseUser currentUser =
+                firebaseAuth.getCurrentUser();
 
         if (currentUser == null) {
+            resetProgressToDefault();
+            applyCurrentFilter();
             return;
         }
 
@@ -129,156 +289,169 @@ public class VocabularyFragment extends Fragment {
                 .document(currentUser.getUid())
                 .collection("wordProgress")
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    for (Vocabulary vocabulary : vocabularyList) {
-                        vocabulary.setLearningStatus("NOT_STARTED");
-                    }
+                .addOnSuccessListener(snapshot -> {
+                    Map<String, DocumentSnapshot> progressMap =
+                            new HashMap<>();
 
                     for (DocumentSnapshot document
-                            : queryDocumentSnapshots.getDocuments()) {
+                            : snapshot.getDocuments()) {
 
-                        String vocabularyId = document.getId();
-                        String status = document.getString("status");
-
-                        for (Vocabulary vocabulary : vocabularyList) {
-                            if (vocabulary.getId().equals(vocabularyId)) {
-                                vocabulary.setLearningStatus(
-                                        status != null
-                                                ? status
-                                                : "NOT_STARTED"
-                                );
-                                break;
-                            }
-                        }
+                        progressMap.put(
+                                document.getId(),
+                                document
+                        );
                     }
 
-                    vocabularyAdapter.notifyDataSetChanged();
-                    updateEmptyStateVisibility();
+                    for (Vocabulary vocabulary
+                            : vocabularyList) {
+
+                        vocabulary.setFavorite(false);
+                        vocabulary.setLearningStatus(
+                                Vocabulary.STATUS_NOT_STARTED
+                        );
+
+                        DocumentSnapshot progress =
+                                progressMap.get(vocabulary.getId());
+
+                        if (progress == null) {
+                            continue;
+                        }
+
+                        Boolean favorite =
+                                firstBoolean(
+                                        progress.getBoolean("favorite"),
+                                        progress.getBoolean("isFavorite"),
+                                        progress.getBoolean("isFav")
+                                );
+
+                        String status =
+                                firstNonEmpty(
+                                        progress.getString("learningStatus"),
+                                        progress.getString("status")
+                                );
+
+                        vocabulary.setFavorite(
+                                favorite != null && favorite
+                        );
+
+                        vocabulary.setLearningStatus(
+                                normalizeStatus(status)
+                        );
+                    }
+
+                    applyCurrentFilter();
                 })
                 .addOnFailureListener(exception -> {
-                    for (Vocabulary vocabulary : vocabularyList) {
-                        vocabulary.setLearningStatus("NOT_STARTED");
-                    }
+                    resetProgressToDefault();
+                    applyCurrentFilter();
 
-                    vocabularyAdapter.notifyDataSetChanged();
-                    updateEmptyStateVisibility();
+                    Toast.makeText(
+                            requireContext(),
+                            "Không tải được tiến độ học.",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 });
     }
 
-    private void createSampleVocabulary() {
-        vocabularyList.clear();
+    private void resetProgressToDefault() {
+        for (Vocabulary vocabulary : vocabularyList) {
+            vocabulary.setFavorite(false);
+            vocabulary.setLearningStatus(
+                    Vocabulary.STATUS_NOT_STARTED
+            );
+        }
+    }
 
-        vocabularyList.add(new Vocabulary(
-                "1",
-                "Apple",
-                "Quả táo",
-                "/ˈæp.əl/",
-                "I eat an apple every day.",
-                "Food",
-                "Easy"
-        ));
+    private void saveFavoriteStatus(
+            Vocabulary vocabulary,
+            boolean newState
+    ) {
+        FirebaseUser currentUser =
+                firebaseAuth.getCurrentUser();
 
-        vocabularyList.add(new Vocabulary(
-                "2",
-                "Banana",
-                "Quả chuối",
-                "/bəˈnɑː.nə/",
-                "The banana is yellow.",
-                "Food",
-                "Easy"
-        ));
+        if (currentUser == null) {
+            vocabulary.setFavorite(!newState);
+            vocabularyAdapter.notifyDataSetChanged();
 
-        vocabularyList.add(new Vocabulary(
-                "3",
-                "Dog",
-                "Con chó",
-                "/dɒɡ/",
-                "The dog is friendly.",
-                "Animals",
-                "Easy"
-        ));
+            Toast.makeText(
+                    requireContext(),
+                    "Bạn cần đăng nhập để lưu yêu thích.",
+                    Toast.LENGTH_SHORT
+            ).show();
 
-        vocabularyList.add(new Vocabulary(
-                "4",
-                "Cat",
-                "Con mèo",
-                "/kæt/",
-                "The cat is sleeping.",
-                "Animals",
-                "Easy"
-        ));
+            return;
+        }
 
-        vocabularyList.add(new Vocabulary(
-                "5",
-                "Teacher",
-                "Giáo viên",
-                "/ˈtiː.tʃər/",
-                "My teacher is very kind.",
-                "School",
-                "Easy"
-        ));
+        String vocabularyId = vocabulary.getId();
 
-        vocabularyList.add(new Vocabulary(
-                "6",
-                "Student",
-                "Học sinh",
-                "/ˈstjuː.dənt/",
-                "She is a good student.",
-                "School",
-                "Easy"
-        ));
+        if (vocabularyId == null
+                || vocabularyId.trim().isEmpty()) {
 
-        vocabularyList.add(new Vocabulary(
-                "7",
-                "Airplane",
-                "Máy bay",
-                "/ˈeə.pleɪn/",
-                "The airplane is flying.",
-                "Travel",
-                "Medium"
-        ));
+            vocabulary.setFavorite(!newState);
+            vocabularyAdapter.notifyDataSetChanged();
 
-        vocabularyList.add(new Vocabulary(
-                "8",
-                "Beautiful",
-                "Xinh đẹp",
-                "/ˈbjuː.tɪ.fəl/",
-                "The flower is beautiful.",
-                "Adjectives",
-                "Medium"
-        ));
+            Toast.makeText(
+                    requireContext(),
+                    "Từ vựng chưa có ID hợp lệ.",
+                    Toast.LENGTH_SHORT
+            ).show();
 
-        vocabularyList.add(new Vocabulary(
-                "9",
-                "Hospital",
-                "Bệnh viện",
-                "/ˈhɒs.pɪ.təl/",
-                "He works at a hospital.",
-                "Places",
-                "Medium"
-        ));
+            return;
+        }
 
-        vocabularyList.add(new Vocabulary(
-                "10",
-                "Computer",
-                "Máy tính",
-                "/kəmˈpjuː.tər/",
-                "I use a computer for studying.",
-                "Technology",
-                "Easy"
-        ));
+        Map<String, Object> progressData =
+                new HashMap<>();
+
+        progressData.put("vocabularyId", vocabularyId);
+        progressData.put("favorite", newState);
+        progressData.put(
+                "updatedAt",
+                System.currentTimeMillis()
+        );
+
+        firestore.collection("users")
+                .document(currentUser.getUid())
+                .collection("wordProgress")
+                .document(vocabularyId)
+                .set(progressData, SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    vocabularyAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(
+                            requireContext(),
+                            newState
+                                    ? "Đã thêm vào yêu thích"
+                                    : "Đã bỏ yêu thích",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                })
+                .addOnFailureListener(exception -> {
+                    vocabulary.setFavorite(!newState);
+                    vocabularyAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(
+                            requireContext(),
+                            "Không lưu được yêu thích: "
+                                    + exception.getMessage(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                });
     }
 
     private void setupSearch() {
         searchVocabulary.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
+
                     @Override
                     public boolean onQueryTextSubmit(
                             String query
                     ) {
-                        currentKeyword = query;
-                        filterVocabulary(currentKeyword);
+                        currentKeyword =
+                                query == null ? "" : query;
+
+                        applyCurrentFilter();
+                        searchVocabulary.clearFocus();
+
                         return true;
                     }
 
@@ -286,16 +459,19 @@ public class VocabularyFragment extends Fragment {
                     public boolean onQueryTextChange(
                             String newText
                     ) {
-                        currentKeyword = newText;
-                        filterVocabulary(currentKeyword);
+                        currentKeyword =
+                                newText == null ? "" : newText;
+
+                        applyCurrentFilter();
                         return true;
                     }
                 }
         );
     }
+
     private void setupFilterButton() {
-        btnFilterVocabulary.setOnClickListener(view ->
-                showFilterDialog()
+        btnFilterVocabulary.setOnClickListener(
+                view -> showFilterDialog()
         );
     }
 
@@ -317,16 +493,8 @@ public class VocabularyFragment extends Fragment {
                         R.id.spinnerLevel
                 );
 
-        String[] categories = {
-                "Tất cả",
-                "Food",
-                "Animals",
-                "School",
-                "Travel",
-                "Adjectives",
-                "Places",
-                "Technology"
-        };
+        String[] categories =
+                buildCategoryArray();
 
         String[] levels = {
                 "Tất cả",
@@ -335,31 +503,13 @@ public class VocabularyFragment extends Fragment {
                 "Hard"
         };
 
-        ArrayAdapter<String> categoryAdapter =
-                new ArrayAdapter<>(
-                        requireContext(),
-                        android.R.layout.simple_spinner_item,
-                        categories
-                );
-
-        categoryAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
+        spinnerCategory.setAdapter(
+                createSpinnerAdapter(categories)
         );
 
-        spinnerCategory.setAdapter(categoryAdapter);
-
-        ArrayAdapter<String> levelAdapter =
-                new ArrayAdapter<>(
-                        requireContext(),
-                        android.R.layout.simple_spinner_item,
-                        levels
-                );
-
-        levelAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
+        spinnerLevel.setAdapter(
+                createSpinnerAdapter(levels)
         );
-
-        spinnerLevel.setAdapter(levelAdapter);
 
         spinnerCategory.setSelection(
                 findArrayPosition(
@@ -375,67 +525,144 @@ public class VocabularyFragment extends Fragment {
                 )
         );
 
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Lọc từ vựng")
-                .setView(dialogView)
-                .setPositiveButton(
-                        "Áp dụng",
-                        (dialog, which) -> {
-                            selectedCategory =
-                                    spinnerCategory
-                                            .getSelectedItem()
-                                            .toString();
+        AlertDialog dialog =
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Lọc từ vựng")
+                        .setView(dialogView)
+                        .setPositiveButton(
+                                "Áp dụng",
+                                (currentDialog, which) -> {
+                                    selectedCategory =
+                                            spinnerCategory
+                                                    .getSelectedItem()
+                                                    .toString();
 
-                            selectedLevel =
-                                    spinnerLevel
-                                            .getSelectedItem()
-                                            .toString();
+                                    selectedLevel =
+                                            spinnerLevel
+                                                    .getSelectedItem()
+                                                    .toString();
 
-                            updateFilterStatus();
-                            filterVocabulary(currentKeyword);
-                        }
-                )
-                .setNeutralButton(
-                        "Xóa lọc",
-                        (dialog, which) -> {
-                            selectedCategory = "Tất cả";
-                            selectedLevel = "Tất cả";
+                                    updateFilterStatus();
+                                    applyCurrentFilter();
+                                }
+                        )
+                        .setNeutralButton(
+                                "Xóa lọc",
+                                (currentDialog, which) -> {
+                                    selectedCategory = "Tất cả";
+                                    selectedLevel = "Tất cả";
 
-                            updateFilterStatus();
-                            filterVocabulary(currentKeyword);
-                        }
-                )
-                .setNegativeButton("Hủy", null)
-                .show();
+                                    updateFilterStatus();
+                                    applyCurrentFilter();
+                                }
+                        )
+                        .setNegativeButton(
+                                "Hủy",
+                                null
+                        )
+                        .create();
+
+        dialog.setOnShowListener(unused -> {
+            dialog.getButton(
+                    AlertDialog.BUTTON_POSITIVE
+            ).setTextColor(
+                    requireContext().getColor(
+                            android.R.color.holo_purple
+                    )
+            );
+
+            dialog.getButton(
+                    AlertDialog.BUTTON_NEUTRAL
+            ).setTextColor(
+                    requireContext().getColor(
+                            android.R.color.holo_purple
+                    )
+            );
+
+            dialog.getButton(
+                    AlertDialog.BUTTON_NEGATIVE
+            ).setTextColor(
+                    requireContext().getColor(
+                            android.R.color.darker_gray
+                    )
+            );
+        });
+
+        dialog.show();
     }
 
-    private int findArrayPosition(
-            String[] values,
-            String selectedValue
+    private ArrayAdapter<String> createSpinnerAdapter(
+            String[] values
     ) {
-        for (int index = 0;
-             index < values.length;
-             index++) {
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        requireContext(),
+                        android.R.layout.simple_spinner_item,
+                        values
+                );
 
-            if (values[index].equals(selectedValue)) {
-                return index;
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        return adapter;
+    }
+
+    private String[] buildCategoryArray() {
+        Set<String> categorySet =
+                new LinkedHashSet<>();
+
+        categorySet.add("Tất cả");
+
+        List<String> categories =
+                new ArrayList<>();
+
+        for (Vocabulary vocabulary : vocabularyList) {
+            String category =
+                    vocabulary.getCategory();
+
+            if (category == null
+                    || category.trim().isEmpty()) {
+
+                continue;
+            }
+
+            String cleanedCategory =
+                    category.trim();
+
+            boolean alreadyExists = false;
+
+            for (String existingCategory : categories) {
+                if (existingCategory.equalsIgnoreCase(
+                        cleanedCategory
+                )) {
+                    alreadyExists = true;
+                    break;
+                }
+            }
+
+            if (!alreadyExists) {
+                categories.add(cleanedCategory);
             }
         }
 
-        return 0;
+        Collections.sort(
+                categories,
+                String.CASE_INSENSITIVE_ORDER
+        );
+
+        categorySet.addAll(categories);
+
+        return categorySet.toArray(new String[0]);
     }
-    private void filterVocabulary(String keyword) {
+
+    private void applyCurrentFilter() {
         filteredList.clear();
 
         String searchText =
-                keyword == null
-                        ? ""
-                        : keyword.trim()
-                          .toLowerCase(Locale.ROOT);
+                safeLower(currentKeyword);
 
-        for (Vocabulary vocabulary
-                : vocabularyList) {
-
+        for (Vocabulary vocabulary : vocabularyList) {
             String englishWord =
                     safeLower(
                             vocabulary.getEnglishWord()
@@ -444,6 +671,11 @@ public class VocabularyFragment extends Fragment {
             String vietnameseMeaning =
                     safeLower(
                             vocabulary.getVietnameseMeaning()
+                    );
+
+            String pronunciation =
+                    safeLower(
+                            vocabulary.getPronunciation()
                     );
 
             String category =
@@ -460,23 +692,20 @@ public class VocabularyFragment extends Fragment {
                     searchText.isEmpty()
                             || englishWord.contains(searchText)
                             || vietnameseMeaning.contains(searchText)
+                            || pronunciation.contains(searchText)
                             || category.contains(searchText)
                             || level.contains(searchText);
 
             boolean matchesCategory =
-                    selectedCategory.equals("Tất cả")
+                    "Tất cả".equals(selectedCategory)
                             || category.equals(
-                            selectedCategory.toLowerCase(
-                                    Locale.ROOT
-                            )
+                            safeLower(selectedCategory)
                     );
 
             boolean matchesLevel =
-                    selectedLevel.equals("Tất cả")
+                    "Tất cả".equals(selectedLevel)
                             || level.equals(
-                            selectedLevel.toLowerCase(
-                                    Locale.ROOT
-                            )
+                            safeLower(selectedLevel)
                     );
 
             if (matchesKeyword
@@ -487,19 +716,27 @@ public class VocabularyFragment extends Fragment {
             }
         }
 
+        updateVocabularySummary();
         vocabularyAdapter.notifyDataSetChanged();
+        updateEmptyStateVisibility();
     }
-    private String safeLower(String value) {
-        if (value == null) {
-            return "";
+
+    private void updateVocabularySummary() {
+        if (tvVocabularySummary == null) {
+            return;
         }
 
-        return value.toLowerCase(Locale.ROOT);
+        int count = filteredList.size();
+
+        tvVocabularySummary.setText(
+                count + " từ vựng đang chờ bạn"
+        );
     }
+
     private void updateFilterStatus() {
         boolean hasFilter =
-                !selectedCategory.equals("Tất cả")
-                        || !selectedLevel.equals("Tất cả");
+                !"Tất cả".equals(selectedCategory)
+                        || !"Tất cả".equals(selectedLevel);
 
         if (!hasFilter) {
             tvFilterStatus.setVisibility(View.GONE);
@@ -509,25 +746,126 @@ public class VocabularyFragment extends Fragment {
 
         tvFilterStatus.setVisibility(View.VISIBLE);
 
+        StringBuilder statusBuilder =
+                new StringBuilder();
+
+        if (!"Tất cả".equals(selectedCategory)) {
+            statusBuilder.append("📚 ")
+                    .append(selectedCategory);
+        }
+
+        if (!"Tất cả".equals(selectedLevel)) {
+            if (statusBuilder.length() > 0) {
+                statusBuilder.append("  •  ");
+            }
+
+            statusBuilder.append("⭐ ")
+                    .append(selectedLevel);
+        }
+
         tvFilterStatus.setText(
-                "Chủ đề: "
-                        + selectedCategory
-                        + " · Độ khó: "
-                        + selectedLevel
+                statusBuilder.toString()
         );
 
         btnFilterVocabulary.setText("Đang lọc");
     }
-    // Hàm phụ trợ để ẩn/hiện Empty State UI
+
     private void updateEmptyStateVisibility() {
-        if (emptyStateLayout != null && recyclerVocabulary != null) {
-            if (filteredList.isEmpty()) {
-                recyclerVocabulary.setVisibility(View.GONE);
-                emptyStateLayout.setVisibility(View.VISIBLE);
-            } else {
-                recyclerVocabulary.setVisibility(View.VISIBLE);
-                emptyStateLayout.setVisibility(View.GONE);
+        if (filteredList.isEmpty()) {
+            recyclerVocabulary.setVisibility(View.GONE);
+            emptyStateLayout.setVisibility(View.VISIBLE);
+        } else {
+            recyclerVocabulary.setVisibility(View.VISIBLE);
+            emptyStateLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private int findArrayPosition(
+            String[] values,
+            String selectedValue
+    ) {
+        if (values == null
+                || selectedValue == null) {
+
+            return 0;
+        }
+
+        for (int index = 0;
+             index < values.length;
+             index++) {
+
+            if (values[index].equals(selectedValue)) {
+                return index;
             }
         }
+
+        return 0;
+    }
+
+    private String safeLower(
+            String value
+    ) {
+        return value == null
+                ? ""
+                : value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private String firstNonEmpty(
+            String... values
+    ) {
+        if (values == null) {
+            return "";
+        }
+
+        for (String value : values) {
+            if (value != null
+                    && !value.trim().isEmpty()) {
+
+                return value.trim();
+            }
+        }
+
+        return "";
+    }
+
+    private Boolean firstBoolean(
+            Boolean... values
+    ) {
+        if (values == null) {
+            return null;
+        }
+
+        for (Boolean value : values) {
+            if (value != null) {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    private String normalizeStatus(
+            String status
+    ) {
+        if (status == null
+                || status.trim().isEmpty()) {
+
+            return Vocabulary.STATUS_NOT_STARTED;
+        }
+
+        String normalized =
+                status.trim().toUpperCase(Locale.ROOT);
+
+        if ("MASTERED".equals(normalized)
+                || "LEARNED".equals(normalized)) {
+
+            return Vocabulary.STATUS_LEARNED;
+        }
+
+        if ("LEARNING".equals(normalized)) {
+            return Vocabulary.STATUS_LEARNING;
+        }
+
+        return Vocabulary.STATUS_NOT_STARTED;
     }
 }

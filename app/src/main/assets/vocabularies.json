@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "father",
+    "englishWord": "father",
+    "vietnameseMeaning": "bố, cha",
+    "pronunciation": "/ˈfɑːðər/",
+    "example": "My father is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "mother",
+    "englishWord": "mother",
+    "vietnameseMeaning": "mẹ",
+    "pronunciation": "/ˈmʌðər/",
+    "example": "My mother is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "brother",
+    "englishWord": "brother",
+    "vietnameseMeaning": "anh hoặc em trai",
+    "pronunciation": "/ˈbrʌðər/",
+    "example": "My brother is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sister",
+    "englishWord": "sister",
+    "vietnameseMeaning": "chị hoặc em gái",
+    "pronunciation": "/ˈsɪstər/",
+    "example": "My sister is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "grandfather",
+    "englishWord": "grandfather",
+    "vietnameseMeaning": "ông",
+    "pronunciation": "/ˈɡrænfɑːðər/",
+    "example": "My grandfather is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "grandmother",
+    "englishWord": "grandmother",
+    "vietnameseMeaning": "bà",
+    "pronunciation": "/ˈɡrænmʌðər/",
+    "example": "My grandmother is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "uncle",
+    "englishWord": "uncle",
+    "vietnameseMeaning": "chú, bác, cậu",
+    "pronunciation": "/ˈʌŋkəl/",
+    "example": "My uncle is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "aunt",
+    "englishWord": "aunt",
+    "vietnameseMeaning": "cô, dì, bác gái",
+    "pronunciation": "/ænt/",
+    "example": "My aunt is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cousin",
+    "englishWord": "cousin",
+    "vietnameseMeaning": "anh, chị hoặc em họ",
+    "pronunciation": "/ˈkʌzən/",
+    "example": "My cousin is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nephew",
+    "englishWord": "nephew",
+    "vietnameseMeaning": "cháu trai",
+    "pronunciation": "/ˈnefjuː/",
+    "example": "My nephew is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "niece",
+    "englishWord": "niece",
+    "vietnameseMeaning": "cháu gái",
+    "pronunciation": "/niːs/",
+    "example": "My niece is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "husband",
+    "englishWord": "husband",
+    "vietnameseMeaning": "chồng",
+    "pronunciation": "/ˈhʌzbənd/",
+    "example": "My husband is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wife",
+    "englishWord": "wife",
+    "vietnameseMeaning": "vợ",
+    "pronunciation": "/waɪf/",
+    "example": "My wife is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "son",
+    "englishWord": "son",
+    "vietnameseMeaning": "con trai",
+    "pronunciation": "/sʌn/",
+    "example": "My son is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "daughter",
+    "englishWord": "daughter",
+    "vietnameseMeaning": "con gái",
+    "pronunciation": "/ˈdɔːtər/",
+    "example": "My daughter is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "baby",
+    "englishWord": "baby",
+    "vietnameseMeaning": "em bé",
+    "pronunciation": "/ˈbeɪbi/",
+    "example": "My baby is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "parents",
+    "englishWord": "parents",
+    "vietnameseMeaning": "bố mẹ",
+    "pronunciation": "/ˈperənts/",
+    "example": "My parents is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "child",
+    "englishWord": "child",
+    "vietnameseMeaning": "đứa trẻ, con",
+    "pronunciation": "/tʃaɪld/",
+    "example": "My child is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "relative",
+    "englishWord": "relative",
+    "vietnameseMeaning": "họ hàng",
+    "pronunciation": "/ˈrelətɪv/",
+    "example": "My relative is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "family",
+    "englishWord": "family",
+    "vietnameseMeaning": "gia đình",
+    "pronunciation": "/ˈfæməli/",
+    "example": "My family is an important person in my family.",
+    "category": "Family",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "teacher",
+    "englishWord": "teacher",
+    "vietnameseMeaning": "giáo viên",
+    "pronunciation": "/ˈtiːtʃər/",
+    "example": "The teacher is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "student",
+    "englishWord": "student",
+    "vietnameseMeaning": "học sinh, sinh viên",
+    "pronunciation": "/ˈstuːdənt/",
+    "example": "The student is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "classroom",
+    "englishWord": "classroom",
+    "vietnameseMeaning": "phòng học",
+    "pronunciation": "/ˈklæsruːm/",
+    "example": "The classroom is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "school",
+    "englishWord": "school",
+    "vietnameseMeaning": "trường học",
+    "pronunciation": "/skuːl/",
+    "example": "The school is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "lesson",
+    "englishWord": "lesson",
+    "vietnameseMeaning": "bài học",
+    "pronunciation": "/ˈlesən/",
+    "example": "The lesson is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "homework",
+    "englishWord": "homework",
+    "vietnameseMeaning": "bài tập về nhà",
+    "pronunciation": "/ˈhoʊmwɜːrk/",
+    "example": "The homework is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "notebook",
+    "englishWord": "notebook",
+    "vietnameseMeaning": "vở ghi chép",
+    "pronunciation": "/ˈnoʊtbʊk/",
+    "example": "The notebook is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "pencil",
+    "englishWord": "pencil",
+    "vietnameseMeaning": "bút chì",
+    "pronunciation": "/ˈpensəl/",
+    "example": "The pencil is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "eraser",
+    "englishWord": "eraser",
+    "vietnameseMeaning": "cục tẩy",
+    "pronunciation": "/ɪˈreɪsər/",
+    "example": "The eraser is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "ruler",
+    "englishWord": "ruler",
+    "vietnameseMeaning": "thước kẻ",
+    "pronunciation": "/ˈruːlər/",
+    "example": "The ruler is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "exam",
+    "englishWord": "exam",
+    "vietnameseMeaning": "kỳ thi, bài kiểm tra",
+    "pronunciation": "/ɪɡˈzæm/",
+    "example": "The exam is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "library",
+    "englishWord": "library",
+    "vietnameseMeaning": "thư viện",
+    "pronunciation": "/ˈlaɪbreri/",
+    "example": "The library is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "subject",
+    "englishWord": "subject",
+    "vietnameseMeaning": "môn học",
+    "pronunciation": "/ˈsʌbdʒɪkt/",
+    "example": "The subject is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "mathematics",
+    "englishWord": "mathematics",
+    "vietnameseMeaning": "môn toán",
+    "pronunciation": "/ˌmæθəˈmætɪks/",
+    "example": "The mathematics is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "science",
+    "englishWord": "science",
+    "vietnameseMeaning": "môn khoa học",
+    "pronunciation": "/ˈsaɪəns/",
+    "example": "The science is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "history",
+    "englishWord": "history",
+    "vietnameseMeaning": "môn lịch sử",
+    "pronunciation": "/ˈhɪstəri/",
+    "example": "The history is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "geography",
+    "englishWord": "geography",
+    "vietnameseMeaning": "môn địa lý",
+    "pronunciation": "/dʒiˈɑːɡrəfi/",
+    "example": "The geography is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "computer",
+    "englishWord": "computer",
+    "vietnameseMeaning": "máy tính",
+    "pronunciation": "/kəmˈpjuːtər/",
+    "example": "The computer is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "university",
+    "englishWord": "university",
+    "vietnameseMeaning": "trường đại học",
+    "pronunciation": "/ˌjuːnɪˈvɜːrsəti/",
+    "example": "The university is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "principal",
+    "englishWord": "principal",
+    "vietnameseMeaning": "hiệu trưởng",
+    "pronunciation": "/ˈprɪnsəpəl/",
+    "example": "The principal is useful at school.",
+    "category": "School",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "apple",
+    "englishWord": "apple",
+    "vietnameseMeaning": "quả táo",
+    "pronunciation": "/ˈæpəl/",
+    "example": "I often have apple with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "banana",
+    "englishWord": "banana",
+    "vietnameseMeaning": "quả chuối",
+    "pronunciation": "/bəˈnænə/",
+    "example": "I often have banana with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "orange",
+    "englishWord": "orange",
+    "vietnameseMeaning": "quả cam",
+    "pronunciation": "/ˈɔːrɪndʒ/",
+    "example": "I often have orange with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "grape",
+    "englishWord": "grape",
+    "vietnameseMeaning": "quả nho",
+    "pronunciation": "/ɡreɪp/",
+    "example": "I often have grape with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "rice",
+    "englishWord": "rice",
+    "vietnameseMeaning": "cơm, gạo",
+    "pronunciation": "/raɪs/",
+    "example": "I often have rice with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bread",
+    "englishWord": "bread",
+    "vietnameseMeaning": "bánh mì",
+    "pronunciation": "/bred/",
+    "example": "I often have bread with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "meat",
+    "englishWord": "meat",
+    "vietnameseMeaning": "thịt",
+    "pronunciation": "/miːt/",
+    "example": "I often have meat with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "fish",
+    "englishWord": "fish",
+    "vietnameseMeaning": "cá, món cá",
+    "pronunciation": "/fɪʃ/",
+    "example": "I often have fish with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "egg",
+    "englishWord": "egg",
+    "vietnameseMeaning": "trứng",
+    "pronunciation": "/eɡ/",
+    "example": "I often have egg with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "milk",
+    "englishWord": "milk",
+    "vietnameseMeaning": "sữa",
+    "pronunciation": "/mɪlk/",
+    "example": "I often have milk with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "coffee",
+    "englishWord": "coffee",
+    "vietnameseMeaning": "cà phê",
+    "pronunciation": "/ˈkɔːfi/",
+    "example": "I often have coffee with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "tea",
+    "englishWord": "tea",
+    "vietnameseMeaning": "trà",
+    "pronunciation": "/tiː/",
+    "example": "I often have tea with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "water",
+    "englishWord": "water",
+    "vietnameseMeaning": "nước",
+    "pronunciation": "/ˈwɔːtər/",
+    "example": "I often have water with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "juice",
+    "englishWord": "juice",
+    "vietnameseMeaning": "nước ép",
+    "pronunciation": "/dʒuːs/",
+    "example": "I often have juice with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "soup",
+    "englishWord": "soup",
+    "vietnameseMeaning": "súp, canh",
+    "pronunciation": "/suːp/",
+    "example": "I often have soup with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "chicken",
+    "englishWord": "chicken",
+    "vietnameseMeaning": "thịt gà",
+    "pronunciation": "/ˈtʃɪkɪn/",
+    "example": "I often have chicken with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "beef",
+    "englishWord": "beef",
+    "vietnameseMeaning": "thịt bò",
+    "pronunciation": "/biːf/",
+    "example": "I often have beef with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "vegetable",
+    "englishWord": "vegetable",
+    "vietnameseMeaning": "rau củ",
+    "pronunciation": "/ˈvedʒtəbəl/",
+    "example": "I often have vegetable with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "fruit",
+    "englishWord": "fruit",
+    "vietnameseMeaning": "trái cây",
+    "pronunciation": "/fruːt/",
+    "example": "I often have fruit with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cake",
+    "englishWord": "cake",
+    "vietnameseMeaning": "bánh ngọt",
+    "pronunciation": "/keɪk/",
+    "example": "I often have cake with my meal.",
+    "category": "Food & Drinks",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "dog",
+    "englishWord": "dog",
+    "vietnameseMeaning": "con chó",
+    "pronunciation": "/dɔːɡ/",
+    "example": "The dog is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cat",
+    "englishWord": "cat",
+    "vietnameseMeaning": "con mèo",
+    "pronunciation": "/kæt/",
+    "example": "The cat is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bird",
+    "englishWord": "bird",
+    "vietnameseMeaning": "con chim",
+    "pronunciation": "/bɜːrd/",
+    "example": "The bird is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "goldfish",
+    "englishWord": "goldfish",
+    "vietnameseMeaning": "cá vàng",
+    "pronunciation": "/ˈɡoʊldfɪʃ/",
+    "example": "The goldfish is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "lion",
+    "englishWord": "lion",
+    "vietnameseMeaning": "sư tử",
+    "pronunciation": "/ˈlaɪən/",
+    "example": "The lion is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "tiger",
+    "englishWord": "tiger",
+    "vietnameseMeaning": "hổ",
+    "pronunciation": "/ˈtaɪɡər/",
+    "example": "The tiger is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "elephant",
+    "englishWord": "elephant",
+    "vietnameseMeaning": "voi",
+    "pronunciation": "/ˈelɪfənt/",
+    "example": "The elephant is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "monkey",
+    "englishWord": "monkey",
+    "vietnameseMeaning": "khỉ",
+    "pronunciation": "/ˈmʌŋki/",
+    "example": "The monkey is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "horse",
+    "englishWord": "horse",
+    "vietnameseMeaning": "ngựa",
+    "pronunciation": "/hɔːrs/",
+    "example": "The horse is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cow",
+    "englishWord": "cow",
+    "vietnameseMeaning": "bò cái",
+    "pronunciation": "/kaʊ/",
+    "example": "The cow is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "pig",
+    "englishWord": "pig",
+    "vietnameseMeaning": "con heo",
+    "pronunciation": "/pɪɡ/",
+    "example": "The pig is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "rabbit",
+    "englishWord": "rabbit",
+    "vietnameseMeaning": "thỏ",
+    "pronunciation": "/ˈræbɪt/",
+    "example": "The rabbit is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "duck",
+    "englishWord": "duck",
+    "vietnameseMeaning": "vịt",
+    "pronunciation": "/dʌk/",
+    "example": "The duck is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "rooster",
+    "englishWord": "rooster",
+    "vietnameseMeaning": "gà trống",
+    "pronunciation": "/ˈruːstər/",
+    "example": "The rooster is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sheep",
+    "englishWord": "sheep",
+    "vietnameseMeaning": "cừu",
+    "pronunciation": "/ʃiːp/",
+    "example": "The sheep is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "goat",
+    "englishWord": "goat",
+    "vietnameseMeaning": "dê",
+    "pronunciation": "/ɡoʊt/",
+    "example": "The goat is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bear",
+    "englishWord": "bear",
+    "vietnameseMeaning": "gấu",
+    "pronunciation": "/ber/",
+    "example": "The bear is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "snake",
+    "englishWord": "snake",
+    "vietnameseMeaning": "rắn",
+    "pronunciation": "/sneɪk/",
+    "example": "The snake is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "turtle",
+    "englishWord": "turtle",
+    "vietnameseMeaning": "rùa",
+    "pronunciation": "/ˈtɜːrtəl/",
+    "example": "The turtle is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "dolphin",
+    "englishWord": "dolphin",
+    "vietnameseMeaning": "cá heo",
+    "pronunciation": "/ˈdɑːlfɪn/",
+    "example": "The dolphin is an interesting animal.",
+    "category": "Animals",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "house",
+    "englishWord": "house",
+    "vietnameseMeaning": "ngôi nhà",
+    "pronunciation": "/haʊs/",
+    "example": "The house is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "room",
+    "englishWord": "room",
+    "vietnameseMeaning": "căn phòng",
+    "pronunciation": "/ruːm/",
+    "example": "The room is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kitchen",
+    "englishWord": "kitchen",
+    "vietnameseMeaning": "nhà bếp",
+    "pronunciation": "/ˈkɪtʃɪn/",
+    "example": "The kitchen is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bedroom",
+    "englishWord": "bedroom",
+    "vietnameseMeaning": "phòng ngủ",
+    "pronunciation": "/ˈbedruːm/",
+    "example": "The bedroom is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bathroom",
+    "englishWord": "bathroom",
+    "vietnameseMeaning": "phòng tắm",
+    "pronunciation": "/ˈbæθruːm/",
+    "example": "The bathroom is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "door",
+    "englishWord": "door",
+    "vietnameseMeaning": "cửa ra vào",
+    "pronunciation": "/dɔːr/",
+    "example": "The door is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "window",
+    "englishWord": "window",
+    "vietnameseMeaning": "cửa sổ",
+    "pronunciation": "/ˈwɪndoʊ/",
+    "example": "The window is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "chair",
+    "englishWord": "chair",
+    "vietnameseMeaning": "ghế",
+    "pronunciation": "/tʃer/",
+    "example": "The chair is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "table",
+    "englishWord": "table",
+    "vietnameseMeaning": "cái bàn",
+    "pronunciation": "/ˈteɪbəl/",
+    "example": "The table is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bed",
+    "englishWord": "bed",
+    "vietnameseMeaning": "giường",
+    "pronunciation": "/bed/",
+    "example": "The bed is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sofa",
+    "englishWord": "sofa",
+    "vietnameseMeaning": "ghế sofa",
+    "pronunciation": "/ˈsoʊfə/",
+    "example": "The sofa is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "lamp",
+    "englishWord": "lamp",
+    "vietnameseMeaning": "đèn bàn",
+    "pronunciation": "/læmp/",
+    "example": "The lamp is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "television",
+    "englishWord": "television",
+    "vietnameseMeaning": "ti vi",
+    "pronunciation": "/ˈtelɪvɪʒən/",
+    "example": "The television is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "refrigerator",
+    "englishWord": "refrigerator",
+    "vietnameseMeaning": "tủ lạnh",
+    "pronunciation": "/rɪˈfrɪdʒəreɪtər/",
+    "example": "The refrigerator is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "fan",
+    "englishWord": "fan",
+    "vietnameseMeaning": "quạt",
+    "pronunciation": "/fæn/",
+    "example": "The fan is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "floor",
+    "englishWord": "floor",
+    "vietnameseMeaning": "sàn nhà",
+    "pronunciation": "/flɔːr/",
+    "example": "The floor is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wall",
+    "englishWord": "wall",
+    "vietnameseMeaning": "bức tường",
+    "pronunciation": "/wɔːl/",
+    "example": "The wall is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "roof",
+    "englishWord": "roof",
+    "vietnameseMeaning": "mái nhà",
+    "pronunciation": "/ruːf/",
+    "example": "The roof is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "garden",
+    "englishWord": "garden",
+    "vietnameseMeaning": "khu vườn",
+    "pronunciation": "/ˈɡɑːrdən/",
+    "example": "The garden is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "key",
+    "englishWord": "key",
+    "vietnameseMeaning": "chìa khóa",
+    "pronunciation": "/kiː/",
+    "example": "The key is in our house.",
+    "category": "House",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "doctor",
+    "englishWord": "doctor",
+    "vietnameseMeaning": "bác sĩ",
+    "pronunciation": "/ˈdɑːktər/",
+    "example": "The doctor works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nurse",
+    "englishWord": "nurse",
+    "vietnameseMeaning": "y tá, điều dưỡng",
+    "pronunciation": "/nɜːrs/",
+    "example": "The nurse works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "engineer",
+    "englishWord": "engineer",
+    "vietnameseMeaning": "kỹ sư",
+    "pronunciation": "/ˌendʒɪˈnɪr/",
+    "example": "The engineer works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "police_officer",
+    "englishWord": "police officer",
+    "vietnameseMeaning": "cảnh sát",
+    "pronunciation": "/pəˈliːs ˌɔːfɪsər/",
+    "example": "The police officer works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "firefighter",
+    "englishWord": "firefighter",
+    "vietnameseMeaning": "lính cứu hỏa",
+    "pronunciation": "/ˈfaɪərfaɪtər/",
+    "example": "The firefighter works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "chef",
+    "englishWord": "chef",
+    "vietnameseMeaning": "đầu bếp",
+    "pronunciation": "/ʃef/",
+    "example": "The chef works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "driver",
+    "englishWord": "driver",
+    "vietnameseMeaning": "tài xế",
+    "pronunciation": "/ˈdraɪvər/",
+    "example": "The driver works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "farmer",
+    "englishWord": "farmer",
+    "vietnameseMeaning": "nông dân",
+    "pronunciation": "/ˈfɑːrmər/",
+    "example": "The farmer works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "pilot",
+    "englishWord": "pilot",
+    "vietnameseMeaning": "phi công",
+    "pronunciation": "/ˈpaɪlət/",
+    "example": "The pilot works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "dentist",
+    "englishWord": "dentist",
+    "vietnameseMeaning": "nha sĩ",
+    "pronunciation": "/ˈdentɪst/",
+    "example": "The dentist works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "singer",
+    "englishWord": "singer",
+    "vietnameseMeaning": "ca sĩ",
+    "pronunciation": "/ˈsɪŋər/",
+    "example": "The singer works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "actor",
+    "englishWord": "actor",
+    "vietnameseMeaning": "nam diễn viên",
+    "pronunciation": "/ˈæktər/",
+    "example": "The actor works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "artist",
+    "englishWord": "artist",
+    "vietnameseMeaning": "họa sĩ, nghệ sĩ",
+    "pronunciation": "/ˈɑːrtɪst/",
+    "example": "The artist works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "programmer",
+    "englishWord": "programmer",
+    "vietnameseMeaning": "lập trình viên",
+    "pronunciation": "/ˈproʊɡræmər/",
+    "example": "The programmer works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "manager",
+    "englishWord": "manager",
+    "vietnameseMeaning": "quản lý",
+    "pronunciation": "/ˈmænɪdʒər/",
+    "example": "The manager works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "accountant",
+    "englishWord": "accountant",
+    "vietnameseMeaning": "kế toán",
+    "pronunciation": "/əˈkaʊntənt/",
+    "example": "The accountant works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "worker",
+    "englishWord": "worker",
+    "vietnameseMeaning": "công nhân, người lao động",
+    "pronunciation": "/ˈwɜːrkər/",
+    "example": "The worker works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "mechanic",
+    "englishWord": "mechanic",
+    "vietnameseMeaning": "thợ sửa máy",
+    "pronunciation": "/məˈkænɪk/",
+    "example": "The mechanic works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "waiter",
+    "englishWord": "waiter",
+    "vietnameseMeaning": "bồi bàn nam",
+    "pronunciation": "/ˈweɪtər/",
+    "example": "The waiter works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cashier",
+    "englishWord": "cashier",
+    "vietnameseMeaning": "thu ngân",
+    "pronunciation": "/kæˈʃɪr/",
+    "example": "The cashier works hard every day.",
+    "category": "Jobs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "head",
+    "englishWord": "head",
+    "vietnameseMeaning": "đầu",
+    "pronunciation": "/hed/",
+    "example": "The word head is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "eye",
+    "englishWord": "eye",
+    "vietnameseMeaning": "mắt",
+    "pronunciation": "/aɪ/",
+    "example": "The word eye is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "ear",
+    "englishWord": "ear",
+    "vietnameseMeaning": "tai",
+    "pronunciation": "/ɪr/",
+    "example": "The word ear is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nose",
+    "englishWord": "nose",
+    "vietnameseMeaning": "mũi",
+    "pronunciation": "/noʊz/",
+    "example": "The word nose is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "mouth",
+    "englishWord": "mouth",
+    "vietnameseMeaning": "miệng",
+    "pronunciation": "/maʊθ/",
+    "example": "The word mouth is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "hand",
+    "englishWord": "hand",
+    "vietnameseMeaning": "bàn tay",
+    "pronunciation": "/hænd/",
+    "example": "The word hand is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "arm",
+    "englishWord": "arm",
+    "vietnameseMeaning": "cánh tay",
+    "pronunciation": "/ɑːrm/",
+    "example": "The word arm is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "leg",
+    "englishWord": "leg",
+    "vietnameseMeaning": "chân",
+    "pronunciation": "/leɡ/",
+    "example": "The word leg is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "foot",
+    "englishWord": "foot",
+    "vietnameseMeaning": "bàn chân",
+    "pronunciation": "/fʊt/",
+    "example": "The word foot is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "heart",
+    "englishWord": "heart",
+    "vietnameseMeaning": "tim",
+    "pronunciation": "/hɑːrt/",
+    "example": "The word heart is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "stomach",
+    "englishWord": "stomach",
+    "vietnameseMeaning": "dạ dày, bụng",
+    "pronunciation": "/ˈstʌmək/",
+    "example": "The word stomach is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "tooth",
+    "englishWord": "tooth",
+    "vietnameseMeaning": "răng",
+    "pronunciation": "/tuːθ/",
+    "example": "The word tooth is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "hair",
+    "englishWord": "hair",
+    "vietnameseMeaning": "tóc",
+    "pronunciation": "/her/",
+    "example": "The word hair is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "finger",
+    "englishWord": "finger",
+    "vietnameseMeaning": "ngón tay",
+    "pronunciation": "/ˈfɪŋɡər/",
+    "example": "The word finger is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "shoulder",
+    "englishWord": "shoulder",
+    "vietnameseMeaning": "vai",
+    "pronunciation": "/ˈʃoʊldər/",
+    "example": "The word shoulder is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "knee",
+    "englishWord": "knee",
+    "vietnameseMeaning": "đầu gối",
+    "pronunciation": "/niː/",
+    "example": "The word knee is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "medicine",
+    "englishWord": "medicine",
+    "vietnameseMeaning": "thuốc",
+    "pronunciation": "/ˈmedɪsɪn/",
+    "example": "The word medicine is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "hospital",
+    "englishWord": "hospital",
+    "vietnameseMeaning": "bệnh viện",
+    "pronunciation": "/ˈhɑːspɪtəl/",
+    "example": "The word hospital is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "healthy",
+    "englishWord": "healthy",
+    "vietnameseMeaning": "khỏe mạnh",
+    "pronunciation": "/ˈhelθi/",
+    "example": "The word healthy is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sick",
+    "englishWord": "sick",
+    "vietnameseMeaning": "ốm, bệnh",
+    "pronunciation": "/sɪk/",
+    "example": "The word sick is related to the body or health.",
+    "category": "Body & Health",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wake_up",
+    "englishWord": "wake up",
+    "vietnameseMeaning": "thức dậy",
+    "pronunciation": "/weɪk ʌp/",
+    "example": "I wake up every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "brush_my_teeth",
+    "englishWord": "brush my teeth",
+    "vietnameseMeaning": "đánh răng",
+    "pronunciation": "/brʌʃ maɪ tiːθ/",
+    "example": "I brush my teeth every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wash_my_face",
+    "englishWord": "wash my face",
+    "vietnameseMeaning": "rửa mặt",
+    "pronunciation": "/wɑːʃ maɪ feɪs/",
+    "example": "I wash my face every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "have_breakfast",
+    "englishWord": "have breakfast",
+    "vietnameseMeaning": "ăn sáng",
+    "pronunciation": "/hæv ˈbrekfəst/",
+    "example": "I have breakfast every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "go_to_school",
+    "englishWord": "go to school",
+    "vietnameseMeaning": "đi học",
+    "pronunciation": "/ɡoʊ tə skuːl/",
+    "example": "I go to school every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "study",
+    "englishWord": "study",
+    "vietnameseMeaning": "học",
+    "pronunciation": "/ˈstʌdi/",
+    "example": "I study every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "work",
+    "englishWord": "work",
+    "vietnameseMeaning": "làm việc",
+    "pronunciation": "/wɜːrk/",
+    "example": "I work every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "read",
+    "englishWord": "read",
+    "vietnameseMeaning": "đọc",
+    "pronunciation": "/riːd/",
+    "example": "I read every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "write",
+    "englishWord": "write",
+    "vietnameseMeaning": "viết",
+    "pronunciation": "/raɪt/",
+    "example": "I write every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "listen",
+    "englishWord": "listen",
+    "vietnameseMeaning": "lắng nghe",
+    "pronunciation": "/ˈlɪsən/",
+    "example": "I listen every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "speak",
+    "englishWord": "speak",
+    "vietnameseMeaning": "nói",
+    "pronunciation": "/spiːk/",
+    "example": "I speak every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sleep",
+    "englishWord": "sleep",
+    "vietnameseMeaning": "ngủ",
+    "pronunciation": "/sliːp/",
+    "example": "I sleep every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cook",
+    "englishWord": "cook",
+    "vietnameseMeaning": "nấu ăn",
+    "pronunciation": "/kʊk/",
+    "example": "I cook every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "clean",
+    "englishWord": "clean",
+    "vietnameseMeaning": "dọn dẹp, làm sạch",
+    "pronunciation": "/kliːn/",
+    "example": "I clean every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "play",
+    "englishWord": "play",
+    "vietnameseMeaning": "chơi",
+    "pronunciation": "/pleɪ/",
+    "example": "I play every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "exercise",
+    "englishWord": "exercise",
+    "vietnameseMeaning": "tập thể dục",
+    "pronunciation": "/ˈeksərsaɪz/",
+    "example": "I exercise every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "walk",
+    "englishWord": "walk",
+    "vietnameseMeaning": "đi bộ",
+    "pronunciation": "/wɔːk/",
+    "example": "I walk every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "run",
+    "englishWord": "run",
+    "vietnameseMeaning": "chạy",
+    "pronunciation": "/rʌn/",
+    "example": "I run every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "watch_tv",
+    "englishWord": "watch TV",
+    "vietnameseMeaning": "xem ti vi",
+    "pronunciation": "/wɑːtʃ ˌtiːˈviː/",
+    "example": "I watch TV every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "relax",
+    "englishWord": "relax",
+    "vietnameseMeaning": "thư giãn",
+    "pronunciation": "/rɪˈlæks/",
+    "example": "I relax every day.",
+    "category": "Daily Activities",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "airport",
+    "englishWord": "airport",
+    "vietnameseMeaning": "sân bay",
+    "pronunciation": "/ˈerpɔːrt/",
+    "example": "The airport is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "airplane",
+    "englishWord": "airplane",
+    "vietnameseMeaning": "máy bay",
+    "pronunciation": "/ˈerpleɪn/",
+    "example": "The airplane is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "train",
+    "englishWord": "train",
+    "vietnameseMeaning": "tàu hỏa",
+    "pronunciation": "/treɪn/",
+    "example": "The train is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bus",
+    "englishWord": "bus",
+    "vietnameseMeaning": "xe buýt",
+    "pronunciation": "/bʌs/",
+    "example": "The bus is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "taxi",
+    "englishWord": "taxi",
+    "vietnameseMeaning": "taxi",
+    "pronunciation": "/ˈtæksi/",
+    "example": "The taxi is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "ticket",
+    "englishWord": "ticket",
+    "vietnameseMeaning": "vé",
+    "pronunciation": "/ˈtɪkɪt/",
+    "example": "The ticket is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "hotel",
+    "englishWord": "hotel",
+    "vietnameseMeaning": "khách sạn",
+    "pronunciation": "/hoʊˈtel/",
+    "example": "The hotel is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "passport",
+    "englishWord": "passport",
+    "vietnameseMeaning": "hộ chiếu",
+    "pronunciation": "/ˈpæspɔːrt/",
+    "example": "The passport is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "luggage",
+    "englishWord": "luggage",
+    "vietnameseMeaning": "hành lý",
+    "pronunciation": "/ˈlʌɡɪdʒ/",
+    "example": "The luggage is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "map",
+    "englishWord": "map",
+    "vietnameseMeaning": "bản đồ",
+    "pronunciation": "/mæp/",
+    "example": "The map is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "beach",
+    "englishWord": "beach",
+    "vietnameseMeaning": "bãi biển",
+    "pronunciation": "/biːtʃ/",
+    "example": "The beach is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "island",
+    "englishWord": "island",
+    "vietnameseMeaning": "hòn đảo",
+    "pronunciation": "/ˈaɪlənd/",
+    "example": "The island is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "city",
+    "englishWord": "city",
+    "vietnameseMeaning": "thành phố",
+    "pronunciation": "/ˈsɪti/",
+    "example": "The city is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "country",
+    "englishWord": "country",
+    "vietnameseMeaning": "đất nước",
+    "pronunciation": "/ˈkʌntri/",
+    "example": "The country is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "journey",
+    "englishWord": "journey",
+    "vietnameseMeaning": "chuyến đi",
+    "pronunciation": "/ˈdʒɜːrni/",
+    "example": "The journey is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "travel",
+    "englishWord": "travel",
+    "vietnameseMeaning": "du lịch, đi lại",
+    "pronunciation": "/ˈtrævəl/",
+    "example": "The travel is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "vacation",
+    "englishWord": "vacation",
+    "vietnameseMeaning": "kỳ nghỉ",
+    "pronunciation": "/veɪˈkeɪʃən/",
+    "example": "The vacation is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "bicycle",
+    "englishWord": "bicycle",
+    "vietnameseMeaning": "xe đạp",
+    "pronunciation": "/ˈbaɪsɪkəl/",
+    "example": "The bicycle is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "motorcycle",
+    "englishWord": "motorcycle",
+    "vietnameseMeaning": "xe máy",
+    "pronunciation": "/ˈmoʊtərsaɪkəl/",
+    "example": "The motorcycle is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "station",
+    "englishWord": "station",
+    "vietnameseMeaning": "nhà ga, trạm",
+    "pronunciation": "/ˈsteɪʃən/",
+    "example": "The station is useful when we travel.",
+    "category": "Travel",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sun",
+    "englishWord": "sun",
+    "vietnameseMeaning": "mặt trời",
+    "pronunciation": "/sʌn/",
+    "example": "The sun is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "moon",
+    "englishWord": "moon",
+    "vietnameseMeaning": "mặt trăng",
+    "pronunciation": "/muːn/",
+    "example": "The moon is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "star",
+    "englishWord": "star",
+    "vietnameseMeaning": "ngôi sao",
+    "pronunciation": "/stɑːr/",
+    "example": "The star is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sky",
+    "englishWord": "sky",
+    "vietnameseMeaning": "bầu trời",
+    "pronunciation": "/skaɪ/",
+    "example": "The sky is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cloud",
+    "englishWord": "cloud",
+    "vietnameseMeaning": "đám mây",
+    "pronunciation": "/klaʊd/",
+    "example": "The cloud is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "rain",
+    "englishWord": "rain",
+    "vietnameseMeaning": "mưa",
+    "pronunciation": "/reɪn/",
+    "example": "The rain is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wind",
+    "englishWord": "wind",
+    "vietnameseMeaning": "gió",
+    "pronunciation": "/wɪnd/",
+    "example": "The wind is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "snow",
+    "englishWord": "snow",
+    "vietnameseMeaning": "tuyết",
+    "pronunciation": "/snoʊ/",
+    "example": "The snow is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "river",
+    "englishWord": "river",
+    "vietnameseMeaning": "sông",
+    "pronunciation": "/ˈrɪvər/",
+    "example": "The river is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sea",
+    "englishWord": "sea",
+    "vietnameseMeaning": "biển",
+    "pronunciation": "/siː/",
+    "example": "The sea is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "mountain",
+    "englishWord": "mountain",
+    "vietnameseMeaning": "núi",
+    "pronunciation": "/ˈmaʊntən/",
+    "example": "The mountain is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "forest",
+    "englishWord": "forest",
+    "vietnameseMeaning": "rừng",
+    "pronunciation": "/ˈfɔːrɪst/",
+    "example": "The forest is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "flower",
+    "englishWord": "flower",
+    "vietnameseMeaning": "hoa",
+    "pronunciation": "/ˈflaʊər/",
+    "example": "The flower is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "tree",
+    "englishWord": "tree",
+    "vietnameseMeaning": "cây",
+    "pronunciation": "/triː/",
+    "example": "The tree is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "grass",
+    "englishWord": "grass",
+    "vietnameseMeaning": "cỏ",
+    "pronunciation": "/ɡræs/",
+    "example": "The grass is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "weather",
+    "englishWord": "weather",
+    "vietnameseMeaning": "thời tiết",
+    "pronunciation": "/ˈweðər/",
+    "example": "The weather is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "hot",
+    "englishWord": "hot",
+    "vietnameseMeaning": "nóng",
+    "pronunciation": "/hɑːt/",
+    "example": "The hot is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "cold",
+    "englishWord": "cold",
+    "vietnameseMeaning": "lạnh",
+    "pronunciation": "/koʊld/",
+    "example": "The cold is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "spring",
+    "englishWord": "spring",
+    "vietnameseMeaning": "mùa xuân",
+    "pronunciation": "/sprɪŋ/",
+    "example": "The spring is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "summer",
+    "englishWord": "summer",
+    "vietnameseMeaning": "mùa hè",
+    "pronunciation": "/ˈsʌmər/",
+    "example": "The summer is part of nature or weather.",
+    "category": "Nature & Weather",
+    "difficulty": "Easy"
+  }
+]

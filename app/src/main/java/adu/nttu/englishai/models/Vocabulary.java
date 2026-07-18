@@ -1,50 +1,64 @@
 package adu.nttu.englishai.models;
 
-public class Vocabulary {
-    private String learningStatus;
+import com.google.firebase.firestore.Exclude;
+
+import java.io.Serializable;
+
+public class Vocabulary implements Serializable {
+
     private String id;
     private String englishWord;
     private String vietnameseMeaning;
     private String pronunciation;
+    private String wordType;
     private String example;
+    private String exampleMeaning;
     private String category;
     private String level;
+    private String imageUrl;
+
+    // Dữ liệu riêng của từng người học
     private boolean favorite;
-    private boolean learned;
+    private String learningStatus;
 
-    // Constructor rỗng: cần cho Firebase Firestore
+    public static final String STATUS_NOT_STARTED = "NOT_STARTED";
+    public static final String STATUS_LEARNING = "LEARNING";
+    public static final String STATUS_LEARNED = "LEARNED";
+
+    /**
+     * Constructor rỗng bắt buộc để Firestore
+     * chuyển dữ liệu thành đối tượng Vocabulary.
+     */
     public Vocabulary() {
+        this.favorite = false;
+        this.learningStatus = STATUS_NOT_STARTED;
     }
 
-    public String getLearningStatus() {
-        return learningStatus;
-    }
-
-    public void setLearningStatus(String learningStatus) {
-        this.learningStatus = learningStatus;
-
-    }
     public Vocabulary(
             String id,
             String englishWord,
             String vietnameseMeaning,
             String pronunciation,
+            String wordType,
             String example,
+            String exampleMeaning,
             String category,
-            String level
+            String level,
+            String imageUrl
     ) {
         this.id = id;
         this.englishWord = englishWord;
         this.vietnameseMeaning = vietnameseMeaning;
         this.pronunciation = pronunciation;
+        this.wordType = wordType;
         this.example = example;
+        this.exampleMeaning = exampleMeaning;
         this.category = category;
         this.level = level;
+        this.imageUrl = imageUrl;
 
         this.favorite = false;
-        this.learned = false;
-
-        this.learningStatus = "NOT_STARTED";
+        this.learningStatus = STATUS_NOT_STARTED;
     }
 
     public String getId() {
@@ -79,12 +93,28 @@ public class Vocabulary {
         this.pronunciation = pronunciation;
     }
 
+    public String getWordType() {
+        return wordType;
+    }
+
+    public void setWordType(String wordType) {
+        this.wordType = wordType;
+    }
+
     public String getExample() {
         return example;
     }
 
     public void setExample(String example) {
         this.example = example;
+    }
+
+    public String getExampleMeaning() {
+        return exampleMeaning;
+    }
+
+    public void setExampleMeaning(String exampleMeaning) {
+        this.exampleMeaning = exampleMeaning;
     }
 
     public String getCategory() {
@@ -103,7 +133,25 @@ public class Vocabulary {
         this.level = level;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     * Favorite không được lưu chung trong collection vocabularies.
+     * Trường này sẽ được ghép từ tiến độ riêng của người dùng.
+     */
+    @Exclude
     public boolean isFavorite() {
+        return favorite;
+    }
+
+    @Exclude
+    public boolean getFavorite() {
         return favorite;
     }
 
@@ -111,11 +159,71 @@ public class Vocabulary {
         this.favorite = favorite;
     }
 
-    public boolean isLearned() {
-        return learned;
+    /**
+     * learningStatus không được lưu chung trong collection vocabularies.
+     * Trường này thuộc tiến độ riêng của từng tài khoản.
+     */
+    @Exclude
+    public String getLearningStatus() {
+        if (learningStatus == null || learningStatus.trim().isEmpty()) {
+            return STATUS_NOT_STARTED;
+        }
+
+        return learningStatus;
     }
 
-    public void setLearned(boolean learned) {
-        this.learned = learned;
+    public void setLearningStatus(String learningStatus) {
+        if (learningStatus == null || learningStatus.trim().isEmpty()) {
+            this.learningStatus = STATUS_NOT_STARTED;
+            return;
+        }
+
+        if (!STATUS_NOT_STARTED.equals(learningStatus)
+                && !STATUS_LEARNING.equals(learningStatus)
+                && !STATUS_LEARNED.equals(learningStatus)) {
+
+            this.learningStatus = STATUS_NOT_STARTED;
+            return;
+        }
+
+        this.learningStatus = learningStatus;
+    }
+
+    @Exclude
+    public boolean isNotStarted() {
+        return STATUS_NOT_STARTED.equals(getLearningStatus());
+    }
+
+    @Exclude
+    public boolean isLearning() {
+        return STATUS_LEARNING.equals(getLearningStatus());
+    }
+
+    @Exclude
+    public boolean isLearned() {
+        return STATUS_LEARNED.equals(getLearningStatus());
+    }
+    public Vocabulary(
+            String id,
+            String englishWord,
+            String vietnameseMeaning,
+            String pronunciation,
+            String example,
+            String category,
+            String level
+    ) {
+        this.id = id;
+        this.englishWord = englishWord;
+        this.vietnameseMeaning = vietnameseMeaning;
+        this.pronunciation = pronunciation;
+        this.example = example;
+        this.category = category;
+        this.level = level;
+
+        this.wordType = "";
+        this.exampleMeaning = "";
+        this.imageUrl = "";
+        this.favorite = false;
+        this.learningStatus = STATUS_NOT_STARTED;
     }
 }

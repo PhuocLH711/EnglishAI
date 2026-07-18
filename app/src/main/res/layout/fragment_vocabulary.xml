@@ -75,7 +75,7 @@
                         android:id="@+id/tvVocabularySummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10 từ vựng đang chờ bạn"
+                        android:text="từ vựng đang chờ bạn"
                         android:textColor="#3E356B"
                         android:textSize="16sp"
                         android:textStyle="bold" />

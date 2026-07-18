@@ -49,6 +49,9 @@
             android:name=".activities.ChatHistoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.ImportVocabularyActivity"
+            android:exported="false" />
 
     </application>
 
