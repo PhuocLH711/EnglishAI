@@ -35,6 +35,7 @@ import java.util.Set;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.adapters.VocabularyAdapter;
+import adu.nttu.englishai.models.DataRepository;
 import adu.nttu.englishai.models.Vocabulary;
 
 // =========================================================================
@@ -213,7 +214,7 @@ public class VocabularyFragment extends Fragment {
                                                     )
                                             )
                     );
-
+                    DataRepository.getInstance().setVocabularyList(vocabularyList);
                     // Khi đã có danh sách từ chung -> Gọi tiếp hàm tải tiến độ học cá nhân
                     loadUserProgress();
                 })
