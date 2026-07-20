@@ -14,59 +14,61 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import adu.nttu.englishai.R;
 
 // =========================================================================
-// HOME FRAGMENT: Màn hình Trang chủ chào đón & Bản đồ chọn Ải thử thách
+// HOME FRAGMENT: Màn hình Trang chủ & Bản đồ chọn Ải thử thách
 // =========================================================================
 public class HomeFragment extends Fragment {
 
     public HomeFragment() {}
 
     // =========================================================================
-    // HÀM TẠO GIAO DIỆN VÀ GÁN SỰ KIỆN (ON CREATE VIEW)
+    // HÀM TẠO GIAO DIỆN
     // =========================================================================
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Bơm (inflate) bản thiết kế XML fragment_home thành đối tượng View thực tế
+        // Bơm bản thiết kế XML fragment_home thành đối tượng View thực tế
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // =========================================================================
-        // 1. HIỂN THỊ TÊN THẬT TỪ FIREBASE (SMART NAME RESOLUTION)
+        // 1. HIỂN THỊ TÊN THẬT TỪ FIREBASE
         // =========================================================================
         TextView tvGreeting = view.findViewById(R.id.tvGreeting);
         // Lấy thông tin tài khoản đang đăng nhập hiện tại từ bộ nhớ đệm Firebase Auth
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            // 1. Gán tạm tên từ Email trước để màn hình không bị trống lúc chờ mạng
+            String email = currentUser.getEmail();
+            String fallbackName = (email != null && email.contains("@"))
+                    ? email.substring(0, email.indexOf("@")) : "bạn";
+            tvGreeting.setText("Chào " + fallbackName + "!");
 
-        if (user != null) {
-            String finalName = "";
-            /*
-             * KỸ THUẬT PHÒNG VỆ VÀ THÂN THIỆN VỚI NGƯỜI DÙNG (Fallback Handling):
-             * - Ưu tiên 1: Lấy Tên hiển thị (DisplayName) được lưu trong profile.
-             * - Ưu tiên 2: Nếu người dùng đăng ký nhanh bằng Email mà chưa kịp cập nhật tên,
-             *   hệ thống sẽ tự động cắt phần chuỗi nằm trước dấu "@" trong email (ví dụ: "nam123@gmail.com" -> "nam123").
-             * - Sau đó, dùng substring và toUpperCase để tự động Viết Hoa Chữ Cái Đầu ("nam123" -> "Nam123"),
-             *   giúp lời chào hiển thị lên giao diện luôn trang trọng, lịch sự và đẹp mắt.
-             */
-            if (user.getDisplayName() != null && !user.getDisplayName().trim().isEmpty()) {
-                finalName = user.getDisplayName().trim();
-            } else if (user.getEmail() != null) {
-                String email = user.getEmail();
-                String fallbackName = email.contains("@") ? email.substring(0, email.indexOf("@")) : email;
-                if (!fallbackName.isEmpty()) {
-                    finalName = fallbackName.substring(0, 1).toUpperCase() + fallbackName.substring(1);
-                }
-            }
-            // Đẩy lời chào lên thẻ TextView
-            if (tvGreeting != null && !finalName.isEmpty()) {
-                tvGreeting.setText("Chào " + finalName + "! 👋");
-            }
+            // 2. Gọi lên Firestore lấy tên thật
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(document -> {
+                        if (!isAdded()) return;
+
+                        String realName = document.getString("name");
+                        if (realName == null || realName.trim().isEmpty()) {
+                            realName = document.getString("fullName");
+                        }
+
+                        // Nếu trên Database có tên thật -> Cập nhật lại lời chào ngay lập tức!
+                        if (realName != null && !realName.trim().isEmpty()) {
+                            tvGreeting.setText("Chào " + realName.trim() + "!");
+                        }
+                    });
         }
 
         // =========================================================================
-        // 2. ÁNH XẠ CÁC ẢI THỬ THÁCH (STAGE CARDS MAPPING)
+        // 2. ÁNH XẠ CÁC ẢI THỬ THÁCH
         // =========================================================================
         Button btnStartDaily = view.findViewById(R.id.btnStartDaily);
         MaterialCardView cardStage1 = view.findViewById(R.id.cardStage1);
@@ -112,19 +114,17 @@ public class HomeFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG: ĐIỀU HƯỚNG & TRUYỀN THAM SỐ ĐỘ KHÓ (STAGE ROUTER)
+    // HÀM ĐIỀU HƯỚNG & TRUYỀN THAM SỐ ĐỘ KHÓ
     // =========================================================================
-    /**
+    /*
      * Hàm mở Trạm Nhiệm Vụ Ải (Đầy đủ 4 kỹ năng: Từ vựng, Nói, Quiz, Lật thẻ)
      */
     private void openStageQuiz(String difficulty, String stageName) {
         StageMissionFragment missionFragment = new StageMissionFragment();
 
         /*
-         * KỸ THUẬT ĐÓNG GÓI DỮ LIỆU GIỮA CÁC FRAGMENT (BUNDLE PASSING):
-         * - Không dùng biến static hay truyền qua hàm tạo (constructor),
-         *   mà đóng gói dữ liệu vào một đối tượng Bundle bằng putString().
-         * - setArguments(bundle): Gắn gói dữ liệu vào Fragment mới.
+         * ĐÓNG GÓI DỮ LIỆU GIỮA CÁC FRAGMENT
+         *   Gắn gói dữ liệu vào Fragment mới.
          *   Kỹ thuật này giúp hệ thống Android tự động bảo toàn tham số (Độ khó & Tên ải)
          *   kể cả khi ứng dụng bị thu hồi bộ nhớ hay người dùng xoay ngang màn hình.
          */
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
         bundle.putString("STAGE_NAME", stageName);
         missionFragment.setArguments(bundle);
 
-        // Chuyển sang màn hình Trạm nhiệm vụ và lưu giao diện Trang chủ vào ngăn xếp bộ nhớ (Backstack)
+        // Chuyển sang màn hình Trạm nhiệm vụ và lưu giao diện Trang chủ vào ngăn xếp bộ nhớ
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, missionFragment)

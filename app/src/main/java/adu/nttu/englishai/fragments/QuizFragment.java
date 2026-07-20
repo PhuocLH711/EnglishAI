@@ -28,32 +28,32 @@ import adu.nttu.englishai.models.Vocabulary;
 // =========================================================================
 public class QuizFragment extends Fragment {
 
-    // Các thành phần giao diện (UI Components)
-    private TextView tvQuestion, tvConfetti; // Nhãn câu hỏi và nhãn pháo hoa chúc mừng
+
+    private TextView tvQuestion, tvConfetti;
     private Button btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4, btnNextQuestion;
 
-    // Danh sách toàn bộ từ vựng và biến lưu từ vựng đang được hỏi hiện tại
+
     private List<Vocabulary> vocabularyList;
     private Vocabulary currentQuestionWord;
 
-    // Cờ đánh dấu câu hỏi đã được trả lời đúng hay chưa (Tránh spam bấm liên tục)
+
     private boolean isQuestionAnswered = false;
 
     public QuizFragment() {}
 
     // =========================================================================
-    // HÀM TẠO GIAO DIỆN & GÁN SỰ KIỆN (ON CREATE VIEW)
+    // HÀM TẠO GIAO DIỆN & GÁN SỰ KIỆN
     // =========================================================================
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Bơm (inflate) bản thiết kế XML fragment_quiz thành đối tượng View
+        // Bơm  bản thiết kế XML fragment_quiz thành đối tượng View
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
 
-        // Xử lý nút Back: Bấm vào là trượt mượt mà về lại trang Danh Sách Nhiệm Vụ Ải
+        // Xử lý nút Back
         View btnBackToStage = view.findViewById(R.id.btnBackToStage);
         if (btnBackToStage != null) {
             btnBackToStage.setOnClickListener(v -> {
-                // Đóng Fragment hiện tại và trở về màn hình bản đồ Ải trong ngăn xếp (Backstack)
+                // Đóng Fragment hiện tại và trở về màn hình bản đồ Ải trong ngăn xếp
                 requireActivity().getSupportFragmentManager().popBackStack();
             });
         }
@@ -67,7 +67,7 @@ public class QuizFragment extends Fragment {
         btnAnswer4 = view.findViewById(R.id.btnAnswer4);
         btnNextQuestion = view.findViewById(R.id.btnNextQuestion);
 
-        // Lấy danh sách từ vựng từ bộ nhớ trung tâm (Singleton Pattern)
+        // Lấy danh sách từ vựng từ bộ nhớ trung tâm
         vocabularyList = DataRepository.getInstance().getVocabularyList();
 
         // Khởi tạo câu hỏi trắc nghiệm đầu tiên
@@ -80,14 +80,9 @@ public class QuizFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 1: THUẬT TOÁN TẠO CÂU HỎI & ĐÁP ÁN NHIỄU (QUESTION GENERATION)
+    // HÀM 1: THUẬT TOÁN TẠO CÂU HỎI & ĐÁP ÁN NHIỄU
     // =========================================================================
     private void generateNewQuestion() {
-        /*
-         * LẬP TRÌNH PHÒNG VỆ (Defensive Guard Check):
-         * Trắc nghiệm cần 4 đáp án (1 đúng + 3 sai). Nếu danh sách từ vựng trống hoặc có ít hơn 4 từ,
-         * hệ thống sẽ không đủ dữ liệu tạo đáp án nhiễu -> Dừng hàm ngay lập tức để tránh lỗi Crash!
-         */
         if (vocabularyList == null || vocabularyList.size() < 4) return;
 
         // Reset trạng thái cờ, mở khóa 4 nút và giấu nút Tiếp theo & pháo hoa đi
@@ -101,12 +96,12 @@ public class QuizFragment extends Fragment {
         currentQuestionWord = vocabularyList.get(random.nextInt(vocabularyList.size()));
         tvQuestion.setText("Nghĩa của từ '" + currentQuestionWord.getEnglishWord() + "' là gì?");
 
-        // 2. Tạo danh sách chứa 4 đáp án (Bắt đầu bằng việc thêm ngay đáp án đúng vào trước)
+        // 2. Tạo danh sách chứa 4 đáp án
         List<String> options = new ArrayList<>();
         options.add(currentQuestionWord.getVietnameseMeaning());
 
         /*
-         * 3. THUẬT TOÁN TẠO ĐÁP ÁN NHIỄU KHÔNG TRÙNG LẶP (Unique Random Distractor Generation):
+         * 3. THUẬT TOÁN TẠO ĐÁP ÁN NHIỄU KHÔNG TRÙNG LẶP
          * Dùng vòng lặp while để liên tục bốc ngẫu nhiên các từ khác trong kho.
          * Chỉ khi nào từ bốc được CHƯA TỒN TẠI trong danh sách options (!options.contains) thì mới thêm vào.
          * Vòng lặp dừng ngay khi đủ 4 đáp án (1 đúng + 3 nhiễu sai).
@@ -135,7 +130,7 @@ public class QuizFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 2: KIỂM TRA ĐÁP ÁN & CƠ CHẾ CHO PHÉP CHỌN LẠI (ANSWER CHECKING)
+    // HÀM 2: KIỂM TRA ĐÁP ÁN & CƠ CHẾ CHO PHÉP CHỌN LẠI
     // =========================================================================
     private void checkAnswer(Button selectedButton, String selectedAnswer) {
         if (isQuestionAnswered) return; // Nếu đã trả lời đúng rồi thì không cho bấm các nút khác nữa
@@ -144,7 +139,7 @@ public class QuizFragment extends Fragment {
         if (selectedAnswer.equals(currentQuestionWord.getVietnameseMeaning())) {
             isQuestionAnswered = true;
 
-            // 1. Đổi nút sang tông màu xanh ngọc dịu mắt (#E8F5E9) + Chữ xanh đậm (#1B5E20)
+            // 1. Đổi nút sang tông màu xanh ngọc
             selectedButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#E8F5E9")));
             selectedButton.setTextColor(Color.parseColor("#1B5E20"));
 
@@ -159,18 +154,11 @@ public class QuizFragment extends Fragment {
             Toast.makeText(getContext(), "Chính xác! Bạn giỏi quá 🎉", Toast.LENGTH_SHORT).show();
 
         } else {
-            // TRƯỜNG HỢP 2: CHỌN SAI ĐÁP ÁN (CƠ CHẾ RETRY THÂN THIỆN)
-            // Đổi nút vừa bấm sang tông màu đỏ hồng dịu mắt (#FFEBEE) + Chữ đỏ đậm (#B71C1C)
+            // TRƯỜNG HỢP 2: CHỌN SAI ĐÁP ÁN
+            // Đổi nút vừa bấm sang tông màu đỏ
             selectedButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#FFEBEE")));
             selectedButton.setTextColor(Color.parseColor("#B71C1C"));
 
-            /*
-             * BÍ KÍP ĐỒ ÁN (UX GAMIFICATION ENHANCEMENT):
-             * Thay vì khóa cả 4 nút làm người dùng bị mất lượt ngay lập tức,
-             * ta CHỈ KHÓA duy nhất nút vừa chọn sai (selectedButton.setEnabled(false)).
-             * Các nút còn lại VẪN MỞ để học viên được tiếp tục suy nghĩ và bấm thử lại cho đến khi tìm ra đáp án đúng!
-             * Cách thiết kế này giúp giảm áp lực tâm lý, khuyến khích sự tự học qua thử-và-sai (Trial and Error).
-             */
             selectedButton.setEnabled(false);
 
             // Hiện Toast động viên người học chọn lại
@@ -179,29 +167,21 @@ public class QuizFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 3: HIỆU ỨNG HOẠT HÌNH PHÁO HOA (CONFETTI ANIMATION SET)
+    // HÀM 3: HIỆU ỨNG HOẠT HÌNH PHÁO HOA
     // =========================================================================
     private void showConfettiAnimation() {
         tvConfetti.setVisibility(View.VISIBLE);
 
-        /*
-         * KỸ THUẬT KẾT HỢP HOẠT HÌNH KÉP (ANIMATION SET):
-         * - ScaleAnimation: Phóng to pháo hoa từ 20% (0.2f) lên 150% (1.5f) lấy tâm nằm chính giữa thẻ (0.5f).
-         * - AlphaAnimation: Làm mờ dần pháo hoa từ rõ ràng 100% (1f) xuống tàng hình 0% (0f).
-         */
         ScaleAnimation scale = new ScaleAnimation(0.2f, 1.5f, 0.2f, 1.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         AlphaAnimation alpha = new AlphaAnimation(1f, 0f);
 
-        // AnimationSet(true): Nhóm cả 2 hiệu ứng Phóng to và Làm mờ để chạy ĐỒNG THỜI cùng lúc!
         AnimationSet set = new AnimationSet(true);
         set.addAnimation(scale);
         set.addAnimation(alpha);
-        set.setDuration(1200); // Tổng thời gian bay pháo hoa là 1.2 giây
+        set.setDuration(1200);
 
         tvConfetti.startAnimation(set);
 
-        // KỸ THUẬT DỌN DẸP GIAO DIỆN: Sau đúng 1.2 giây bay pháo hoa xong -> Lập tức ẩn View đi (GONE)
-        // Ngăn thẻ TextView trống che khuất màn hình cản trở các thao tác bấm nút tiếp theo
         tvConfetti.postDelayed(() -> tvConfetti.setVisibility(View.GONE), 1200);
     }
 

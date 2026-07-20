@@ -25,41 +25,32 @@ import adu.nttu.englishai.models.DataRepository;
 import adu.nttu.englishai.models.Vocabulary;
 
 // =========================================================================
-// MEMORY MATCH FRAGMENT: Màn hình trò chơi Lật Thẻ Tìm Cặp Từ (English <-> Việt)
+// MEMORY MATCH FRAGMENT: Màn hình trò chơi Lật Thẻ Tìm Cặp Từ
 // =========================================================================
 public class MemoryMatchFragment extends Fragment {
 
-    // Các thành phần giao diện (UI Components)
-    private GridLayout gridCards; // Khung lưới chứa 12 thẻ (3 cột x 4 hàng)
+    private GridLayout gridCards;
     private TextView tvPairsFound, tvScore;
     private Button btnPlayAgain;
 
-    // Danh sách lưu trữ 12 thẻ trên màn hình và biến theo dõi 2 thẻ đang được chọn
     private List<CardItem> cardList = new ArrayList<>();
     private CardItem firstSelectedCard = null;
     private CardItem secondSelectedCard = null;
 
-    /*
-     * CỜ BẢO VỆ LUỒNG (STATE LOCK FLAG - CRITICAL):
-     * Khi người dùng lật sai 2 thẻ, hệ thống cần 1 giây (1000ms) để úp thẻ lại.
-     * Biến isProcessing = true giúp khóa giao diện, KHÔNG cho người dùng bấm tiếp thẻ thứ 3, thứ 4
-     * trong lúc chờ 1 giây đó. Tránh tuyệt đối lỗi xung đột logic (Race Condition / Click Spamming).
-     */
     private boolean isProcessing = false;
     private int pairsFound = 0;
     private int totalScore = 0;
-    private final int TOTAL_PAIRS = 6; // 6 cặp từ = 12 thẻ trên lưới
+    private final int TOTAL_PAIRS = 6;
 
     // =========================================================================
-    // LỚP MÔ HÌNH NỘI BỘ: THẺ TỪ VỰNG (INNER STATIC CLASS)
+    // LỚP MÔ HÌNH NỘI BỘ: THẺ TỪ VỰNG
     // =========================================================================
-    // Dùng static để tối ưu bộ nhớ. Mỗi CardItem đại diện cho 1 nút bấm trên màn hình.
     private static class CardItem {
-        String wordId;      // Mã ID của từ vựng (Dùng để đối chiếu thẻ Tiếng Anh và thẻ Tiếng Việt có cùng ID không)
-        String displayText; // Chữ hiển thị trên thẻ (Nghĩa Anh hoặc nghĩa Việt)
-        Button button;      // Tham chiếu trực tiếp đến nút bấm UI
-        boolean isFlipped = false; // Thẻ đang ngửa (true) hay úp (false)
-        boolean isMatched = false; // Thẻ đã tìm đúng cặp và bị khóa (true) hay chưa
+        String wordId;
+        String displayText;
+        Button button;
+        boolean isFlipped = false;
+        boolean isMatched = false;
 
         CardItem(String wordId, String displayText) {
             this.wordId = wordId;
@@ -70,14 +61,14 @@ public class MemoryMatchFragment extends Fragment {
     public MemoryMatchFragment() {}
 
     // =========================================================================
-    // HÀM TẠO GIAO DIỆN & GÁN SỰ KIỆN (ON CREATE VIEW)
+    // HÀM TẠO GIAO DIỆN & GÁN SỰ KIỆN
     // =========================================================================
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Bơm (inflate) bản thiết kế XML fragment_memory_match thành đối tượng View
+        // Bơm bản thiết kế XML fragment_memory_match thành đối tượng View
         View view = inflater.inflate(R.layout.fragment_memory_match, container, false);
 
-        // Xử lý nút Back: Bấm vào là trượt mượt mà về lại trang Danh Sách Nhiệm Vụ Ải
+        // Xử lý nút Back
         View btnBackToStage = view.findViewById(R.id.btnBackToStage);
         if (btnBackToStage != null) {
             btnBackToStage.setOnClickListener(v -> {
@@ -94,14 +85,14 @@ public class MemoryMatchFragment extends Fragment {
         // Khởi tạo ván chơi mới ngay khi mở màn hình
         startNewGame();
 
-        // Bấm nút Chơi lại -> Gọi startNewGame() để reset bàn chơi
+        // Bấm nút Chơi lại để reset bàn chơi
         btnPlayAgain.setOnClickListener(v -> startNewGame());
 
         return view;
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 1: KHỞI TẠO BÀN CHƠI & XÁO TRỘN THẺ (GAME INITIALIZATION)
+    // HÀM 1: KHỞI TẠO BÀN CHƠI & XÁO TRỘN THẺ
     // =========================================================================
     private void startNewGame() {
         // 1. Reset toàn bộ điểm số, trạng thái và xóa sạch thẻ cũ trên màn hình
@@ -124,7 +115,6 @@ public class MemoryMatchFragment extends Fragment {
         }
 
         /*
-         * 3. KỸ THUẬT PHÒNG VỆ DỮ LIỆU (DEFENSIVE FALLBACK DATA):
          * Trò chơi cần đúng 6 cặp từ (TOTAL_PAIRS = 6). Nếu người dùng mới tải app,
          * chưa học hoặc chưa có đủ 6 từ trong hệ thống, ván chơi sẽ bị lỗi hoặc trống trơn.
          * Code tự động phát hiện và chèn ngay 8 từ vựng cơ bản mẫu vào để đảm bảo game luôn chơi được 100%!
@@ -145,7 +135,7 @@ public class MemoryMatchFragment extends Fragment {
         Collections.shuffle(allWords);
         List<Vocabulary> selectedWords = allWords.subList(0, TOTAL_PAIRS);
 
-        // 4. Tạo ra 12 thẻ từ 6 từ vựng được chọn (Mỗi từ tạo 1 thẻ Tiếng Anh + 1 thẻ Tiếng Việt, chung wordId)
+        // 4. Tạo ra 12 thẻ từ 6 từ vựng được chọn
         for (Vocabulary vocab : selectedWords) {
             cardList.add(new CardItem(vocab.getId(), vocab.getEnglishWord()));
             cardList.add(new CardItem(vocab.getId(), vocab.getVietnameseMeaning()));
@@ -154,13 +144,7 @@ public class MemoryMatchFragment extends Fragment {
         // 5. Xáo trộn ngẫu nhiên vị trí của 12 thẻ này trên bàn chơi
         Collections.shuffle(cardList);
 
-        /*
-         * 6. KỸ THUẬT TẠO GIAO DIỆN ĐỘNG BẰNG JAVA CODE (PROGRAMMATIC UI GENERATION):
-         * Thay vì viết 12 nút trong XML, ta chạy vòng lặp tạo 12 Button và đưa vào GridLayout.
-         * - params.width = 0 & columnSpec = spec(i % 3, 1f): BÍ KÍP CHIA ĐỀU 3 CỘT!
-         *   Thiết lập chiều rộng 0 kèm trọng số weight = 1f ép Android phải tự động tính toán
-         *   và chia đều chiều ngang màn hình cho đúng 3 cột bằng nhau, không bao giờ bị lệch.
-         */
+        // 6. TẠO GIAO DIỆN ĐỘNG BẰNG JAVA CODE:
         for (int i = 0; i < cardList.size(); i++) {
             CardItem card = cardList.get(i);
             Button btn = createCardButton(card);
@@ -169,8 +153,7 @@ public class MemoryMatchFragment extends Fragment {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0; // Để chia đều cho 3 cột theo trọng số 1f bên dưới
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = GridLayout.spec(i % 3, 1f); // i % 3 giúp tuần hoàn chỉ số cột: 0, 1, 2, 0, 1, 2...
-            params.setMargins(12, 12, 12, 12);
+            params.columnSpec = GridLayout.spec(i % 3, 1f);
             btn.setLayoutParams(params);
 
             // Ép chiều cao tối thiểu cho thẻ nổi bật, không bao giờ bị tàng hình hoặc quá bẹp
@@ -181,17 +164,17 @@ public class MemoryMatchFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM TẠO NÚT BẤM VÀ TRANG ĐIỂM THẺ (UI STYLING)
+    // HÀM TẠO NÚT BẤM
     // =========================================================================
     private Button createCardButton(CardItem card) {
         Button btn = new Button(getContext());
-        btn.setText("❓"); // Mặc định khi mới tạo là úp thẻ (hiện dấu hỏi chấm)
+        btn.setText("❓"); // Mặc định khi mới tạo là úp thẻ
         btn.setTextSize(24f);
         btn.setGravity(Gravity.CENTER);
         btn.setAllCaps(false); // Không ép chữ viết hoa để giữ nguyên định dạng từ vựng
         btn.setPadding(8, 8, 8, 8);
 
-        // Thiết lập giao diện thẻ úp: Nền tím nhạt, chữ tím đậm, có bóng đổ 3D (elevation 6f)
+        // Thiết lập giao diện thẻ úp
         btn.setBackgroundResource(R.drawable.bg_button_quiz);
         btn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#E1BEE7")));
         btn.setTextColor(Color.parseColor("#4A148C"));
@@ -203,20 +186,20 @@ public class MemoryMatchFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 2: XỬ LÝ LẬT THẺ & KIỂM TRA ĐIỀU KIỆN (CARD CLICK LOGIC)
+    // HÀM 2: XỬ LÝ LẬT THẺ & KIỂM TRA ĐIỀU KIỆN
     // =========================================================================
     private void onCardClicked(CardItem card) {
-        // LẬP TRÌNH PHÒNG VỆ: Nếu thẻ đã ngửa, đã tìm đúng cặp, hoặc hệ thống đang chờ úp thẻ sai -> Bỏ qua lệnh click
+        // Nếu thẻ đã ngửa, đã tìm đúng cặp, hoặc hệ thống đang chờ úp thẻ sai -> Bỏ qua lệnh click
         if (card.isFlipped || card.isMatched || isProcessing) return;
 
-        // 1. Lật ngửa thẻ: Đổi trạng thái, hiện chữ từ vựng, đổi sang nền trắng cho dễ đọc
+        // 1. Lật ngửa thẻ: Đổi trạng thái, hiện chữ từ vựng, đổi sang nền trắng
         card.isFlipped = true;
         card.button.setText(card.displayText);
         card.button.setTextSize(14f);
         card.button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.WHITE));
         card.button.setTextColor(Color.parseColor("#1A1A1A"));
 
-        // 2. Phân luồng thẻ thứ 1 và thẻ thứ 2
+        // 2. Phân luồng thẻ 1 và 2
         if (firstSelectedCard == null) {
             // Đây là thẻ đầu tiên người dùng lật -> Lưu lại vào biến firstSelectedCard và chờ
             firstSelectedCard = card;
@@ -229,14 +212,11 @@ public class MemoryMatchFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 3: KIỂM TRA ĐÚNG/SAI & ĐỒNG BỘ BẤT ĐỒNG BỘ (MATCH CHECKING)
+    // HÀM 3: KIỂM TRA ĐÚNG/SAI & ĐỒNG BỘ BẤT ĐỒNG BỘ
     // =========================================================================
     private void checkMatch() {
-        /*
-         * SO SÁNH ID TỪ VỰNG:
-         * Không so sánh chữ (displayText) vì 1 bên là Tiếng Anh ("Apple"), 1 bên là Tiếng Việt ("Quả táo").
-         * So sánh wordId bảo đảm chỉ cần 2 thẻ thuộc cùng 1 từ vựng là nhận diện trúng khớp 100%!
-         */
+
+         // SO SÁNH ID TỪ VỰNG:
         if (firstSelectedCard.wordId.equals(secondSelectedCard.wordId)) {
             // TRƯỜNG HỢP 1: LẬT ĐÚNG CẶP TỪ
             firstSelectedCard.isMatched = true;
@@ -270,21 +250,18 @@ public class MemoryMatchFragment extends Fragment {
             secondSelectedCard.button.setTextColor(Color.parseColor("#B71C1C"));
 
             /*
-             * KỸ THUẬT HẸN GIỜ BẤT ĐỒNG BỘ AN TOÀN (ASYNCHRONOUS DELAY HANDLING):
-             * Không được dùng Thread.sleep(1000) vì sẽ làm đơ cứng toàn bộ điện thoại!
-             * Dùng Handler(Looper.getMainLooper()).postDelayed() giúp giao diện vẫn mượt mà,
              * cho phép người dùng nhìn thấy 2 thẻ đỏ trong đúng 1 giây (1000ms) để nhớ vị trí từ vựng,
              * sau 1 giây hệ thống mới tự động úp thẻ lại và mở khóa giao diện.
              */
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (firstSelectedCard != null) flipCardBack(firstSelectedCard);
                 if (secondSelectedCard != null) flipCardBack(secondSelectedCard);
-                resetSelection(); // Mở khóa isProcessing = false sau 1 giây
+                resetSelection();
             }, 1000);
         }
     }
 
-    // Hàm phụ: Úp thẻ về lại trạng thái ban đầu (Hiện dấu hỏi chấm và nền tím)
+    // Hàm: Úp thẻ về lại trạng thái ban đầu
     private void flipCardBack(CardItem card) {
         card.isFlipped = false;
         card.button.setText("❓");
@@ -293,7 +270,7 @@ public class MemoryMatchFragment extends Fragment {
         card.button.setTextColor(Color.parseColor("#4A148C"));
     }
 
-    // Hàm phụ: Xóa bộ nhớ tạm 2 thẻ đã chọn và mở khóa luồng cho ván lật tiếp theo
+    // Hàm: Xóa bộ nhớ tạm 2 thẻ đã chọn và mở khóa luồng cho ván lật tiếp theo
     private void resetSelection() {
         firstSelectedCard = null;
         secondSelectedCard = null;

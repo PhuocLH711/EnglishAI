@@ -43,27 +43,18 @@ import adu.nttu.englishai.models.Vocabulary;
 // =========================================================================
 public class VocabularyFragment extends Fragment {
 
-    // Các thành phần giao diện (UI Components)
     private Button btnFilterVocabulary;
     private TextView tvFilterStatus;
     private TextView tvVocabularySummary;
     private RecyclerView recyclerVocabulary;
     private SearchView searchVocabulary;
-    private View emptyStateLayout; // Màn hình trống khi tìm/lọc không thấy từ nào
+    private View emptyStateLayout;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
 
     private VocabularyAdapter vocabularyAdapter;
 
-    /*
-     * KỸ THUẬT QUẢN LÝ DANH SÁCH KÉP (DUAL-LIST PATTERN):
-     * - vocabularyList: Chứa TOÀN BỘ dữ liệu từ vựng gốc tải về từ Firebase.
-     * - filteredList: Chứa danh sách kết quả SAU KHI đã qua bộ lọc (Tìm kiếm + Chủ đề + Cấp độ).
-     * -> Adapter chỉ vẽ theo filteredList. Nhờ giữ nguyên bộ gốc vocabularyList,
-     *    khi người dùng xóa từ khóa tìm kiếm hay đổi bộ lọc, app tính toán lại lập tức
-     *    trong RAM mà KHÔNG CẦN gọi lại truy vấn mạng Firebase tốn phí!
-     */
     private final List<Vocabulary> vocabularyList = new ArrayList<>();
     private final List<Vocabulary> filteredList = new ArrayList<>();
 
@@ -73,7 +64,7 @@ public class VocabularyFragment extends Fragment {
     private String currentKeyword = "";
 
     public VocabularyFragment() {
-        // Constructor rỗng bắt buộc theo chuẩn kiến trúc Android Fragment.
+
     }
 
     @Override
@@ -82,7 +73,7 @@ public class VocabularyFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        // Bơm (inflate) bản thiết kế XML fragment_vocabulary thành đối tượng View
+        // Bơm bản thiết kế XML fragment_vocabulary thành đối tượng View
         return inflater.inflate(
                 R.layout.fragment_vocabulary,
                 container,
@@ -91,7 +82,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM KHỞI TẠO LOGIC SAU KHI GIAO DIỆN ĐÃ TẠO XONG (ON VIEW CREATED)
+    // HÀM KHỞI TẠO LOGIC SAU KHI GIAO DIỆN ĐÃ TẠO XONG
     // =========================================================================
     @Override
     public void onViewCreated(
@@ -103,7 +94,6 @@ public class VocabularyFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        // Ánh xạ các thành phần UI
         recyclerVocabulary =
                 view.findViewById(R.id.recyclerVocabulary);
 
@@ -122,7 +112,6 @@ public class VocabularyFragment extends Fragment {
         tvVocabularySummary =
                 view.findViewById(R.id.tvVocabularySummary);
 
-        // Khởi tạo các bộ điều khiển
         setupRecyclerView();
         setupSearch();
         setupFilterButton();
@@ -134,24 +123,16 @@ public class VocabularyFragment extends Fragment {
 
         updateEmptyStateVisibility();
 
-        // Bắt đầu quy trình tải dữ liệu từ Cloud Firestore
         loadVocabularyFromFirestore();
     }
 
     // =========================================================================
-    // ĐỒNG BỘ TIẾN ĐỘ KHI QUAY LẠI MÀN HÌNH (ON RESUME LIFECYCLE)
+    // ĐỒNG BỘ TIẾN ĐỘ KHI QUAY LẠI MÀN HÌNH
     // =========================================================================
     @Override
     public void onResume() {
         super.onResume();
 
-        /*
-         * KỸ THUẬT ĐỒNG BỘ TRẢI NGHIỆM LIỀN MẠCH (UI CONTINUITY SYNC):
-         * Khi học viên bấm vào 1 thẻ từ vựng để mở trang Chi tiết (VocabularyDetailActivity),
-         * họ có thể bấm "Đã học" hoặc thả tim ở trang đó. Khi bấm Back quay trở lại Fragment này,
-         * hàm onResume() tự động chạy và gọi loadUserProgress() để vẽ lại màu thẻ, icon ngôi sao
-         * đúng với trạng thái mới nhất mà không cần tải lại toàn bộ danh sách từ gốc!
-         */
         if (firebaseAuth != null
                 && firestore != null
                 && !vocabularyList.isEmpty()) {
@@ -177,7 +158,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 1: TẢI DANH SÁCH TỪ VỰNG CHUNG (PUBLIC DATA LOADING)
+    // HÀM 1: TẢI DANH SÁCH TỪ VỰNG CHUNG
     // =========================================================================
     private void loadVocabularyFromFirestore() {
         firestore.collection("vocabularies")
@@ -236,7 +217,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 2: PARSE DỮ LIỆU BAO DUNG (TOLERANT NOSQL PARSER)
+    // HÀM 2: PARSE DỮ LIỆU BAO DUNG
     // =========================================================================
     private Vocabulary createVocabularyFromDocument(
             DocumentSnapshot document
@@ -245,13 +226,6 @@ public class VocabularyFragment extends Fragment {
 
         vocabulary.setId(document.getId());
 
-        /*
-         * BÍ KÍP CHỐNG LỖI CẤU TRÚC NOSQL (DEFENSIVE SCHEMA TOLERANCE):
-         * Cơ sở dữ liệu NoSQL không cố định cột. Khi nhập liệu từ nhiều nguồn khác nhau,
-         * tên trường có thể bị lệch (vd: bản cũ dùng "word", bản mới dùng "englishWord").
-         * Hàm tiện ích firstNonEmpty sẽ quét lần lượt các tên trường khả dĩ,
-         * lấy ngay chuỗi hợp lệ đầu tiên tìm thấy. Đảm bảo app không bao giờ bị lỗi hiển thị rỗng!
-         */
         vocabulary.setEnglishWord(
                 firstNonEmpty(
                         document.getString("englishWord"),
@@ -329,7 +303,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 3: GHÉP NỐI DỮ LIỆU CÁ NHÂN VÀO TỪ VỰNG CHUNG (RAM JOIN)
+    // HÀM 3: GHÉP NỐI DỮ LIỆU CÁ NHÂN VÀO TỪ VỰNG CHUNG
     // =========================================================================
     private void loadUserProgress() {
         FirebaseUser currentUser =
@@ -342,7 +316,7 @@ public class VocabularyFragment extends Fragment {
             return;
         }
 
-        // Truy vấn vào subcollection riêng của user: users/{uid}/wordProgress
+        // Truy vấn vào subcollection riêng của user
         firestore.collection("users")
                 .document(currentUser.getUid())
                 .collection("wordProgress")
@@ -362,7 +336,7 @@ public class VocabularyFragment extends Fragment {
                     }
 
                     /*
-                     * THUẬT TOÁN INNER-JOIN TRONG BỘ NHỚ RAM:
+                     * INNER-JOIN TRONG BỘ NHỚ RAM:
                      * Duyệt qua toàn bộ danh sách từ vựng chung (vocabularyList),
                      * tra cứu trong progressMap xem người dùng có tiến độ học của từ này chưa.
                      * Nếu có -> Cập nhật trạng thái "Đang học/Đã học" và cờ "Yêu thích" vào đối tượng Vocabulary.
@@ -379,10 +353,10 @@ public class VocabularyFragment extends Fragment {
                                 progressMap.get(vocabulary.getId());
 
                         if (progress == null) {
-                            continue; // Chưa từng tương tác -> Bỏ qua, giữ nguyên NOT_STARTED
+                            continue; // Chưa từng tương tác -> Bỏ qua, giữ nguyên
                         }
 
-                        // Quét lấy trạng thái yêu thích (Tolerant với nhiều biến thể tên cột)
+                        // Quét lấy trạng thái yêu thích
                         Boolean favorite =
                                 firstBoolean(
                                         progress.getBoolean("favorite"),
@@ -431,7 +405,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 4: LƯU YÊU THÍCH BẰNG KỸ THUẬT MERGE (OPTIMISTIC UPSERT)
+    // HÀM 4: LƯU YÊU THÍCH BẰNG KỸ THUẬT MERGE
     // =========================================================================
     private void saveFavoriteStatus(
             Vocabulary vocabulary,
@@ -481,16 +455,6 @@ public class VocabularyFragment extends Fragment {
                 System.currentTimeMillis()
         );
 
-        /*
-         * KỸ THUẬT UPSERT AN TOÀN TUYỆT ĐỐI (SET WITH MERGE OPTION):
-         * - Tại sao không dùng .update()? Vì nếu đây là lần đầu tiên học viên bấm thả tim,
-         *   tài liệu wordProgress chưa tồn tại, lệnh update() sẽ báo lỗi Document Not Found!
-         * - Tại sao không dùng .set(data) thông thường? Vì nó sẽ ghi đè xóa sạch các trường khác
-         *   như learningStatus ("LEARNED", "LEARNING") đang có trong tài liệu!
-         * -> Lệnh .set(progressData, SetOptions.merge()) là giải pháp HOÀN HẢO:
-         *    Nếu chưa có tài liệu -> Tự động tạo mới. Nếu đã có -> Chỉ cập nhật trường "favorite"
-         *    và "updatedAt", giữ nguyên vẹn các trường tiến độ học tập khác!
-         */
         firestore.collection("users")
                 .document(currentUser.getUid())
                 .collection("wordProgress")
@@ -522,7 +486,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // CẤU HÌNH TÌM KIẾM TRONG THỜI GIAN THỰC (REALTIME SEARCHING)
+    // CẤU HÌNH TÌM KIẾM TRONG THỜI GIAN THỰC
     // =========================================================================
     private void setupSearch() {
         searchVocabulary.setOnQueryTextListener(
@@ -563,7 +527,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 5: HỘP THOẠI LỌC NÂNG CAO (FILTER DIALOG)
+    // HÀM 5: HỘP THOẠI LỌC NÂNG CAO
     // =========================================================================
     private void showFilterDialog() {
         View dialogView = LayoutInflater
@@ -702,7 +666,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 6: TẠO DANH SÁCH CHỦ ĐỀ KHÔNG TRÙNG LẶP (DYNAMIC DEDUPLICATION)
+    // HÀM 6: TẠO DANH SÁCH CHỦ ĐỀ KHÔNG TRÙNG LẶP
     // =========================================================================
     private String[] buildCategoryArray() {
         // LinkedHashSet: Vừa giữ đúng thứ tự thêm vào, vừa tự động loại bỏ phần tử trùng lặp
@@ -714,12 +678,6 @@ public class VocabularyFragment extends Fragment {
         List<String> categories =
                 new ArrayList<>();
 
-        /*
-         * KỸ THUẬT LỌC TRÙNG KHÔNG PHÂN BIỆT HOA/THƯỜNG:
-         * Trong NoSQL, Admin có thể lỡ tay nhập "Food", "food" hay "FOOD".
-         * Nếu chỉ dùng Set thông thường, cả 3 từ này sẽ bị coi là khác nhau và hiện hết lên Spinner.
-         * Vòng lặp kiểm tra equalsIgnoreCase bên dưới giúp hợp nhất các biến thể đó thành đúng 1 mục!
-         */
         for (Vocabulary vocabulary : vocabularyList) {
             String category =
                     vocabulary.getCategory();
@@ -761,7 +719,7 @@ public class VocabularyFragment extends Fragment {
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG NHẤT: THUẬT TOÁN LỌC TỔNG HỢP (MULTI-CRITERIA FILTERING)
+    // HÀM QUAN TRỌNG: THUẬT TOÁN LỌC TỔNG HỢP
     // =========================================================================
     private void applyCurrentFilter() {
         filteredList.clear();
@@ -849,7 +807,7 @@ public class VocabularyFragment extends Fragment {
         );
     }
 
-    // Cập nhật câu nhãn hiển thị trạng thái lọc (vd: "📚 Food  •  ⭐ Easy")
+    // Cập nhật câu nhãn hiển thị trạng thái lọc
     private void updateFilterStatus() {
         boolean hasFilter =
                 !"Tất cả".equals(selectedCategory)
@@ -887,7 +845,7 @@ public class VocabularyFragment extends Fragment {
         btnFilterVocabulary.setText("Đang lọc");
     }
 
-    // Quản lý hiển thị Màn hình trống (Empty State) khi không tìm thấy kết quả
+    // Quản lý hiển thị Màn hình trống khi không tìm thấy kết quả
     private void updateEmptyStateVisibility() {
         if (filteredList.isEmpty()) {
             recyclerVocabulary.setVisibility(View.GONE);
@@ -929,7 +887,7 @@ public class VocabularyFragment extends Fragment {
                 : value.trim().toLowerCase(Locale.ROOT);
     }
 
-    // Hàm tiện ích: Trả về chuỗi không rỗng đầu tiên tìm thấy (Bao dung lỗi NoSQL schema)
+    // Hàm tiện ích: Trả về chuỗi không rỗng đầu tiên tìm thấy
     private String firstNonEmpty(
             String... values
     ) {

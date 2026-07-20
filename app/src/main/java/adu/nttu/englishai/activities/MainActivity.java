@@ -8,23 +8,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
-import adu.nttu.englishai.utils.VocabularySeeder;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.fragments.GameFragment;
 import adu.nttu.englishai.fragments.HomeFragment;
-import adu.nttu.englishai.fragments.ProgressFragment;
+import adu.nttu.englishai.fragments.ProfileFragment;
 import adu.nttu.englishai.fragments.VocabularyFragment;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import adu.nttu.englishai.fragments.GameFragment;
-import adu.nttu.englishai.fragments.HomeFragment;
-import adu.nttu.englishai.fragments.ProgressFragment;
-import adu.nttu.englishai.fragments.VocabularyFragment;
-import adu.nttu.englishai.utils.VocabularySeeder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         .beginTransaction()
                         .replace(
                                 R.id.fragment_container,
-                                new ProgressFragment()
+                                new ProfileFragment()
                         )
                         .commit();
 

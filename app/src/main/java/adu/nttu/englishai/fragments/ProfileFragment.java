@@ -1,10 +1,15 @@
 package adu.nttu.englishai.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,13 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,63 +32,54 @@ import java.util.Map;
 import java.util.Set;
 
 import adu.nttu.englishai.R;
-import adu.nttu.englishai.activities.ImportVocabularyActivity;
+import adu.nttu.englishai.activities.LoginActivity;
 
 // =========================================================================
-// PROFILE FRAGMENT: Màn hình Hồ sơ cá nhân & Thống kê tiến độ Real-time
+// PROFILE FRAGMENT: Hồ sơ cá nhân + Thống kê Real-time + Quản lý tài khoản
 // =========================================================================
 public class ProfileFragment extends Fragment {
 
-    // Hằng số định danh trạng thái học tập chuẩn hóa
-    private static final String STATUS_NOT_STARTED = "NOT_STARTED";
-    private static final String STATUS_LEARNING = "LEARNING";
-    private static final String STATUS_LEARNED = "LEARNED";
+    private static final String TAG = "PROFILE_FRAGMENT";
 
+    // Các hằng số định nghĩa trạng thái học tập của từ vựng
+    private static final String STATUS_NOT_STARTED = "NOT_STARTED"; // Chưa học
+    private static final String STATUS_LEARNING = "LEARNING";       // Đang học
+    private static final String STATUS_LEARNED = "LEARNED";         // Đã thuộc (Mastered)
+
+    // Các đối tượng kết nối Firebase
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
 
-    // Các thành phần giao diện (UI Components)
+    // Các thành phần giao diện (UI) hiển thị thông tin người dùng
     private TextView tvProfileName;
     private TextView tvProfileEmail;
 
+    // Các thành phần giao diện hiển thị số liệu thống kê
     private TextView tvTotalVocabulary;
     private TextView tvNotStartedCount;
     private TextView tvLearningCount;
     private TextView tvLearnedCount;
     private TextView tvFavoriteCount;
 
-    private MaterialButton btnOpenImportVocabulary;
-
-    /*
-     * CƠ CHẾ BẢO VỆ TOÀN VẸN DỮ LIỆU (DATA INTEGRITY & GHOST RECORD PREVENTER):
-     * Chứa ID các từ đang tồn tại thật trong collection vocabularies.
-     * Nhờ đó các document cũ như 1, 2, 5, 6, 7 sẽ không bị tính nhầm.
-     * - Dùng Set<String> (HashSet) giúp tìm kiếm (contains) với độ phức tạp thời gian O(1) cực kỳ siêu tốc!
-     */
+    // Bộ nhớ đệm (RAM Cache) để lưu trữ và tính toán dữ liệu Real-time
     private final Set<String> validVocabularyIds = new HashSet<>();
+    private final Map<String, DocumentSnapshot> vocabularyMap = new HashMap<>();
+    private final Map<String, DocumentSnapshot> progressMap = new HashMap<>();
 
-    /*
-     * Lưu tạm dữ liệu tiến độ hiện tại của người dùng vào bộ nhớ RAM.
-     * - Dùng Map<String, DocumentSnapshot> để tra cứu tiến độ của một từ vựng chỉ mất O(1) thời gian.
-     */
-    private final Map<String, DocumentSnapshot> wordProgressMap =
-            new HashMap<>();
-
-    // Các biến lưu trữ bộ lắng nghe Realtime của Firebase (dùng để hủy lắng nghe khi rời màn hình)
     private ListenerRegistration vocabularyListener;
     private ListenerRegistration progressListener;
 
     public ProfileFragment() {
-        // Constructor rỗng bắt buộc cho Fragment theo chuẩn Android.
+
     }
 
+   // Khởi tạo và nạp giao diện XML (fragment_profile) vào bộ nhớ.
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        // Bơm (inflate) bản thiết kế XML fragment_profile thành đối tượng View
         return inflater.inflate(
                 R.layout.fragment_profile,
                 container,
@@ -91,10 +87,6 @@ public class ProfileFragment extends Fragment {
         );
     }
 
-    // =========================================================================
-    // HÀM KHỞI TẠO LOGIC SAU KHI GIAO DIỆN ĐÃ TẠO XONG (ON VIEW CREATED)
-    // =========================================================================
-    // Kỹ thuật chuẩn Android: Xử lý ánh xạ và gọi API ở onViewCreated để đảm bảo View đã tồn tại an toàn
     @Override
     public void onViewCreated(
             @NonNull View view,
@@ -102,421 +94,482 @@ public class ProfileFragment extends Fragment {
     ) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Khởi tạo các dịch vụ Firebase Auth và Firestore
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-
+        // Ánh xạ
         initViews(view);
-        setupEvents();
+        setupEvents(view);
         loadUserInformation();
         startRealtimeStatistics();
     }
 
-    // Ánh xạ các biến Java với ID thẻ trong XML
     private void initViews(View view) {
-        tvProfileName =
-                view.findViewById(R.id.tvProfileName);
+        tvProfileName = view.findViewById(R.id.tvProfileName);
+        tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
 
-        tvProfileEmail =
-                view.findViewById(R.id.tvProfileEmail);
+        tvTotalVocabulary = view.findViewById(R.id.tvTotalVocabulary);
+        tvNotStartedCount = view.findViewById(R.id.tvNotStartedCount);
+        tvLearningCount = view.findViewById(R.id.tvLearningCount);
 
-        tvTotalVocabulary =
-                view.findViewById(R.id.tvTotalVocabulary);
+        // Sử dụng ID chuẩn từ giao diện Progress: R.id.tvMasteredCount
+        tvLearnedCount = view.findViewById(R.id.tvMasteredCount);
 
-        tvNotStartedCount =
-                view.findViewById(R.id.tvNotStartedCount);
-
-        tvLearningCount =
-                view.findViewById(R.id.tvLearningCount);
-
-        tvLearnedCount =
-                view.findViewById(R.id.tvLearnedCount);
-
-        tvFavoriteCount =
-                view.findViewById(R.id.tvFavoriteCount);
-
-        btnOpenImportVocabulary =
-                view.findViewById(R.id.btnOpenImportVocabulary);
+        tvFavoriteCount = view.findViewById(R.id.tvFavoriteCount);
     }
 
-    // Gán sự kiện cho nút Mở trang Nhập dữ liệu từ vựng (ImportVocabularyActivity)
-    private void setupEvents() {
-        btnOpenImportVocabulary.setOnClickListener(view -> {
-            Intent intent = new Intent(
-                    requireContext(),
-                    ImportVocabularyActivity.class
-            );
+        // Hàm cài đặt sự kiện click cho các thẻ thống kê và nút cài đặt.
+    private void setupEvents(View view) {
+        // 1. Sự kiện bấm vào các Thẻ thống kê -> Mở BottomSheet danh sách từ vựng theo trạng thái tương ứng
+        MaterialCardView cardMastered = view.findViewById(R.id.cardMastered);
+        MaterialCardView cardLearning = view.findViewById(R.id.cardLearning);
+        MaterialCardView cardNotStarted = view.findViewById(R.id.cardNotStarted);
+        MaterialCardView cardFavorite = view.findViewById(R.id.cardFavorite);
 
-            startActivity(intent);
-        });
+        if (cardMastered != null) {
+            cardMastered.setOnClickListener(v -> showWordListBottomSheet("🟢 Từ vựng đã thuộc", "learned"));
+        }
+        if (cardLearning != null) {
+            cardLearning.setOnClickListener(v -> showWordListBottomSheet("🟡 Từ vựng đang học", "learning"));
+        }
+        if (cardNotStarted != null) {
+            cardNotStarted.setOnClickListener(v -> showWordListBottomSheet("⚪ Từ vựng chưa học", "not_started"));
+        }
+        if (cardFavorite != null) {
+            cardFavorite.setOnClickListener(v -> showWordListBottomSheet("❤️ Từ vựng yêu thích", "favorite"));
+        }
+
+        // 2. Sự kiện bấm Nút Cài đặt -> Mở BottomSheet Cài đặt & Đăng xuất
+        MaterialCardView btnSettings = view.findViewById(R.id.btnSettings);
+        if (btnSettings != null) {
+            btnSettings.setOnClickListener(v -> showSettingsBottomSheet());
+        }
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 1: TẢI THÔNG TIN HỒ SƠ NGƯỜI DÙNG (TWO-TIER LOADING)
+    // TẢI THÔNG TIN HỒ SƠ & TỰ ĐỘNG TẠO TÊN FALLBACK
     // =========================================================================
     private void loadUserInformation() {
-        FirebaseUser currentUser =
-                firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
+        // Nếu chưa đăng nhập -> Hiển thị chế độ Khách và reset thống kê về 0
         if (currentUser == null) {
-            tvProfileName.setText("Khách");
-            tvProfileEmail.setText("Chưa đăng nhập");
+            if (tvProfileName != null) tvProfileName.setText("Khách");
+            if (tvProfileEmail != null) tvProfileEmail.setText("Chưa đăng nhập");
             resetStatistics();
             return;
         }
 
-        // Bước 1: HIỂN THỊ TỨC THÌ từ bộ nhớ đệm Authentication (Không cần chờ mạng)
         String authName = currentUser.getDisplayName();
         String authEmail = currentUser.getEmail();
 
-        if (authName == null || authName.trim().isEmpty()) {
-            tvProfileName.setText("Học viên EnglishAI");
-        } else {
-            tvProfileName.setText(authName.trim());
+        if (tvProfileEmail != null) {
+            tvProfileEmail.setText(authEmail == null ? "" : authEmail);
         }
 
-        tvProfileEmail.setText(
-                authEmail == null ? "" : authEmail
-        );
+        // Xử lý Fallback Tên hiển thị ngay lập tức từ dữ liệu Auth
+        if (tvProfileName != null) {
+            if (authName != null && !authName.trim().isEmpty()) {
+                tvProfileName.setText(authName.trim());
+            } else if (authEmail != null && !authEmail.trim().isEmpty()) {
+                // Cắt phần tên trước @ của Email để làm tên tạm (vd: test@gmail.com -> Test)
+                String fallbackName = authEmail.contains("@") ? authEmail.substring(0, authEmail.indexOf("@")) : authEmail;
+                if (!fallbackName.isEmpty()) {
+                    fallbackName = fallbackName.substring(0, 1).toUpperCase(Locale.ROOT) + fallbackName.substring(1);
+                }
+                tvProfileName.setText(fallbackName);
+            } else {
+                tvProfileName.setText("Học viên EnglishAI");
+            }
+        }
 
-        // Bước 2: TRUY VẤN SÂU lên Firestore để lấy thông tin mới nhất (Nếu có thay đổi từ Admin/Thiết bị khác)
+        // Tải thêm dữ liệu chính xác nhất từ Firestore
         firestore.collection("users")
                 .document(currentUser.getUid())
                 .get()
                 .addOnSuccessListener(document -> {
-                    // LẬP TRÌNH PHÒNG VỆ (UI Defensive Check):
-                    // Kiểm tra xem Fragment này còn gắn với Activity không.
-                    // Nếu người dùng vừa mở Profile rồi lập tức bấm nút Back thoát ra trước khi mạng tải xong,
-                    // việc gọi setText() sẽ gây lỗi crash app (IllegalStateException). Lệnh !isAdded() giúp chặn đứng lỗi này!
-                    if (!isAdded()) {
-                        return;
-                    }
+                    if (!isAdded()) return; // Kiểm tra Fragment còn gắn với Activity không
 
-                    // Sử dụng hàm tiện ích firstNonEmpty để quét cả 3 tên cột phổ biến (Tín năng chịu lỗi NoSQL)
+                    // Thử tìm tên theo các trường phổ biến: name, fullName, username
                     String firestoreName = firstNonEmpty(
                             document.getString("name"),
                             document.getString("fullName"),
                             document.getString("username")
                     );
+                    String firestoreEmail = document.getString("email");
 
-                    String firestoreEmail =
-                            document.getString("email");
-
-                    if (!firestoreName.isEmpty()) {
+                    if (tvProfileName != null && !firestoreName.isEmpty()) {
                         tvProfileName.setText(firestoreName);
                     }
-
-                    if (firestoreEmail != null
-                            && !firestoreEmail.trim().isEmpty()) {
-
-                        tvProfileEmail.setText(
-                                firestoreEmail.trim()
-                        );
+                    if (tvProfileEmail != null && firestoreEmail != null && !firestoreEmail.trim().isEmpty()) {
+                        tvProfileEmail.setText(firestoreEmail.trim());
                     }
                 });
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG 2: BẮT ĐẦU ĐỒNG BỘ SỐ LIỆU THỜI GIAN THỰC (REALTIME STATS)
+    // LẮNG NGHE DỮ LIỆU THỜI GIAN THỰC
     // =========================================================================
-    /**
-     * Bắt đầu nghe dữ liệu thật từ Firestore.
-     */
     private void startRealtimeStatistics() {
-        FirebaseUser currentUser =
-                firebaseAuth.getCurrentUser();
-
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
             resetStatistics();
             return;
         }
 
-        // Hủy các listener cũ nếu có trước khi tạo mới để tránh bị nhân đôi luồng lắng nghe
-        stopRealtimeListeners();
-
-        // Lắng nghe song song 2 nguồn dữ liệu
+        stopRealtimeListeners(); // Dừng các listener cũ trước khi tạo mới để tránh trùng lặp
         listenToVocabularyCollection();
         listenToWordProgress(currentUser.getUid());
     }
 
-    /**
-     * Nghe realtime collection vocabularies.
-     */
+        // Hàm lắng nghe collection vocabularies từ Firestore.
     private void listenToVocabularyCollection() {
-        // addSnapshotListener: Thay vì gọi .get() 1 lần, lệnh này duy trì kết nối mạng liên tục với Firebase.
-        // Bất cứ khi nào có từ vựng được thêm mới, sửa, hoặc xóa trên Cloud, block code này sẽ lập tức tự động chạy lại!
-        vocabularyListener = firestore
-                .collection("vocabularies")
+        vocabularyListener = firestore.collection("vocabularies")
                 .addSnapshotListener((snapshot, error) -> {
-                    if (!isAdded()) {
-                        return;
-                    }
+                    if (!isAdded()) return;
 
                     if (error != null) {
-                        Toast.makeText(
-                                requireContext(),
-                                "Không tải được danh sách từ vựng",
-                                Toast.LENGTH_SHORT
-                        ).show();
-
+                        Log.e(TAG, "Lỗi tải danh sách từ vựng", error);
                         return;
                     }
 
                     validVocabularyIds.clear();
+                    vocabularyMap.clear();
 
                     if (snapshot != null) {
-                        for (DocumentSnapshot document
-                                : snapshot.getDocuments()) {
-
-                            // Gom toàn bộ ID từ vựng đang có thật trong hệ thống vào Set
-                            validVocabularyIds.add(
-                                    document.getId()
-                            );
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            validVocabularyIds.add(document.getId());
+                            vocabularyMap.put(document.getId(), document);
                         }
                     }
-
-                    // Tự động tính toán và vẽ lại số liệu lên màn hình
-                    calculateAndDisplayStatistics();
+                    calculateAndDisplayStatistics(); // Tính toán lại số liệu ngay khi có dữ liệu mới
                 });
     }
 
-    /**
-     * Nghe realtime tiến độ người dùng.
-     */
+        // Hàm lắng nghe sub-collection wordProgress của học viên từ Firestore.
     private void listenToWordProgress(String userId) {
-        progressListener = firestore
-                .collection("users")
+        progressListener = firestore.collection("users")
                 .document(userId)
                 .collection("wordProgress")
                 .addSnapshotListener((snapshot, error) -> {
-                    if (!isAdded()) {
-                        return;
-                    }
+                    if (!isAdded()) return;
 
                     if (error != null) {
-                        Toast.makeText(
-                                requireContext(),
-                                "Không tải được trạng thái từ vựng",
-                                Toast.LENGTH_SHORT
-                        ).show();
-
+                        Log.e(TAG, "Lỗi tải tiến độ học viên", error);
                         return;
                     }
 
-                    wordProgressMap.clear();
+                    progressMap.clear();
 
                     if (snapshot != null) {
-                        for (DocumentSnapshot document
-                                : snapshot.getDocuments()) {
-
-                            // Đưa toàn bộ tài liệu tiến độ của user vào Map theo cặp: Key=vocabularyId, Value=DocumentSnapshot
-                            wordProgressMap.put(
-                                    document.getId(),
-                                    document
-                            );
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            progressMap.put(document.getId(), document);
                         }
                     }
-
-                    // Tự động tính toán và vẽ lại số liệu lên màn hình
-                    calculateAndDisplayStatistics();
+                    calculateAndDisplayStatistics(); // Tính toán lại số liệu ngay khi tiến độ thay đổi
                 });
     }
 
     // =========================================================================
-    // HÀM QUAN TRỌNG NHẤT: THUẬT TOÁN KẾT HỢP DỮ LIỆU IN-MEMORY (RAM INNER JOIN)
+    // THUẬT TOÁN INNER-JOIN TRONG RAM & TÍNH TOÁN THỐNG KÊ
     // =========================================================================
-    /**
-     * Tính dữ liệu thật:
-     *
-     * apple   -> LEARNED + favorite
-     * mother  -> LEARNING + favorite
-     * teacher -> LEARNING
-     */
+
     private void calculateAndDisplayStatistics() {
         int totalCount = validVocabularyIds.size();
-
         int notStartedCount = 0;
         int learningCount = 0;
         int learnedCount = 0;
         int favoriteCount = 0;
 
-        /*
-         * THUẬT TOÁN ĐỐI CHIẾU SIÊU TỐC (O(N) Complexity):
-         * Chỉ duyệt qua các ID từ vựng ĐANG TỒN TẠI THẬT trong validVocabularyIds.
-         * LÝ DO: Trong quá trình học, học viên có thể từng học các từ cũ (ví dụ ID 1, 2, 5...)
-         * nhưng sau đó Admin đã xóa các từ đó khỏi hệ thống. Nếu duyệt trực tiếp bảng wordProgress
-         * thì sẽ bị đếm nhầm những "tài liệu ma" (ghost records) đó.
-         * Cách thiết kế này giúp số liệu thống kê luôn chính xác tuyệt đối 100%!
-         */
+        // Duyệt qua tất cả ID từ vựng hợp lệ có trong hệ thống
         for (String vocabularyId : validVocabularyIds) {
-            // Tra cứu O(1) trong Map bộ nhớ RAM
-            DocumentSnapshot progressDocument =
-                    wordProgressMap.get(vocabularyId);
+            DocumentSnapshot progressDocument = progressMap.get(vocabularyId);
 
-            // Nếu người dùng chưa từng tương tác với từ này -> Tính là "Chưa học"
-            if (progressDocument == null
-                    || !progressDocument.exists()) {
-
+            // Nếu user chưa có bản ghi tiến độ của từ này -> Tính là Chưa học
+            if (progressDocument == null || !progressDocument.exists()) {
                 notStartedCount++;
                 continue;
             }
 
-            // Lấy trạng thái học tập (Bao dung cả 2 trường hợp tên cột: learningStatus hoặc status)
+            // Lấy trạng thái học, ưu tiên trường "learningStatus" rồi đến "status"
             String status = firstNonEmpty(
-                    progressDocument.getString(
-                            "learningStatus"
-                    ),
+                    progressDocument.getString("learningStatus"),
                     progressDocument.getString("status")
             );
-
-            // Chuẩn hóa chuỗi về dạng viết hoa chuẩn mực
-            status = normalizeLearningStatus(status);
+            status = normalizeLearningStatus(status); // Chuẩn hóa chuỗi trạng thái
 
             // Phân loại đếm số lượng
             switch (status) {
                 case STATUS_LEARNING:
                     learningCount++;
                     break;
-
                 case STATUS_LEARNED:
                     learnedCount++;
                     break;
-
                 default:
                     notStartedCount++;
                     break;
             }
 
             // Kiểm tra trạng thái yêu thích
-            Boolean favorite =
-                    progressDocument.getBoolean("favorite");
-
+            Boolean favorite = progressDocument.getBoolean("favorite");
             if (favorite != null && favorite) {
                 favoriteCount++;
             }
         }
 
-        // Đẩy số liệu đã tính toán ra giao diện
-        updateStatistics(
-                totalCount,
-                notStartedCount,
-                learningCount,
-                learnedCount,
-                favoriteCount
-        );
+        updateStatistics(totalCount, notStartedCount, learningCount, learnedCount, favoriteCount);
     }
 
-    // Cập nhật các thẻ con số thống kê trên màn hình
-    private void updateStatistics(
-            int totalCount,
-            int notStartedCount,
-            int learningCount,
-            int learnedCount,
-            int favoriteCount
-    ) {
-        // Kiểm tra an toàn: Đảm bảo Fragment vẫn đang gắn với Activity và View chưa bị hủy
-        if (!isAdded() || getView() == null) {
-            return;
-        }
+      // Hàm cập nhật các số liệu thống kê đã tính toán lên các TextView trên màn hình.
+    private void updateStatistics(int total, int notStarted, int learning, int learned, int favorite) {
+        if (!isAdded() || getView() == null) return;
 
-        tvTotalVocabulary.setText(
-                String.valueOf(totalCount)
-        );
-
-        tvNotStartedCount.setText(
-                String.valueOf(notStartedCount)
-        );
-
-        tvLearningCount.setText(
-                String.valueOf(learningCount)
-        );
-
-        tvLearnedCount.setText(
-                String.valueOf(learnedCount)
-        );
-
-        tvFavoriteCount.setText(
-                String.valueOf(favoriteCount)
-        );
+        if (tvTotalVocabulary != null) tvTotalVocabulary.setText(String.valueOf(total));
+        if (tvNotStartedCount != null) tvNotStartedCount.setText(String.valueOf(notStarted));
+        if (tvLearningCount != null) tvLearningCount.setText(String.valueOf(learning));
+        if (tvLearnedCount != null) tvLearnedCount.setText(String.valueOf(learned));
+        if (tvFavoriteCount != null) tvFavoriteCount.setText(String.valueOf(favorite));
     }
 
-    // Đặt lại toàn bộ số liệu về 0 (Dùng khi đăng xuất hoặc chưa có dữ liệu)
+  // Hàm xóa trắng bộ nhớ đệm và đặt tất cả số liệu thống kê về 0 (dùng khi đăng xuất hoặc lỗi).
     private void resetStatistics() {
         validVocabularyIds.clear();
-        wordProgressMap.clear();
-
-        updateStatistics(
-                0,
-                0,
-                0,
-                0,
-                0
-        );
+        vocabularyMap.clear();
+        progressMap.clear();
+        updateStatistics(0, 0, 0, 0, 0);
     }
 
-    // Chuẩn hóa các biến thể chuỗi trạng thái từ NoSQL về 3 dạng chuẩn của hệ thống
+    // =========================================================================
+    // HỘP THOẠI BOTTOM SHEET: HIỂN THỊ DANH SÁCH TỪ VỰNG TỪ RAM
+    // =========================================================================
+    private void showWordListBottomSheet(String title, String filterType) {
+        if (getContext() == null) return;
+
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_word_list, null);
+        dialog.setContentView(dialogView);
+
+        TextView tvDialogTitle = dialogView.findViewById(R.id.tvDialogTitle);
+        TextView btnCloseDialog = dialogView.findViewById(R.id.btnCloseDialog);
+        LinearLayout layoutWordContainer = dialogView.findViewById(R.id.layoutWordContainer);
+
+        if (tvDialogTitle != null) tvDialogTitle.setText(title);
+        if (btnCloseDialog != null) btnCloseDialog.setOnClickListener(v -> dialog.dismiss());
+
+        if (layoutWordContainer != null) {
+            layoutWordContainer.removeAllViews(); // Xóa các view cũ trước khi render danh sách mới
+            int matchCount = 0;
+
+            // Lọc và render từng từ vựng thỏa mãn điều kiện
+            for (String vocabularyId : validVocabularyIds) {
+                DocumentSnapshot vocabularyDocument = vocabularyMap.get(vocabularyId);
+                DocumentSnapshot progressDocument = progressMap.get(vocabularyId);
+
+                String status = STATUS_NOT_STARTED;
+                boolean favorite = false;
+
+                if (progressDocument != null && progressDocument.exists()) {
+                    status = normalizeLearningStatus(firstNonEmpty(
+                            progressDocument.getString("learningStatus"),
+                            progressDocument.getString("status")
+                    ));
+                    Boolean favVal = progressDocument.getBoolean("favorite");
+                    favorite = (favVal != null && favVal);
+                }
+
+                // Nếu từ vựng không khớp với bộ lọc -> Bỏ qua
+                if (!matchesFilter(filterType, status, favorite) || vocabularyDocument == null) {
+                    continue;
+                }
+
+                // Lấy từ tiếng Anh, phiên âm và nghĩa tiếng Việt
+                String word = firstNonEmpty(
+                        vocabularyDocument.getString("englishWord"),
+                        vocabularyDocument.getString("word")
+                );
+                String meaning = firstNonEmpty(
+                        vocabularyDocument.getString("vietnameseMeaning"),
+                        vocabularyDocument.getString("meaning")
+                );
+                String pronunciation = firstNonEmpty(
+                        vocabularyDocument.getString("pronunciation"),
+                        vocabularyDocument.getString("phonetic")
+                );
+
+                if (!word.isEmpty()) {
+                    addWordCardToContainer(layoutWordContainer, word, pronunciation, meaning);
+                    matchCount++;
+                }
+            }
+
+            // Nếu không có từ nào khớp -> Hiển thị thông báo danh sách trống
+            if (matchCount == 0) {
+                showEmptyMessage(layoutWordContainer);
+            }
+        }
+        dialog.show();
+    }
+
+   // Hàm kiểm tra xem một từ vựng có thỏa mãn điều kiện của bộ lọc đang chọn hay không.
+    private boolean matchesFilter(String filterType, String status, boolean favorite) {
+        if ("favorite".equals(filterType)) return favorite;
+        if ("learned".equals(filterType)) return STATUS_LEARNED.equals(status);
+        if ("learning".equals(filterType)) return STATUS_LEARNING.equals(status);
+        if ("not_started".equals(filterType)) return STATUS_NOT_STARTED.equals(status);
+        return false;
+    }
+
+   // Hàm tạo giao diện Thẻ từ vựng (MaterialCardView) bằng code Java và thêm vào danh sách BottomSheet.
+    private void addWordCardToContainer(LinearLayout container, String word, String phonetic, String meaning) {
+        if (getContext() == null) return;
+
+        // Khởi tạo thẻ CardView bên ngoài
+        MaterialCardView card = new MaterialCardView(requireContext());
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        cardParams.setMargins(0, 0, 0, dpToPx(12));
+        card.setLayoutParams(cardParams);
+        card.setRadius(dpToPx(16));
+        card.setCardElevation(dpToPx(2));
+        card.setCardBackgroundColor(Color.parseColor("#F8F9FA"));
+        card.setStrokeWidth(dpToPx(1));
+        card.setStrokeColor(Color.parseColor("#E9ECEF"));
+
+        // Khởi tạo Layout chứa nội dung bên trong thẻ
+        LinearLayout innerLayout = new LinearLayout(requireContext());
+        innerLayout.setOrientation(LinearLayout.VERTICAL);
+        innerLayout.setPadding(dpToPx(16), dpToPx(14), dpToPx(16), dpToPx(14));
+
+        // Dòng 1: Từ vựng Tiếng Anh + Phiên âm
+        TextView tvWord = new TextView(requireContext());
+        String wordTitle = word + (phonetic != null && !phonetic.trim().isEmpty() ? "  " + phonetic.trim() : "");
+        tvWord.setText(wordTitle);
+        tvWord.setTextSize(17f);
+        tvWord.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvWord.setTextColor(Color.parseColor("#1A73E8"));
+
+        // Dòng 2: Nghĩa Tiếng Việt
+        TextView tvMeaning = new TextView(requireContext());
+        tvMeaning.setText(meaning == null || meaning.trim().isEmpty() ? "👉 Chưa có nghĩa tiếng Việt" : "👉 Nghĩa: " + meaning.trim());
+        tvMeaning.setTextSize(14f);
+        tvMeaning.setTextColor(Color.parseColor("#37474F"));
+        tvMeaning.setPadding(0, dpToPx(6), 0, 0);
+
+        // Ghép các thành phần lại và thêm vào container chính
+        innerLayout.addView(tvWord);
+        innerLayout.addView(tvMeaning);
+        card.addView(innerLayout);
+        container.addView(card);
+    }
+
+    // Hàm hiển thị thông báo giao diện khi danh sách từ vựng lọc được bị trống.
+    private void showEmptyMessage(LinearLayout container) {
+        if (getContext() == null || container == null) return;
+
+        TextView tvEmpty = new TextView(requireContext());
+        tvEmpty.setText("📭 Chưa có từ vựng nào trong mục này.\nHãy qua trang Từ vựng để học nhé!");
+        tvEmpty.setTextSize(15f);
+        tvEmpty.setTextColor(Color.parseColor("#757575"));
+        tvEmpty.setGravity(Gravity.CENTER);
+        tvEmpty.setPadding(dpToPx(20), dpToPx(40), dpToPx(20), dpToPx(40));
+        container.addView(tvEmpty);
+    }
+
+    // =========================================================================
+    // HỘP THOẠI CÀI ĐẶT & ĐĂNG XUẤT AN TOÀN
+    // =========================================================================
+    private void showSettingsBottomSheet() {
+        if (getContext() == null) return;
+
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_settings, null);
+        dialog.setContentView(dialogView);
+
+        LinearLayout itemAvatar = dialogView.findViewById(R.id.itemChangeAvatar);
+        LinearLayout itemInfo = dialogView.findViewById(R.id.itemUpdateInfo);
+        LinearLayout itemHelp = dialogView.findViewById(R.id.itemHelp);
+        Button dialogBtnLogout = dialogView.findViewById(R.id.dialogBtnLogout);
+
+        if (itemAvatar != null) {
+            itemAvatar.setOnClickListener(v -> {
+                Toast.makeText(requireContext(), "Tính năng đổi ảnh đang được cập nhật", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            });
+        }
+        if (itemInfo != null) {
+            itemInfo.setOnClickListener(v -> {
+                Toast.makeText(requireContext(), "Tính năng sửa thông tin đang được cập nhật", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            });
+        }
+        if (itemHelp != null) {
+            itemHelp.setOnClickListener(v -> {
+                Toast.makeText(requireContext(), "Hãy qua trang Từ vựng để bắt đầu học", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            });
+        }
+
+        // Xử lý sự kiện bấm nút Đăng xuất
+        if (dialogBtnLogout != null) {
+            dialogBtnLogout.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (firebaseAuth != null) firebaseAuth.signOut(); // Đăng xuất khỏi Firebase Auth
+
+                // Chuyển hướng về màn hình Đăng nhập và xóa hết lịch sử các màn hình trước đó
+                Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                requireActivity().finish();
+            });
+        }
+        dialog.show();
+    }
+
+    // =========================================================================
+    // CÁC HÀM TIỆN ÍCH & QUẢN LÝ VÒNG ĐỜI
+    // =========================================================================
+   // Hàm tiện ích: Chuẩn hóa chuỗi trạng thái học từ DB về các hằng số chuẩn của Fragment
     private String normalizeLearningStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
-            return STATUS_NOT_STARTED;
-        }
-
-        String normalized =
-                status.trim().toUpperCase(Locale.ROOT);
-
-        if ("LEARNED".equals(normalized)
-                || "MASTERED".equals(normalized)) {
-
-            return STATUS_LEARNED;
-        }
-
-        if ("LEARNING".equals(normalized)) {
-            return STATUS_LEARNING;
-        }
-
+        if (status == null || status.trim().isEmpty()) return STATUS_NOT_STARTED;
+        String normalized = status.trim().toUpperCase(Locale.ROOT);
+        if ("LEARNED".equals(normalized) || "MASTERED".equals(normalized)) return STATUS_LEARNED;
+        if ("LEARNING".equals(normalized)) return STATUS_LEARNING;
         return STATUS_NOT_STARTED;
     }
 
-    // Hàm tiện ích: Trả về chuỗi không rỗng đầu tiên tìm thấy trong danh sách tham số (Varargs)
+    // Hàm tiện ích: Trả về giá trị chuỗi đầu tiên không bị null hoặc rỗng trong danh sách các chuỗi truyền vào.
     private String firstNonEmpty(String... values) {
-        if (values == null) {
-            return "";
-        }
-
+        if (values == null) return "";
         for (String value : values) {
-            if (value != null
-                    && !value.trim().isEmpty()) {
-
-                return value.trim();
-            }
+            if (value != null && !value.trim().isEmpty()) return value.trim();
         }
-
         return "";
     }
 
-    // =========================================================================
-    // QUẢN LÝ VÒNG ĐỜI & CHỐNG RÒ RỈ BỘ NHỚ (MEMORY LEAK PREVENTION)
-    // =========================================================================
+    //Hàm tiện ích: Chuyển đổi đơn vị đo lường từ dp  sang px
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+    // Hàm hủy bỏ (remove) các Listener lắng nghe Realtime từ Firebase
     private void stopRealtimeListeners() {
         if (vocabularyListener != null) {
-            vocabularyListener.remove(); // Hủy kết nối lắng nghe Realtime với Firebase
+            vocabularyListener.remove();
             vocabularyListener = null;
         }
-
         if (progressListener != null) {
             progressListener.remove();
             progressListener = null;
         }
     }
 
+    // Hàm vòng đời Fragment: Được gọi khi View của Fragment bị hủy (VD: Chuyển tab hoặc tắt app).
     @Override
     public void onDestroyView() {
-        /*
-         * LỆNH CỰC KỲ QUAN TRỌNG TRONG FRAGMENT:
-         * Ngay khi người dùng rời khỏi màn hình Hồ sơ (ví dụ bấm sang tab Trang chủ hay Trò chơi),
-         * ta BẮT BUỘC phải gọi stopRealtimeListeners() để ngắt kết nối với máy chủ Firebase.
-         * NẾU KHÔNG GỌI: Các listener này sẽ tiếp tục chạy ngầm vô tận phía sau,
-         * gây hao pin, tốn lưu lượng mạng internet, rò rỉ bộ nhớ RAM (Memory Leak),
-         * và thậm chí gây CRASH APP nếu mạng tải về và cố gắng cập nhật giao diện đã bị tiêu hủy!
-         */
         stopRealtimeListeners();
         super.onDestroyView();
     }
