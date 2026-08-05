@@ -1,5 +1,7 @@
 package adu.nttu.englishai.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,41 +31,58 @@ public class HomeFragment extends Fragment {
     // HÀM TẠO GIAO DIỆN
     // =========================================================================
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Bơm bản thiết kế XML fragment_home thành đối tượng View thực tế
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // =========================================================================
-        // 1. HIỂN THỊ TÊN THẬT TỪ FIREBASE
+        // 1. ĐỒNG BỘ REAL-TIME: TÊN, ĐIỂM XP VÀ CHUỖI LỬA
         // =========================================================================
         TextView tvGreeting = view.findViewById(R.id.tvGreeting);
-        // Lấy thông tin tài khoản đang đăng nhập hiện tại từ bộ nhớ đệm Firebase Auth
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            // 1. Gán tạm tên từ Email trước để màn hình không bị trống lúc chờ mạng
-            String email = currentUser.getEmail();
-            String fallbackName = (email != null && email.contains("@"))
-                    ? email.substring(0, email.indexOf("@")) : "bạn";
-            tvGreeting.setText("Chào " + fallbackName + "!");
+        TextView tvHomeStreak = view.findViewById(R.id.tvHomeStreak);
+        TextView tvHomeXP = view.findViewById(R.id.tvHomeXP);
 
-            // 2. Gọi lên Firestore lấy tên thật
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            SharedPreferences sharedPref = requireActivity().getSharedPreferences("EnglishAI_Prefs", Context.MODE_PRIVATE);
+            String cachedName = sharedPref.getString("USER_REAL_NAME", null);
+
+            if (cachedName != null && !cachedName.isEmpty()) {
+                tvGreeting.setText("Chào " + cachedName + "!");
+            } else {
+                String email = currentUser.getEmail();
+                String fallbackName = (email != null && email.contains("@")) ? email.substring(0, email.indexOf("@")) : "bạn";
+                tvGreeting.setText("Chào " + fallbackName + "!");
+            }
+
+            // 👉 SỬ DỤNG SnapshotListener ĐỂ NHẢY SỐ NGAY LẬP TỨC KHI VỪA THOÁT GAME
             FirebaseFirestore.getInstance()
                     .collection("users")
                     .document(currentUser.getUid())
-                    .get()
-                    .addOnSuccessListener(document -> {
-                        if (!isAdded()) return;
+                    .addSnapshotListener((document, error) -> {
+                        if (!isAdded() || error != null || document == null || !document.exists()) return;
 
+                        // 1. Đồng bộ Tên
                         String realName = document.getString("name");
                         if (realName == null || realName.trim().isEmpty()) {
                             realName = document.getString("fullName");
                         }
-
-                        // Nếu trên Database có tên thật -> Cập nhật lại lời chào ngay lập tức!
                         if (realName != null && !realName.trim().isEmpty()) {
-                            tvGreeting.setText("Chào " + realName.trim() + "!");
+                            String finalName = realName.trim();
+                            if (!finalName.equals(cachedName)) {
+                                tvGreeting.setText("Chào " + finalName + "!");
+                                sharedPref.edit().putString("USER_REAL_NAME", finalName).apply();
+                            }
                         }
+
+                        // 2. Đồng bộ Điểm XP và Chuỗi lửa (Nhảy số tức thì)
+                        Long scoreObj = document.getLong("score");
+                        long realScore = (scoreObj != null) ? scoreObj : 0;
+                        if (tvHomeXP != null) tvHomeXP.setText("💎 " + realScore);
+
+                        Long streakObj = document.getLong("streak");
+                        long realStreak = (streakObj != null) ? streakObj : 0;
+                        if (tvHomeStreak != null) tvHomeStreak.setText("🔥 " + realStreak + " ngày");
                     });
         }
 
@@ -77,35 +96,28 @@ public class HomeFragment extends Fragment {
         MaterialCardView cardStage4 = view.findViewById(R.id.cardStage4);
         MaterialCardView cardStageChest = view.findViewById(R.id.cardStageChest);
 
-        // Nút Học Ngay hàng ngày -> Mặc định mở Ải 1 (Dễ)
         if (btnStartDaily != null) {
             btnStartDaily.setOnClickListener(v -> openStageQuiz("Easy", "Ải 1: Khởi Động"));
         }
 
-        // Bấm Ải 1 -> Gửi độ khó "Easy" (Dễ)
         if (cardStage1 != null) {
             cardStage1.setOnClickListener(v -> openStageQuiz("Easy", "Ải 1: Khởi Động"));
         }
 
-        // Bấm Ải 2 -> Gửi độ khó "Medium" (Vừa)
         if (cardStage2 != null) {
             cardStage2.setOnClickListener(v -> openStageQuiz("Medium", "Ải 2: Tăng Tốc"));
         }
 
-        // Bấm Ải 3 -> Gửi độ khó "Hard" (Khó)
         if (cardStage3 != null) {
             cardStage3.setOnClickListener(v -> openStageQuiz("Hard", "Ải 3: Bứt Phá"));
         }
 
-        // Bấm Ải 4 -> Gửi độ khó "Boss" (Siêu Khó - Trùm cuối)
         if (cardStage4 != null) {
             cardStage4.setOnClickListener(v -> openStageQuiz("Boss", "Ải 4: Trùm Cuối 👑"));
         }
 
-        // Bấm Ải 5 -> Rương quà tặng (Khóa thử thách)
         if (cardStageChest != null) {
             cardStageChest.setOnClickListener(v -> {
-                // Hiển thị thông báo hướng dẫn người dùng vượt qua 4 ải trước
                 Toast.makeText(requireContext(), "🎁 Hãy vượt qua toàn bộ 4 Ải để mở khóa Rương Báu nhé!", Toast.LENGTH_LONG).show();
             });
         }
@@ -116,31 +128,20 @@ public class HomeFragment extends Fragment {
     // =========================================================================
     // HÀM ĐIỀU HƯỚNG & TRUYỀN THAM SỐ ĐỘ KHÓ
     // =========================================================================
-    /*
-     * Hàm mở Trạm Nhiệm Vụ Ải (Đầy đủ 4 kỹ năng: Từ vựng, Nói, Quiz, Lật thẻ)
-     */
     private void openStageQuiz(String difficulty, String stageName) {
         StageMissionFragment missionFragment = new StageMissionFragment();
 
-        /*
-         * ĐÓNG GÓI DỮ LIỆU GIỮA CÁC FRAGMENT
-         *   Gắn gói dữ liệu vào Fragment mới.
-         *   Kỹ thuật này giúp hệ thống Android tự động bảo toàn tham số (Độ khó & Tên ải)
-         *   kể cả khi ứng dụng bị thu hồi bộ nhớ hay người dùng xoay ngang màn hình.
-         */
         Bundle bundle = new Bundle();
-        bundle.putString("DIFFICULTY_LEVEL", difficulty); // "Easy", "Medium", "Hard", "Boss"
+        bundle.putString("DIFFICULTY_LEVEL", difficulty);
         bundle.putString("STAGE_NAME", stageName);
         missionFragment.setArguments(bundle);
 
-        // Chuyển sang màn hình Trạm nhiệm vụ và lưu giao diện Trang chủ vào ngăn xếp bộ nhớ
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, missionFragment)
-                .addToBackStack(null) // Cho phép bấm nút Back trên điện thoại quay lại bản đồ Trang chủ
+                .addToBackStack(null)
                 .commit();
 
-        // Hiển thị Toast chào mừng ngắn gọn tạo hứng thú học tập
         Toast.makeText(requireContext(), "Chào mừng vào " + stageName, Toast.LENGTH_SHORT).show();
     }
 }

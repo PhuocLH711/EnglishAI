@@ -70,6 +70,14 @@ dependencies {
     // Dùng cho phản hồi dạng streaming
     implementation("org.reactivestreams:reactive-streams:1.0.4")
 
+    // Thư viện Firebase Storage lưu trữ ảnh
+    implementation("com.google.firebase:firebase-storage")
+
+    // Thư viện Glide giúp load ảnh siêu mượt và bo tròn
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Thư viện bắn pháo hoa siêu đẹp
+    implementation("nl.dionsegijn:konfetti-xml:2.0.4")
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

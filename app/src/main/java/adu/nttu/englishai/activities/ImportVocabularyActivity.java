@@ -1,179 +1,108 @@
 package adu.nttu.englishai.activities;
 
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.DocumentReference;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 import adu.nttu.englishai.R;
-import adu.nttu.englishai.models.Vocabulary;
 
 public class ImportVocabularyActivity extends AppCompatActivity {
 
-    private Button btnImportVocabulary;
-    private FirebaseFirestore db;
+    private EditText etBulkData;
+    private MaterialButton btnStartImport;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_vocabulary);
 
-        btnImportVocabulary =
-                findViewById(R.id.btnImportVocabulary);
+        firestore = FirebaseFirestore.getInstance();
+        etBulkData = findViewById(R.id.etBulkData);
+        btnStartImport = findViewById(R.id.btnStartImport);
 
-        db = FirebaseFirestore.getInstance();
-
-        btnImportVocabulary.setOnClickListener(
-                view -> importVocabulary()
-        );
+        btnStartImport.setOnClickListener(v -> processAndUploadData());
+        // Khai báo sự kiện bấm nút Quay lại (Back)
+        TextView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish()); // Lệnh finish() giúp đóng màn hình này lại
     }
 
-    private void importVocabulary() {
-        btnImportVocabulary.setEnabled(false);
-        btnImportVocabulary.setText("Đang nhập dữ liệu...");
+    private void processAndUploadData() {
+        String rawData = etBulkData.getText().toString().trim();
 
-        try (
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                getAssets().open("vocabularies.json")
-                        )
-                )
-        ) {
-            Type listType =
-                    new TypeToken<List<Vocabulary>>() {
-                    }.getType();
-
-            List<Vocabulary> vocabularyList =
-                    new Gson().fromJson(reader, listType);
-
-            if (vocabularyList == null
-                    || vocabularyList.isEmpty()) {
-
-                showResult("File từ vựng đang trống.");
-                return;
-            }
-
-            Toast.makeText(
-                    this,
-                    "Đã đọc được "
-                            + vocabularyList.size()
-                            + " từ trong JSON",
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            uploadVocabularyList(vocabularyList);
-
-        } catch (Exception exception) {
-            showResult(
-                    "Không đọc được file JSON: "
-                            + exception.getMessage()
-            );
-        }
-    }
-
-    private void uploadVocabularyList(
-            List<Vocabulary> vocabularyList
-    ) {
-        final int total = vocabularyList.size();
-        final int[] successCount = {0};
-        final int[] failureCount = {0};
-
-        for (Vocabulary vocabulary : vocabularyList) {
-            String englishWord =
-                    vocabulary.getEnglishWord();
-
-            String documentId =
-                    createDocumentId(englishWord);
-
-            db.collection("vocabularies")
-                    .document(documentId)
-                    .set(vocabulary)
-                    .addOnSuccessListener(unused -> {
-                        successCount[0]++;
-
-                        checkUploadFinished(
-                                total,
-                                successCount[0],
-                                failureCount[0]
-                        );
-                    })
-                    .addOnFailureListener(exception -> {
-                        failureCount[0]++;
-
-                        checkUploadFinished(
-                                total,
-                                successCount[0],
-                                failureCount[0]
-                        );
-                    });
-        }
-    }
-
-    private String createDocumentId(
-            String englishWord
-    ) {
-        if (englishWord == null
-                || englishWord.trim().isEmpty()) {
-
-            return db.collection("vocabularies")
-                    .document()
-                    .getId();
-        }
-
-        return englishWord
-                .trim()
-                .toLowerCase(Locale.ROOT)
-                .replaceAll("[^a-z0-9]+", "_")
-                .replaceAll("^_+|_+$", "");
-    }
-
-    private void checkUploadFinished(
-            int total,
-            int successCount,
-            int failureCount
-    ) {
-        if (successCount + failureCount != total) {
+        if (rawData.isEmpty()) {
+            Toast.makeText(this, "Vui lòng dán dữ liệu vào ô trống!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        btnImportVocabulary.setEnabled(true);
-        btnImportVocabulary.setText(
-                "Nhập dữ liệu từ vựng"
-        );
+        // Đổi trạng thái nút bấm tránh bấm 2 lần
+        btnStartImport.setEnabled(false);
+        btnStartImport.setText("ĐANG XỬ LÝ...");
 
-        Toast.makeText(
-                this,
-                "Thành công: "
-                        + successCount
-                        + "\nThất bại: "
-                        + failureCount,
-                Toast.LENGTH_LONG
-        ).show();
-    }
+        // Tách văn bản thành từng dòng
+        String[] lines = rawData.split("\n");
 
-    private void showResult(
-            String message
-    ) {
-        btnImportVocabulary.setEnabled(true);
-        btnImportVocabulary.setText(
-                "Nhập dữ liệu từ vựng"
-        );
+        // Khởi tạo Firebase WriteBatch (cho phép nạp tối đa 500 document cùng lúc)
+        WriteBatch batch = firestore.batch();
+        int validCount = 0;
 
-        Toast.makeText(
-                this,
-                message,
-                Toast.LENGTH_LONG
-        ).show();
+        for (String line : lines) {
+            // Tách các cột bằng ký tự "|"
+            String[] parts = line.split("\\|");
+
+            // Đảm bảo có ít nhất Từ tiếng Anh và Nghĩa tiếng Việt
+            if (parts.length >= 2) {
+                String englishWord = parts[0].trim();
+                String phonetic = parts.length > 2 ? parts[1].trim() : "";
+                String vietnameseMeaning = parts[parts.length > 2 ? 2 : 1].trim();
+
+                if (!englishWord.isEmpty() && !vietnameseMeaning.isEmpty()) {
+                    // Tạo ID tự động và đóng gói dữ liệu
+                    DocumentReference docRef = firestore.collection("vocabularies").document();
+                    Map<String, Object> wordMap = new HashMap<>();
+                    wordMap.put("englishWord", englishWord);
+                    wordMap.put("phonetic", phonetic);
+                    wordMap.put("vietnameseMeaning", vietnameseMeaning);
+                    wordMap.put("createdAt", System.currentTimeMillis());
+
+                    // Thêm vào hàng đợi Batch
+                    batch.set(docRef, wordMap);
+                    validCount++;
+                }
+            }
+        }
+
+        if (validCount == 0) {
+            Toast.makeText(this, "Không tìm thấy dữ liệu hợp lệ. Vui lòng kiểm tra lại định dạng!", Toast.LENGTH_LONG).show();
+            btnStartImport.setEnabled(true);
+            btnStartImport.setText("BẮT ĐẦU NẠP DỮ LIỆU");
+            return;
+        }
+
+        // Bắt đầu đẩy toàn bộ lô dữ liệu lên server
+        final int finalValidCount = validCount;
+        batch.commit()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Đã nạp thành công " + finalValidCount + " từ vựng!", Toast.LENGTH_LONG).show();
+                    etBulkData.setText(""); // Xóa trắng ô nhập
+                    btnStartImport.setEnabled(true);
+                    btnStartImport.setText("BẮT ĐẦU NẠP DỮ LIỆU");
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Lỗi nạp dữ liệu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    btnStartImport.setEnabled(true);
+                    btnStartImport.setText("BẮT ĐẦU NẠP DỮ LIỆU");
+                });
     }
 }

@@ -73,7 +73,26 @@
             android:textSize="15sp"
             android:textColor="#37474F"/>
     </LinearLayout>
+    <!-- Nút Admin Import (Dành riêng cho quản trị viên) -->
+    <LinearLayout
+        android:id="@+id/itemAdminImport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="🔧 Admin: Nạp dữ liệu từ vựng"
+            android:textColor="#D32F2F"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

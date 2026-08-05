@@ -62,7 +62,7 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- Avatar & Thông tin tài khoản -->
+            <!-- 👉 ĐÃ SỬA: Chồng 2 lớp (Dưới là icon mặc định, Trên là ảnh trong suốt chờ load) -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
@@ -72,6 +72,7 @@
                 app:strokeColor="#1976D2"
                 app:strokeWidth="3dp">
 
+                <!-- Lớp 1 (Nằm dưới): Hiện icon học viên mặc định như cũ -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -79,6 +80,14 @@
                     android:gravity="center"
                     android:text="🧑‍🎓"
                     android:textSize="54sp" />
+
+                <!-- Lớp 2 (Nằm trên): Sẽ hiển thị ảnh thật của người dùng -->
+                <ImageView
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/transparent" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -418,9 +427,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
-
-            <!-- NÚT BỔ SUNG TỪ PROFILE: Nhập dữ liệu từ vựng (Đổi màu theo theme xanh Progress) -->
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -160,15 +160,11 @@
         android:visibility="gone"
         android:elevation="6dp"/>
 
-    <!-- Khung chứa hiệu ứng bắn pháo hoa lúc trả lời đúng -->
-    <TextView
-        android:id="@+id/tvConfetti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="🏆"
-        android:textSize="48sp"
-        android:visibility="gone"
+    <!-- 👉 ĐÃ SỬA: Khung chứa hiệu ứng bắn pháo hoa vật lý (Konfetti) -->
+    <nl.dionsegijn.konfetti.xml.KonfettiView
+        android:id="@+id/konfettiView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:elevation="10dp"/>
 
 </RelativeLayout>

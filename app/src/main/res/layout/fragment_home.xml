@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <!-- ========================================================================= -->
-    <!-- 1. PHẦN HEADER CỐ ĐỊNH (ĐÃ BỎ ĐỔ BÓNG - PHẢNG PHIU LIỀN MẠCH)             -->
+    <!-- 1. PHẦN HEADER CỐ ĐỊNH -->
     <!-- ========================================================================= -->
     <LinearLayout
         android:id="@+id/layoutFixedHeader"
@@ -61,10 +61,12 @@
                 android:layout_marginEnd="8dp"
                 android:elevation="2dp"
                 android:gravity="center">
+                <!-- 👉 ĐÃ THÊM ID CHO CHUỖI LỬA -->
                 <TextView
+                    android:id="@+id/tvHomeStreak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🔥 3 ngày"
+                    android:text="🔥 0 ngày"
                     android:textColor="#856404"
                     android:textStyle="bold"
                     android:textSize="13sp"/>
@@ -79,10 +81,12 @@
                 android:paddingVertical="8dp"
                 android:elevation="2dp"
                 android:gravity="center">
+                <!-- 👉 ĐÃ THÊM ID CHO ĐIỂM XP -->
                 <TextView
+                    android:id="@+id/tvHomeXP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💎 150"
+                    android:text="💎 0"
                     android:textColor="#1A73E8"
                     android:textStyle="bold"
                     android:textSize="13sp"/>
@@ -206,7 +210,7 @@
             android:paddingBottom="120dp"
             android:gravity="center_horizontal">
 
-            <!-- ẢI 1: KHỞI ĐỘNG (DỄ - Lệch Trái) -->
+            <!-- ẢI 1: KHỞI ĐỘNG -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -252,7 +256,7 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- ẢI 2: TĂNG TỐC (VỪA - Chính Giữa) -->
+            <!-- ẢI 2: TĂNG TỐC -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -297,7 +301,7 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- ẢI 3: BỨT PHÁ (KHÓ - Lệch Phải) -->
+            <!-- ẢI 3: BỨT PHÁ -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -343,7 +347,7 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- ẢI 4: TRÙM CUỐI (SIÊU KHÓ - Quay về Giữa) -->
+            <!-- ẢI 4: TRÙM CUỐI -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -388,7 +392,7 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- ẢI 5: RƯƠNG BÁU CHIẾN THẮNG (Lệch Trái - Đích đến) -->
+            <!-- ẢI 5: RƯƠNG BÁU CHIẾN THẮNG -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
