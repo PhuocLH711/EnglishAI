@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="20dp">
+
+    <!-- Header: Nút Xóa, Thanh Tiến Trình và Trái Tim -->
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✖"
+            android:textSize="24sp"
+            android:textColor="#757575"
+            android:textStyle="bold"
+            android:padding="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="16dp"
+            android:progress="0"
+            android:max="10"
+            android:scaleY="3"
+            android:progressTint="#4CAF50"
+            android:progressBackgroundTint="#E0E0E0" />
+
+        <TextView
+            android:id="@+id/tvHearts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="❤️ 3"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#F44336"/>
+    </LinearLayout>
+
+    <!-- Khu vực Câu Hỏi -->
+    <TextView
+        android:id="@+id/tvQuestionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutHeader"
+        android:text="Chọn nghĩa đúng của từ này:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#37474F"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/tvTargetWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvQuestionTitle"
+        android:text="Apple"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#1A73E8"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Khu vực Đáp án (Trắc nghiệm) -->
+    <LinearLayout
+        android:id="@+id/layoutMultipleChoice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTargetWord"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAns1"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:text="Quả cam"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#37474F"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAns2"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:text="Quả táo"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#37474F"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAns3"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:text="Quả chuối"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#37474F"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAns4"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:text="Quả ổi"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#37474F"/>
+    </LinearLayout>
+
+    <!-- Khu vực Đáp án (Gõ phím) -->
+    <LinearLayout
+        android:id="@+id/layoutTyping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTargetWord"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edtTypingAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Gõ từ tiếng Anh vào đây..."
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:textColor="#1A1A1A"/>
+    </LinearLayout>
+
+    <!-- Thông báo kết quả (Đúng/Sai) -->
+    <TextView
+        android:id="@+id/tvFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnCheck"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
+
+    <!-- Nút KIỂM TRA -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCheck"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_button_quiz"
+        android:backgroundTint="#1976D2"
+        android:text="KIỂM TRA"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:elevation="4dp"/>
+
+    <!-- Pháo hoa 🎇 -->
+    <nl.dionsegijn.konfetti.xml.KonfettiView
+        android:id="@+id/konfettiView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"/>
+
+</RelativeLayout>

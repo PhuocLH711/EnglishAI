@@ -17,6 +17,9 @@ public class Vocabulary implements Serializable {
     private String level;
     private String imageUrl;
 
+    // 👉 BIẾN MỚI THÊM VÀO ĐỂ PHỤC VỤ CHO VƯỢT ẢI (Độ khó: Easy, Medium, Hard, Boss)
+    private String difficulty;
+
     // Dữ liệu riêng của từng người học
     private boolean favorite;
     private String learningStatus;
@@ -141,6 +144,17 @@ public class Vocabulary implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    // =========================================================================
+    // 👉 GETTER & SETTER CHO BIẾN DIFFICULTY (DÙNG CHO GAME VƯỢT ẢI)
+    // =========================================================================
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
     /**
      * Favorite không được lưu chung trong collection vocabularies.
      * Trường này sẽ được ghép từ tiến độ riêng của người dùng.
@@ -203,6 +217,7 @@ public class Vocabulary implements Serializable {
     public boolean isLearned() {
         return STATUS_LEARNED.equals(getLearningStatus());
     }
+
     public Vocabulary(
             String id,
             String englishWord,
