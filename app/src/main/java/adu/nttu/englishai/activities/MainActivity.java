@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
+import adu.nttu.englishai.fragments.ToeicFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,10 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 
         // Khởi tạo Firestore
@@ -57,6 +61,18 @@ public class MainActivity extends AppCompatActivity {
                         .replace(
                                 R.id.fragment_container,
                                 new VocabularyFragment()
+                        )
+                        .commit();
+
+                return true;
+
+            } else if (itemId == R.id.nav_toeic) {
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragment_container,
+                                new ToeicFragment()
                         )
                         .commit();
 

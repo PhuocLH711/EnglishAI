@@ -10,6 +10,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.material.button.MaterialButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,7 @@ import adu.nttu.englishai.models.Vocabulary;
 // VOCABULARY FRAGMENT: Màn hình Từ điển Từ vựng, Tìm kiếm & Lọc nâng cao
 // =========================================================================
 public class VocabularyFragment extends Fragment {
+
 
     private Button btnFilterVocabulary;
     private TextView tvFilterStatus;
@@ -112,11 +114,14 @@ public class VocabularyFragment extends Fragment {
         tvVocabularySummary =
                 view.findViewById(R.id.tvVocabularySummary);
 
+
+
         setupRecyclerView();
         setupSearch();
         setupFilterButton();
 
-        // Cấu hình SearchView: Mở rộng ô tìm kiếm sẵn nhưng bỏ focus để bàn phím không tự bật lên gây choáng màn hình
+        // Cấu hình SearchView: Mở rộng ô tìm kiếm sẵn nhưng bỏ focus
+        // để bàn phím không tự bật lên khi vừa mở màn hình
         searchVocabulary.setIconifiedByDefault(false);
         searchVocabulary.setIconified(false);
         searchVocabulary.clearFocus();
@@ -125,6 +130,7 @@ public class VocabularyFragment extends Fragment {
 
         loadVocabularyFromFirestore();
     }
+
 
     // =========================================================================
     // ĐỒNG BỘ TIẾN ĐỘ KHI QUAY LẠI MÀN HÌNH

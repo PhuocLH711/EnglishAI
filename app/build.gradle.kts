@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 
     implementation("com.google.code.gson:gson:2.11.0")
 

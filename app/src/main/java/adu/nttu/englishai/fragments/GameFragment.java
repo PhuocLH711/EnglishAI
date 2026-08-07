@@ -80,6 +80,28 @@ public class GameFragment extends Fragment {
         if (cardSpeaking != null) cardSpeaking.setOnClickListener(openSpeaking);
         if (btnOpenSpeaking != null) btnOpenSpeaking.setOnClickListener(openSpeaking);
 
+        // =========================================================================
+        // 5. SỰ KIỆN MỞ TRÒ CHƠI XẾP CÂU NGỮ PHÁP
+        // =========================================================================
+        View cardGrammarSprint = view.findViewById(R.id.cardGrammarSprint);
+        View btnOpenGrammar = view.findViewById(R.id.btnOpenGrammar);
+
+        View.OnClickListener openGrammar = v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new SentenceArrangeFragment())
+                    .addToBackStack(null)
+                    .commit();
+        };
+
+        if (cardGrammarSprint != null) {
+            cardGrammarSprint.setOnClickListener(openGrammar);
+        }
+
+        if (btnOpenGrammar != null) {
+            btnOpenGrammar.setOnClickListener(openGrammar);
+        }
+
         return view;
     }
 }

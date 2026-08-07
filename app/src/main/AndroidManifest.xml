@@ -26,7 +26,15 @@
             </intent-filter>
 
         </activity>
-
+        <activity
+            android:name=".activities.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ToeicImportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ImportSentenceExerciseActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false"/>

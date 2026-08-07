@@ -1,0 +1,15 @@
+{
+  "test": {
+    "id": "YOUR_TEST_ID",
+    "title": "Tên bộ đề",
+    "sourceName": "Nguồn dữ liệu hợp lệ của bạn",
+    "sourceReference": "Ghi chú hoặc mã tài liệu",
+    "year": 0,
+    "totalQuestions": 0,
+    "durationMinutes": 120,
+    "hasListening": false,
+    "hasReading": true,
+    "availableParts": [5]
+  },
+  "questions": []
+}

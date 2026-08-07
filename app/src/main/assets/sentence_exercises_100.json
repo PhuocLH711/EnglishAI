@@ -1,0 +1,802 @@
+[
+  {
+    "id": "sentence_001",
+    "englishSentence": "I go to school every day.",
+    "vietnameseMeaning": "Tôi đi học mỗi ngày.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn để diễn tả thói quen."
+  },
+  {
+    "id": "sentence_002",
+    "englishSentence": "She drinks coffee every morning.",
+    "vietnameseMeaning": "Cô ấy uống cà phê mỗi sáng.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn cho thói quen hằng ngày."
+  },
+  {
+    "id": "sentence_003",
+    "englishSentence": "They play football after school.",
+    "vietnameseMeaning": "Họ chơi bóng đá sau giờ học.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn cho hoạt động thường xuyên."
+  },
+  {
+    "id": "sentence_004",
+    "englishSentence": "He works in a hospital.",
+    "vietnameseMeaning": "Anh ấy làm việc trong một bệnh viện.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn để nói về công việc."
+  },
+  {
+    "id": "sentence_005",
+    "englishSentence": "My mother cooks dinner every evening.",
+    "vietnameseMeaning": "Mẹ tôi nấu bữa tối mỗi tối.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn cho hành động lặp lại."
+  },
+  {
+    "id": "sentence_006",
+    "englishSentence": "We study English on Monday.",
+    "vietnameseMeaning": "Chúng tôi học tiếng Anh vào thứ Hai.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn cho lịch học."
+  },
+  {
+    "id": "sentence_007",
+    "englishSentence": "The sun rises in the east.",
+    "vietnameseMeaning": "Mặt trời mọc ở hướng đông.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn cho sự thật hiển nhiên."
+  },
+  {
+    "id": "sentence_008",
+    "englishSentence": "Tom likes chocolate ice cream.",
+    "vietnameseMeaning": "Tom thích kem sô-cô-la.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại đơn để nói về sở thích."
+  },
+  {
+    "id": "sentence_009",
+    "englishSentence": "She does not watch television at night.",
+    "vietnameseMeaning": "Cô ấy không xem tivi vào ban đêm.",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Phủ định hiện tại đơn: does not + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_010",
+    "englishSentence": "Do you speak English at home?",
+    "vietnameseMeaning": "Bạn có nói tiếng Anh ở nhà không?",
+    "grammarTopic": "Present Simple",
+    "level": "Easy",
+    "explanation": "Câu hỏi hiện tại đơn: Do + chủ ngữ + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_011",
+    "englishSentence": "She is reading a book now.",
+    "vietnameseMeaning": "Cô ấy đang đọc một quyển sách.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Hiện tại tiếp diễn: am/is/are + V-ing."
+  },
+  {
+    "id": "sentence_012",
+    "englishSentence": "I am doing my homework now.",
+    "vietnameseMeaning": "Tôi đang làm bài tập về nhà.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại tiếp diễn cho hành động đang xảy ra."
+  },
+  {
+    "id": "sentence_013",
+    "englishSentence": "They are playing in the garden.",
+    "vietnameseMeaning": "Họ đang chơi trong vườn.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Dùng are + V-ing với chủ ngữ số nhiều."
+  },
+  {
+    "id": "sentence_014",
+    "englishSentence": "He is talking to his teacher.",
+    "vietnameseMeaning": "Anh ấy đang nói chuyện với giáo viên.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại tiếp diễn cho hành động hiện tại."
+  },
+  {
+    "id": "sentence_015",
+    "englishSentence": "We are waiting for the bus.",
+    "vietnameseMeaning": "Chúng tôi đang chờ xe buýt.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Dùng hiện tại tiếp diễn khi hành động đang diễn ra."
+  },
+  {
+    "id": "sentence_016",
+    "englishSentence": "The baby is sleeping now.",
+    "vietnameseMeaning": "Em bé đang ngủ.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Dùng is + V-ing với chủ ngữ số ít."
+  },
+  {
+    "id": "sentence_017",
+    "englishSentence": "She is not wearing a jacket.",
+    "vietnameseMeaning": "Cô ấy không mặc áo khoác lúc này.",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Phủ định hiện tại tiếp diễn: am/is/are not + V-ing."
+  },
+  {
+    "id": "sentence_018",
+    "englishSentence": "Are they studying English now?",
+    "vietnameseMeaning": "Họ có đang học tiếng Anh không?",
+    "grammarTopic": "Present Continuous",
+    "level": "Easy",
+    "explanation": "Câu hỏi hiện tại tiếp diễn đưa to be lên trước chủ ngữ."
+  },
+  {
+    "id": "sentence_019",
+    "englishSentence": "I am a pharmacy student.",
+    "vietnameseMeaning": "Tôi là sinh viên dược.",
+    "grammarTopic": "Verb To Be",
+    "level": "Easy",
+    "explanation": "Dùng am với chủ ngữ I."
+  },
+  {
+    "id": "sentence_020",
+    "englishSentence": "She is very friendly.",
+    "vietnameseMeaning": "Cô ấy rất thân thiện.",
+    "grammarTopic": "Verb To Be",
+    "level": "Easy",
+    "explanation": "Dùng is với chủ ngữ số ít."
+  },
+  {
+    "id": "sentence_021",
+    "englishSentence": "They are my classmates.",
+    "vietnameseMeaning": "Họ là bạn cùng lớp của tôi.",
+    "grammarTopic": "Verb To Be",
+    "level": "Easy",
+    "explanation": "Dùng are với chủ ngữ số nhiều."
+  },
+  {
+    "id": "sentence_022",
+    "englishSentence": "There is a book on the table.",
+    "vietnameseMeaning": "Có một quyển sách trên bàn.",
+    "grammarTopic": "There is / There are",
+    "level": "Easy",
+    "explanation": "There is dùng với danh từ số ít."
+  },
+  {
+    "id": "sentence_023",
+    "englishSentence": "There are three students in the room.",
+    "vietnameseMeaning": "Có ba sinh viên trong phòng.",
+    "grammarTopic": "There is / There are",
+    "level": "Easy",
+    "explanation": "There are dùng với danh từ số nhiều."
+  },
+  {
+    "id": "sentence_024",
+    "englishSentence": "There is not any milk in the fridge.",
+    "vietnameseMeaning": "Không có sữa trong tủ lạnh.",
+    "grammarTopic": "There is / There are",
+    "level": "Easy",
+    "explanation": "There is not dùng với danh từ không đếm được."
+  },
+  {
+    "id": "sentence_025",
+    "englishSentence": "Can you swim very well?",
+    "vietnameseMeaning": "Bạn có thể bơi rất giỏi không?",
+    "grammarTopic": "Modal Can",
+    "level": "Easy",
+    "explanation": "Can dùng để hỏi về khả năng."
+  },
+  {
+    "id": "sentence_026",
+    "englishSentence": "I can speak a little English.",
+    "vietnameseMeaning": "Tôi có thể nói một ít tiếng Anh.",
+    "grammarTopic": "Modal Can",
+    "level": "Easy",
+    "explanation": "Can + động từ nguyên mẫu diễn tả khả năng."
+  },
+  {
+    "id": "sentence_027",
+    "englishSentence": "He cannot drive a car.",
+    "vietnameseMeaning": "Anh ấy không thể lái ô tô.",
+    "grammarTopic": "Modal Can",
+    "level": "Easy",
+    "explanation": "Cannot + động từ nguyên mẫu diễn tả không có khả năng."
+  },
+  {
+    "id": "sentence_028",
+    "englishSentence": "My sister has a new bicycle.",
+    "vietnameseMeaning": "Em gái tôi có một chiếc xe đạp mới.",
+    "grammarTopic": "Have / Has",
+    "level": "Easy",
+    "explanation": "Has dùng với chủ ngữ ngôi ba số ít."
+  },
+  {
+    "id": "sentence_029",
+    "englishSentence": "We have lunch at twelve o'clock.",
+    "vietnameseMeaning": "Chúng tôi ăn trưa lúc mười hai giờ.",
+    "grammarTopic": "Have / Has",
+    "level": "Easy",
+    "explanation": "Have được dùng trong cụm have lunch."
+  },
+  {
+    "id": "sentence_030",
+    "englishSentence": "She always gets up early.",
+    "vietnameseMeaning": "Cô ấy luôn thức dậy sớm.",
+    "grammarTopic": "Adverbs of Frequency",
+    "level": "Easy",
+    "explanation": "Trạng từ tần suất thường đứng trước động từ thường."
+  },
+  {
+    "id": "sentence_031",
+    "englishSentence": "I usually walk to school.",
+    "vietnameseMeaning": "Tôi thường đi bộ đến trường.",
+    "grammarTopic": "Adverbs of Frequency",
+    "level": "Easy",
+    "explanation": "Usually thường đứng trước động từ thường."
+  },
+  {
+    "id": "sentence_032",
+    "englishSentence": "He is never late for class.",
+    "vietnameseMeaning": "Anh ấy không bao giờ trễ học.",
+    "grammarTopic": "Adverbs of Frequency",
+    "level": "Easy",
+    "explanation": "Với to be, trạng từ tần suất thường đứng sau to be."
+  },
+  {
+    "id": "sentence_033",
+    "englishSentence": "This bag is bigger than that one.",
+    "vietnameseMeaning": "Chiếc túi này lớn hơn chiếc kia.",
+    "grammarTopic": "Comparatives",
+    "level": "Easy",
+    "explanation": "Tính từ ngắn thêm -er + than."
+  },
+  {
+    "id": "sentence_034",
+    "englishSentence": "My house is smaller than yours.",
+    "vietnameseMeaning": "Nhà tôi nhỏ hơn nhà của bạn.",
+    "grammarTopic": "Comparatives",
+    "level": "Easy",
+    "explanation": "So sánh hơn với tính từ ngắn: adjective-er + than."
+  },
+  {
+    "id": "sentence_035",
+    "englishSentence": "This is the tallest building here.",
+    "vietnameseMeaning": "Đây là tòa nhà cao nhất ở đây.",
+    "grammarTopic": "Superlatives",
+    "level": "Easy",
+    "explanation": "So sánh nhất với tính từ ngắn: the + adjective-est."
+  },
+  {
+    "id": "sentence_036",
+    "englishSentence": "Today is hotter than yesterday.",
+    "vietnameseMeaning": "Hôm nay nóng hơn hôm qua.",
+    "grammarTopic": "Comparatives",
+    "level": "Easy",
+    "explanation": "Hot gấp đôi phụ âm cuối trước khi thêm -er."
+  },
+  {
+    "id": "sentence_037",
+    "englishSentence": "I visited my grandmother yesterday.",
+    "vietnameseMeaning": "Tôi đã thăm bà tôi hôm qua.",
+    "grammarTopic": "Past Simple",
+    "level": "Easy",
+    "explanation": "Dùng quá khứ đơn cho hành động đã kết thúc."
+  },
+  {
+    "id": "sentence_038",
+    "englishSentence": "She watched a movie last night.",
+    "vietnameseMeaning": "Cô ấy đã xem phim tối qua.",
+    "grammarTopic": "Past Simple",
+    "level": "Easy",
+    "explanation": "Động từ có quy tắc thêm -ed."
+  },
+  {
+    "id": "sentence_039",
+    "englishSentence": "We went to the beach last Sunday.",
+    "vietnameseMeaning": "Chúng tôi đã đi biển Chủ nhật tuần trước.",
+    "grammarTopic": "Past Simple",
+    "level": "Easy",
+    "explanation": "Went là dạng quá khứ của go."
+  },
+  {
+    "id": "sentence_040",
+    "englishSentence": "He did not come to class yesterday.",
+    "vietnameseMeaning": "Hôm qua anh ấy không đến lớp.",
+    "grammarTopic": "Past Simple",
+    "level": "Easy",
+    "explanation": "Phủ định quá khứ đơn: did not + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_041",
+    "englishSentence": "Did you finish your homework?",
+    "vietnameseMeaning": "Bạn đã làm xong bài tập về nhà chưa?",
+    "grammarTopic": "Past Simple",
+    "level": "Medium",
+    "explanation": "Câu hỏi quá khứ đơn: Did + chủ ngữ + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_042",
+    "englishSentence": "I will call you tomorrow.",
+    "vietnameseMeaning": "Tôi sẽ gọi cho bạn ngày mai.",
+    "grammarTopic": "Future Simple",
+    "level": "Medium",
+    "explanation": "Will + động từ nguyên mẫu diễn tả tương lai."
+  },
+  {
+    "id": "sentence_043",
+    "englishSentence": "She will visit her parents next week.",
+    "vietnameseMeaning": "Cô ấy sẽ thăm bố mẹ vào tuần tới.",
+    "grammarTopic": "Future Simple",
+    "level": "Medium",
+    "explanation": "Dùng will cho hành động trong tương lai."
+  },
+  {
+    "id": "sentence_044",
+    "englishSentence": "We are going to buy a new computer.",
+    "vietnameseMeaning": "Chúng tôi định mua một máy tính mới.",
+    "grammarTopic": "Be Going To",
+    "level": "Medium",
+    "explanation": "Be going to dùng cho kế hoạch hoặc ý định."
+  },
+  {
+    "id": "sentence_045",
+    "englishSentence": "It is going to rain tonight.",
+    "vietnameseMeaning": "Tối nay trời sắp mưa.",
+    "grammarTopic": "Be Going To",
+    "level": "Medium",
+    "explanation": "Be going to có thể dùng cho dự đoán dựa trên dấu hiệu."
+  },
+  {
+    "id": "sentence_046",
+    "englishSentence": "I have finished my homework.",
+    "vietnameseMeaning": "Tôi đã làm xong bài tập về nhà.",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "Present perfect: have/has + past participle."
+  },
+  {
+    "id": "sentence_047",
+    "englishSentence": "She has lived here for five years.",
+    "vietnameseMeaning": "Cô ấy đã sống ở đây được năm năm.",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "For chỉ khoảng thời gian kéo dài đến hiện tại."
+  },
+  {
+    "id": "sentence_048",
+    "englishSentence": "We have known each other since 2020.",
+    "vietnameseMeaning": "Chúng tôi đã biết nhau từ năm 2020.",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "Since chỉ mốc thời gian bắt đầu."
+  },
+  {
+    "id": "sentence_049",
+    "englishSentence": "He has never visited Japan.",
+    "vietnameseMeaning": "Anh ấy chưa bao giờ đến Nhật Bản.",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "Never thường đứng giữa have/has và quá khứ phân từ."
+  },
+  {
+    "id": "sentence_050",
+    "englishSentence": "Have you ever eaten sushi?",
+    "vietnameseMeaning": "Bạn đã từng ăn sushi chưa?",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "Ever thường dùng trong câu hỏi present perfect về trải nghiệm."
+  },
+  {
+    "id": "sentence_051",
+    "englishSentence": "She has just arrived at the station.",
+    "vietnameseMeaning": "Cô ấy vừa đến nhà ga.",
+    "grammarTopic": "Present Perfect",
+    "level": "Medium",
+    "explanation": "Just thường đứng giữa has/have và quá khứ phân từ."
+  },
+  {
+    "id": "sentence_052",
+    "englishSentence": "I was studying when you called me.",
+    "vietnameseMeaning": "Tôi đang học khi bạn gọi cho tôi.",
+    "grammarTopic": "Past Continuous",
+    "level": "Medium",
+    "explanation": "Past continuous diễn tả hành động đang diễn ra khi hành động khác xen vào."
+  },
+  {
+    "id": "sentence_053",
+    "englishSentence": "They were watching television at eight o'clock.",
+    "vietnameseMeaning": "Họ đang xem tivi lúc tám giờ.",
+    "grammarTopic": "Past Continuous",
+    "level": "Medium",
+    "explanation": "Was/were + V-ing tại một thời điểm trong quá khứ."
+  },
+  {
+    "id": "sentence_054",
+    "englishSentence": "While I was cooking, my brother was cleaning.",
+    "vietnameseMeaning": "Trong khi tôi đang nấu ăn, anh trai tôi đang dọn dẹp.",
+    "grammarTopic": "Past Continuous",
+    "level": "Medium",
+    "explanation": "While nối hai hành động đang diễn ra đồng thời."
+  },
+  {
+    "id": "sentence_055",
+    "englishSentence": "You should drink more water.",
+    "vietnameseMeaning": "Bạn nên uống nhiều nước hơn.",
+    "grammarTopic": "Modal Verbs",
+    "level": "Medium",
+    "explanation": "Should dùng để đưa ra lời khuyên."
+  },
+  {
+    "id": "sentence_056",
+    "englishSentence": "Students must wear their uniforms.",
+    "vietnameseMeaning": "Học sinh phải mặc đồng phục.",
+    "grammarTopic": "Modal Verbs",
+    "level": "Medium",
+    "explanation": "Must diễn tả nghĩa vụ mạnh."
+  },
+  {
+    "id": "sentence_057",
+    "englishSentence": "You must not smoke here.",
+    "vietnameseMeaning": "Bạn không được hút thuốc ở đây.",
+    "grammarTopic": "Modal Verbs",
+    "level": "Medium",
+    "explanation": "Must not diễn tả sự cấm đoán."
+  },
+  {
+    "id": "sentence_058",
+    "englishSentence": "We have to finish this work today.",
+    "vietnameseMeaning": "Chúng tôi phải hoàn thành công việc này hôm nay.",
+    "grammarTopic": "Have To",
+    "level": "Medium",
+    "explanation": "Have to diễn tả sự bắt buộc hoặc cần thiết."
+  },
+  {
+    "id": "sentence_059",
+    "englishSentence": "She does not have to come early.",
+    "vietnameseMeaning": "Cô ấy không cần phải đến sớm.",
+    "grammarTopic": "Have To",
+    "level": "Medium",
+    "explanation": "Do not have to nghĩa là không cần thiết."
+  },
+  {
+    "id": "sentence_060",
+    "englishSentence": "This exercise is more difficult than the last one.",
+    "vietnameseMeaning": "Bài tập này khó hơn bài trước.",
+    "grammarTopic": "Comparatives",
+    "level": "Medium",
+    "explanation": "Tính từ dài dùng more + adjective + than."
+  },
+  {
+    "id": "sentence_061",
+    "englishSentence": "English is more interesting than I expected.",
+    "vietnameseMeaning": "Tiếng Anh thú vị hơn tôi mong đợi.",
+    "grammarTopic": "Comparatives",
+    "level": "Medium",
+    "explanation": "More + tính từ dài + than dùng để so sánh hơn."
+  },
+  {
+    "id": "sentence_062",
+    "englishSentence": "This is the most beautiful place I have visited.",
+    "vietnameseMeaning": "Đây là nơi đẹp nhất mà tôi từng đến.",
+    "grammarTopic": "Superlatives",
+    "level": "Medium",
+    "explanation": "Tính từ dài dùng the most + adjective."
+  },
+  {
+    "id": "sentence_063",
+    "englishSentence": "The room is cleaned every day.",
+    "vietnameseMeaning": "Căn phòng được dọn mỗi ngày.",
+    "grammarTopic": "Passive Voice",
+    "level": "Medium",
+    "explanation": "Bị động hiện tại đơn: am/is/are + past participle."
+  },
+  {
+    "id": "sentence_064",
+    "englishSentence": "English is spoken in many countries.",
+    "vietnameseMeaning": "Tiếng Anh được nói ở nhiều quốc gia.",
+    "grammarTopic": "Passive Voice",
+    "level": "Medium",
+    "explanation": "Bị động hiện tại đơn nhấn mạnh đối tượng chịu tác động."
+  },
+  {
+    "id": "sentence_065",
+    "englishSentence": "The letter was sent yesterday.",
+    "vietnameseMeaning": "Bức thư đã được gửi hôm qua.",
+    "grammarTopic": "Passive Voice",
+    "level": "Medium",
+    "explanation": "Bị động quá khứ đơn: was/were + past participle."
+  },
+  {
+    "id": "sentence_066",
+    "englishSentence": "The homework will be checked tomorrow.",
+    "vietnameseMeaning": "Bài tập sẽ được kiểm tra vào ngày mai.",
+    "grammarTopic": "Passive Voice",
+    "level": "Medium",
+    "explanation": "Bị động tương lai: will be + past participle."
+  },
+  {
+    "id": "sentence_067",
+    "englishSentence": "If it rains, I will stay at home.",
+    "vietnameseMeaning": "Nếu trời mưa, tôi sẽ ở nhà.",
+    "grammarTopic": "First Conditional",
+    "level": "Medium",
+    "explanation": "Điều kiện loại 1: If + hiện tại đơn, will + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_068",
+    "englishSentence": "If you study hard, you will pass the exam.",
+    "vietnameseMeaning": "Nếu bạn học chăm, bạn sẽ vượt qua kỳ thi.",
+    "grammarTopic": "First Conditional",
+    "level": "Medium",
+    "explanation": "Điều kiện loại 1 nói về khả năng có thể xảy ra."
+  },
+  {
+    "id": "sentence_069",
+    "englishSentence": "Unless you hurry, you will miss the bus.",
+    "vietnameseMeaning": "Nếu bạn không nhanh lên, bạn sẽ lỡ xe buýt.",
+    "grammarTopic": "First Conditional",
+    "level": "Medium",
+    "explanation": "Unless mang nghĩa if not."
+  },
+  {
+    "id": "sentence_070",
+    "englishSentence": "The girl who sits next to me is very friendly.",
+    "vietnameseMeaning": "Cô gái ngồi cạnh tôi rất thân thiện.",
+    "grammarTopic": "Relative Clauses",
+    "level": "Medium",
+    "explanation": "Who dùng làm đại từ quan hệ chỉ người."
+  },
+  {
+    "id": "sentence_071",
+    "englishSentence": "This is the book that I bought yesterday.",
+    "vietnameseMeaning": "Đây là quyển sách tôi mua hôm qua.",
+    "grammarTopic": "Relative Clauses",
+    "level": "Medium",
+    "explanation": "That có thể dùng trong mệnh đề quan hệ xác định."
+  },
+  {
+    "id": "sentence_072",
+    "englishSentence": "The restaurant where we had dinner was excellent.",
+    "vietnameseMeaning": "Nhà hàng nơi chúng tôi ăn tối rất tuyệt.",
+    "grammarTopic": "Relative Clauses",
+    "level": "Medium",
+    "explanation": "Where dùng trong mệnh đề quan hệ chỉ nơi chốn."
+  },
+  {
+    "id": "sentence_073",
+    "englishSentence": "I enjoy reading books in my free time.",
+    "vietnameseMeaning": "Tôi thích đọc sách vào thời gian rảnh.",
+    "grammarTopic": "Gerunds",
+    "level": "Medium",
+    "explanation": "Enjoy được theo sau bởi V-ing."
+  },
+  {
+    "id": "sentence_074",
+    "englishSentence": "She wants to learn another language.",
+    "vietnameseMeaning": "Cô ấy muốn học thêm một ngôn ngữ.",
+    "grammarTopic": "Infinitives",
+    "level": "Medium",
+    "explanation": "Want thường được theo sau bởi to-infinitive."
+  },
+  {
+    "id": "sentence_075",
+    "englishSentence": "He stopped smoking two years ago.",
+    "vietnameseMeaning": "Anh ấy đã bỏ hút thuốc hai năm trước.",
+    "grammarTopic": "Gerunds",
+    "level": "Medium",
+    "explanation": "Stop + V-ing nghĩa là ngừng một hoạt động."
+  },
+  {
+    "id": "sentence_076",
+    "englishSentence": "If I had more time, I would learn Spanish.",
+    "vietnameseMeaning": "Nếu tôi có nhiều thời gian hơn, tôi sẽ học tiếng Tây Ban Nha.",
+    "grammarTopic": "Second Conditional",
+    "level": "Hard",
+    "explanation": "Điều kiện loại 2: If + quá khứ đơn, would + động từ nguyên mẫu."
+  },
+  {
+    "id": "sentence_077",
+    "englishSentence": "If I were you, I would accept the offer.",
+    "vietnameseMeaning": "Nếu tôi là bạn, tôi sẽ nhận lời đề nghị.",
+    "grammarTopic": "Second Conditional",
+    "level": "Hard",
+    "explanation": "Trong điều kiện loại 2, were thường dùng với mọi chủ ngữ."
+  },
+  {
+    "id": "sentence_078",
+    "englishSentence": "If she studied harder, she would get better grades.",
+    "vietnameseMeaning": "Nếu cô ấy học chăm hơn, cô ấy sẽ đạt điểm tốt hơn.",
+    "grammarTopic": "Second Conditional",
+    "level": "Hard",
+    "explanation": "Điều kiện loại 2 diễn tả tình huống không thật hoặc ít có khả năng."
+  },
+  {
+    "id": "sentence_079",
+    "englishSentence": "If I had known about the meeting, I would have attended it.",
+    "vietnameseMeaning": "Nếu tôi biết về cuộc họp, tôi đã tham dự rồi.",
+    "grammarTopic": "Third Conditional",
+    "level": "Hard",
+    "explanation": "Điều kiện loại 3: If + past perfect, would have + past participle."
+  },
+  {
+    "id": "sentence_080",
+    "englishSentence": "If they had left earlier, they would not have missed the train.",
+    "vietnameseMeaning": "Nếu họ rời đi sớm hơn, họ đã không lỡ tàu.",
+    "grammarTopic": "Third Conditional",
+    "level": "Hard",
+    "explanation": "Điều kiện loại 3 nói về tình huống trái với quá khứ."
+  },
+  {
+    "id": "sentence_081",
+    "englishSentence": "The report has been completed by the team.",
+    "vietnameseMeaning": "Báo cáo đã được nhóm hoàn thành.",
+    "grammarTopic": "Passive Voice",
+    "level": "Hard",
+    "explanation": "Bị động present perfect: have/has been + past participle."
+  },
+  {
+    "id": "sentence_082",
+    "englishSentence": "The new bridge is being built near the city.",
+    "vietnameseMeaning": "Cây cầu mới đang được xây gần thành phố.",
+    "grammarTopic": "Passive Voice",
+    "level": "Hard",
+    "explanation": "Bị động hiện tại tiếp diễn: am/is/are being + past participle."
+  },
+  {
+    "id": "sentence_083",
+    "englishSentence": "She said that she was tired.",
+    "vietnameseMeaning": "Cô ấy nói rằng cô ấy mệt.",
+    "grammarTopic": "Reported Speech",
+    "level": "Hard",
+    "explanation": "Trong lời nói gián tiếp, thì có thể lùi khi động từ tường thuật ở quá khứ."
+  },
+  {
+    "id": "sentence_084",
+    "englishSentence": "He told me that he would call later.",
+    "vietnameseMeaning": "Anh ấy nói với tôi rằng anh ấy sẽ gọi sau.",
+    "grammarTopic": "Reported Speech",
+    "level": "Hard",
+    "explanation": "Will thường lùi thành would trong lời nói gián tiếp."
+  },
+  {
+    "id": "sentence_085",
+    "englishSentence": "My teacher asked me where I lived.",
+    "vietnameseMeaning": "Giáo viên hỏi tôi sống ở đâu.",
+    "grammarTopic": "Reported Questions",
+    "level": "Hard",
+    "explanation": "Câu hỏi gián tiếp dùng trật tự chủ ngữ + động từ."
+  },
+  {
+    "id": "sentence_086",
+    "englishSentence": "She asked whether I had finished the assignment.",
+    "vietnameseMeaning": "Cô ấy hỏi liệu tôi đã hoàn thành bài tập chưa.",
+    "grammarTopic": "Reported Questions",
+    "level": "Hard",
+    "explanation": "Whether/if dùng để tường thuật câu hỏi Yes/No."
+  },
+  {
+    "id": "sentence_087",
+    "englishSentence": "The man whose car was stolen called the police.",
+    "vietnameseMeaning": "Người đàn ông có xe bị đánh cắp đã gọi cảnh sát.",
+    "grammarTopic": "Relative Clauses",
+    "level": "Hard",
+    "explanation": "Whose diễn tả quan hệ sở hữu."
+  },
+  {
+    "id": "sentence_088",
+    "englishSentence": "The laptop which I bought last year still works well.",
+    "vietnameseMeaning": "Chiếc laptop tôi mua năm ngoái vẫn hoạt động tốt.",
+    "grammarTopic": "Relative Clauses",
+    "level": "Hard",
+    "explanation": "Which dùng cho vật trong mệnh đề quan hệ."
+  },
+  {
+    "id": "sentence_089",
+    "englishSentence": "Although he was tired, he continued working.",
+    "vietnameseMeaning": "Mặc dù mệt, anh ấy vẫn tiếp tục làm việc.",
+    "grammarTopic": "Concessive Clauses",
+    "level": "Hard",
+    "explanation": "Although + mệnh đề diễn tả sự tương phản."
+  },
+  {
+    "id": "sentence_090",
+    "englishSentence": "Despite the heavy rain, they continued the match.",
+    "vietnameseMeaning": "Mặc dù mưa lớn, họ vẫn tiếp tục trận đấu.",
+    "grammarTopic": "Concessive Clauses",
+    "level": "Hard",
+    "explanation": "Despite + danh từ/cụm danh từ diễn tả sự tương phản."
+  },
+  {
+    "id": "sentence_091",
+    "englishSentence": "Because she was ill, she stayed at home.",
+    "vietnameseMeaning": "Vì cô ấy bị ốm, cô ấy ở nhà.",
+    "grammarTopic": "Reason Clauses",
+    "level": "Hard",
+    "explanation": "Because + mệnh đề dùng để nêu nguyên nhân."
+  },
+  {
+    "id": "sentence_092",
+    "englishSentence": "Because of the traffic, we arrived late.",
+    "vietnameseMeaning": "Vì giao thông đông đúc, chúng tôi đến muộn.",
+    "grammarTopic": "Reason Clauses",
+    "level": "Hard",
+    "explanation": "Because of + danh từ/cụm danh từ dùng để nêu nguyên nhân."
+  },
+  {
+    "id": "sentence_093",
+    "englishSentence": "The test was so difficult that many students failed.",
+    "vietnameseMeaning": "Bài kiểm tra khó đến mức nhiều sinh viên trượt.",
+    "grammarTopic": "Result Clauses",
+    "level": "Hard",
+    "explanation": "So + adjective + that diễn tả kết quả."
+  },
+  {
+    "id": "sentence_094",
+    "englishSentence": "It was such an interesting book that I read it twice.",
+    "vietnameseMeaning": "Đó là một quyển sách thú vị đến mức tôi đọc hai lần.",
+    "grammarTopic": "Result Clauses",
+    "level": "Hard",
+    "explanation": "Such + a/an + adjective + noun + that diễn tả kết quả."
+  },
+  {
+    "id": "sentence_095",
+    "englishSentence": "She is too young to drive a car.",
+    "vietnameseMeaning": "Cô ấy quá trẻ để lái ô tô.",
+    "grammarTopic": "Too / Enough",
+    "level": "Hard",
+    "explanation": "Too + adjective + to-infinitive diễn tả quá mức."
+  },
+  {
+    "id": "sentence_096",
+    "englishSentence": "He is old enough to travel alone.",
+    "vietnameseMeaning": "Anh ấy đủ lớn để đi du lịch một mình.",
+    "grammarTopic": "Too / Enough",
+    "level": "Hard",
+    "explanation": "Adjective + enough + to-infinitive diễn tả đủ điều kiện."
+  },
+  {
+    "id": "sentence_097",
+    "englishSentence": "I wish I had more free time.",
+    "vietnameseMeaning": "Tôi ước mình có nhiều thời gian rảnh hơn.",
+    "grammarTopic": "Wish",
+    "level": "Hard",
+    "explanation": "Wish + past simple diễn tả điều ước trái với hiện tại."
+  },
+  {
+    "id": "sentence_098",
+    "englishSentence": "I wish I had studied harder for the exam.",
+    "vietnameseMeaning": "Tôi ước mình đã học chăm hơn cho kỳ thi.",
+    "grammarTopic": "Wish",
+    "level": "Hard",
+    "explanation": "Wish + past perfect diễn tả sự tiếc nuối về quá khứ."
+  },
+  {
+    "id": "sentence_099",
+    "englishSentence": "By the time I arrived, the movie had already started.",
+    "vietnameseMeaning": "Khi tôi đến thì bộ phim đã bắt đầu rồi.",
+    "grammarTopic": "Past Perfect",
+    "level": "Hard",
+    "explanation": "Past perfect diễn tả hành động xảy ra trước một hành động quá khứ khác."
+  },
+  {
+    "id": "sentence_100",
+    "englishSentence": "She had finished dinner before her friend arrived.",
+    "vietnameseMeaning": "Cô ấy đã ăn tối xong trước khi bạn cô ấy đến.",
+    "grammarTopic": "Past Perfect",
+    "level": "Hard",
+    "explanation": "Had + past participle diễn tả hành động hoàn tất trước một mốc quá khứ khác."
+  }
+]
