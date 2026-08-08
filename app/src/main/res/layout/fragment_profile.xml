@@ -62,7 +62,7 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- 👉 ĐÃ SỬA: Chồng 2 lớp (Dưới là icon mặc định, Trên là ảnh trong suốt chờ load) -->
+            <!-- Avatar -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
@@ -72,7 +72,6 @@
                 app:strokeColor="#1976D2"
                 app:strokeWidth="3dp">
 
-                <!-- Lớp 1 (Nằm dưới): Hiện icon học viên mặc định như cũ -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -81,7 +80,6 @@
                     android:text="🧑‍🎓"
                     android:textSize="54sp" />
 
-                <!-- Lớp 2 (Nằm trên): Sẽ hiển thị ảnh thật của người dùng -->
                 <ImageView
                     android:id="@+id/imgAvatar"
                     android:layout_width="match_parent"
@@ -145,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="3 Ngày"
+                            android:text="0 Ngày"
                             android:textColor="#F57F17"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -180,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="150 XP"
+                            android:text="0 XP"
                             android:textColor="#E65100"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -188,7 +186,71 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- THẺ BỔ SUNG TỪ PROFILE: Tổng số từ vựng trong hệ thống -->
+            <!-- 👉 NÚT BẢNG XẾP HẠNG ĐƯA RA NGOÀI -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLeaderboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="#FFF8E1"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:strokeColor="#FFC107"
+                app:strokeWidth="1.5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="🏆"
+                        android:textSize="28sp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bảng Xếp Hạng"
+                            android:textColor="#E65100"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Đua top XP, tranh tài cùng mọi người!"
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="›"
+                        android:textColor="#FFB300"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- THẺ BỔ SUNG: Tổng số từ vựng trong hệ thống -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -428,7 +490,7 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Khu vực quản trị: chỉ hiện khi users/{uid}.role = "admin" -->
+            <!-- Khu vực quản trị -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAdminPanel"
                 android:layout_width="match_parent"
@@ -478,7 +540,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Quản lý người dùng • Từ vựng • Ngữ pháp • TOEIC"
+                            android:text="Quản lý người dùng • Từ vựng • Ngữ pháp"
                             android:textColor="#616161"
                             android:textSize="13sp" />
                     </LinearLayout>

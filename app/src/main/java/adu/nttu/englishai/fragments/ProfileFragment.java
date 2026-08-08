@@ -50,6 +50,7 @@ import java.util.Set;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.activities.LoginActivity;
+import adu.nttu.englishai.activities.LeaderboardActivity;
 
 public class ProfileFragment extends Fragment {
 
@@ -119,7 +120,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initViews(View view) {
-
         imgAvatar = view.findViewById(R.id.imgAvatar);
         tvProfileName = view.findViewById(R.id.tvProfileName);
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
@@ -151,11 +151,11 @@ public class ProfileFragment extends Fragment {
         if (btnSettings != null) {
             btnSettings.setOnClickListener(v -> showSettingsBottomSheet());
         }
-        // Click vào thẻ Tổng điểm hoặc Chuỗi lửa -> Mở Bảng xếp hạng đua Top
-        TextView tvTotalScore = view.findViewById(R.id.tvTotalScore);
-        if (tvTotalScore != null) {
-            ((View)tvTotalScore.getParent()).setOnClickListener(v -> {
-                startActivity(new Intent(requireContext(), adu.nttu.englishai.activities.LeaderboardActivity.class));
+
+        MaterialCardView cardLeaderboard = view.findViewById(R.id.cardLeaderboard);
+        if (cardLeaderboard != null) {
+            cardLeaderboard.setOnClickListener(v -> {
+                startActivity(new Intent(requireContext(), LeaderboardActivity.class));
             });
         }
 
@@ -180,10 +180,7 @@ public class ProfileFragment extends Fragment {
         Toast.makeText(requireContext(), "Đang xử lý ảnh...", Toast.LENGTH_SHORT).show();
 
         try {
-            // 1. Đọc ảnh từ bộ nhớ máy
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-
-            // 2. Nén ảnh lại (kích thước tối đa 256x256) để lưu Database không bị nặng
             int maxSize = 256;
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -196,16 +193,12 @@ public class ProfileFragment extends Fragment {
                 width = (int) (height * bitmapRatio);
             }
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-
-            // 3. Chuyển ảnh thành chuỗi văn bản (Base64)
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos); // Giảm chất lượng xuống 70% để tối ưu dung lượng
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
             byte[] imageBytes = baos.toByteArray();
             String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            // 4. Lưu trực tiếp chuỗi này lên Cloud Firestore
             updateAvatarUrlInDatabase(base64Image);
-
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Lỗi xử lý ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -219,8 +212,6 @@ public class ProfileFragment extends Fragment {
                 .update("avatarUrl", base64Data)
                 .addOnSuccessListener(aVoid -> {
                     if (!isAdded()) return;
-
-                    // Hiển thị ảnh ngay lập tức bằng cách dịch ngược Base64
                     byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
@@ -272,26 +263,21 @@ public class ProfileFragment extends Fragment {
                     }
 
                     String role = document.getString("role");
-                    boolean isAdmin =
-                            role != null
-                                    && "admin".equalsIgnoreCase(role.trim());
+                    boolean isAdmin = role != null && "admin".equalsIgnoreCase(role.trim());
 
                     if (cardAdminPanel != null) {
-                        cardAdminPanel.setVisibility(
-                                isAdmin ? View.VISIBLE : View.GONE
-                        );
+                        cardAdminPanel.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
                     }
 
-                    // 👉 TẢI VÀ GIẢI MÃ ẢNH BASE64 TỪ FIRESTORE XUỐNG
                     String avatarData = document.getString("avatarUrl");
                     if (imgAvatar != null) {
                         if (avatarData != null && !avatarData.trim().isEmpty()) {
                             try {
-                                if (avatarData.length() > 500) { // Nếu độ dài cực lớn thì chắc chắn là Base64
+                                if (avatarData.length() > 500) {
                                     byte[] decodedString = Base64.decode(avatarData, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                                     Glide.with(this).load(decodedByte).circleCrop().into(imgAvatar);
-                                } else { // Trường hợp là link http cũ
+                                } else {
                                     Glide.with(this).load(avatarData).circleCrop().into(imgAvatar);
                                 }
                             } catch (Exception e) {
@@ -301,7 +287,7 @@ public class ProfileFragment extends Fragment {
                             Glide.with(this).load(currentUser.getPhotoUrl()).circleCrop().into(imgAvatar);
                         }
                     }
-                    // 👉 LẤY VÀ HIỂN THỊ ĐIỂM XP THẬT + CHUỖI LỬA
+
                     Long scoreObj = document.getLong("score");
                     long realScore = (scoreObj != null) ? scoreObj : 0;
                     TextView tvTotalScore = getView().findViewById(R.id.tvTotalScore);

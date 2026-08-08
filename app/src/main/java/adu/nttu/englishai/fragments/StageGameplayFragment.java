@@ -291,6 +291,25 @@ public class StageGameplayFragment extends Fragment {
         showConfettiAnimation();
         updateProgressAndStreak(xpReward);
 
+        // =========================================================
+        // 👉 LƯU TIẾN ĐỘ MỞ KHÓA ẢI VÀO BỘ NHỚ MÁY
+        // =========================================================
+        int currentUnlocked = requireActivity().getSharedPreferences("EnglishAI_Prefs", android.content.Context.MODE_PRIVATE)
+                .getInt("UNLOCKED_STAGE", 1);
+
+        int nextStageNumber = 1;
+        if (difficultyLevel.equals("Easy")) nextStageNumber = 2; // Thắng Ải 1 -> Mở Ải 2
+        else if (difficultyLevel.equals("Medium")) nextStageNumber = 3; // Thắng Ải 2 -> Mở Ải 3
+        else if (difficultyLevel.equals("Hard")) nextStageNumber = 4; // Thắng Ải 3 -> Mở Ải 4
+        else if (difficultyLevel.equals("Boss")) nextStageNumber = 5; // Thắng Ải 4 -> Mở Rương
+
+        // Chỉ cập nhật nếu ải mới lớn hơn ải đã mở hiện tại
+        if (nextStageNumber > currentUnlocked) {
+            requireActivity().getSharedPreferences("EnglishAI_Prefs", android.content.Context.MODE_PRIVATE)
+                    .edit().putInt("UNLOCKED_STAGE", nextStageNumber).apply();
+        }
+        // =========================================================
+
         String nextDifficulty = getNextDifficulty(difficultyLevel);
 
         // Khởi tạo Custom Dialog
@@ -332,9 +351,9 @@ public class StageGameplayFragment extends Fragment {
             btnNegative.setVisibility(View.VISIBLE);
             btnNegative.setOnClickListener(v -> {
                 dialog.dismiss();
-                // 👉 FIX: Lùi 2 bước để thoát hẳn ra Bản Đồ
-                requireActivity().getSupportFragmentManager().popBackStack(); // Lùi 1 bước khỏi Đấu Trường
-                requireActivity().getSupportFragmentManager().popBackStack(); // Lùi bước 2 khỏi Sảnh Chuẩn Bị
+                // 👉 Lùi 2 bước để thoát hẳn ra Bản Đồ (nhảy cóc qua Sảnh chờ)
+                requireActivity().getSupportFragmentManager().popBackStack();
+                requireActivity().getSupportFragmentManager().popBackStack();
             });
         } else {
             // Đã vượt Trùm Cuối
@@ -342,7 +361,7 @@ public class StageGameplayFragment extends Fragment {
             btnPositive.setText("VỀ BẢN ĐỒ");
             btnPositive.setOnClickListener(v -> {
                 dialog.dismiss();
-                // 👉 FIX: Lùi 2 bước để thoát hẳn ra Bản Đồ
+                // 👉 Lùi 2 bước để thoát hẳn ra Bản Đồ
                 requireActivity().getSupportFragmentManager().popBackStack();
                 requireActivity().getSupportFragmentManager().popBackStack();
             });
