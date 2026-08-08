@@ -25,14 +25,14 @@
             android:id="@+id/btnAdminBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Quay lại"
+            android:focusable="true"
             android:gravity="center"
             android:text="‹"
             android:textColor="#303248"
-            android:textSize="30sp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Quay lại"/>
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -55,7 +55,9 @@
                 android:text="Trung tâm quản trị hệ thống"
                 android:textColor="#85879A"
                 android:textSize="12sp" />
+
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -80,6 +82,7 @@
             android:text="Đang kiểm tra quyền quản trị..."
             android:textColor="#7E8094"
             android:textSize="13sp" />
+
     </LinearLayout>
 
     <ScrollView
@@ -128,86 +131,246 @@
                         android:text="Đang đồng bộ dữ liệu..."
                         android:textColor="#E9E5FF"
                         android:textSize="13sp" />
+
                 </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAdminStats"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#E3E5EE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingStart="18dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thống kê nhanh"
+                        android:textColor="#202239"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Dữ liệu hiện tại của hệ thống"
+                        android:textColor="#9294A6"
+                        android:textSize="11sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="14dp"
+                        android:background="#EEF0F5" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <!-- USERS -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDashboardUsers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#202239"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/barDashboardUsers"
+                                android:layout_width="38dp"
+                                android:layout_height="22dp"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_admin_bar_users" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="User"
+                                android:textColor="#292B3D"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvDashboardUsersSub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="0 admin"
+                                android:textColor="#9294A6"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <!-- VOCABULARY -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDashboardVocabulary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#202239"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/barDashboardVocabulary"
+                                android:layout_width="38dp"
+                                android:layout_height="22dp"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_admin_bar_vocabulary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Từ vựng"
+                                android:textColor="#292B3D"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="từ"
+                                android:textColor="#9294A6"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <!-- GRAMMAR -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDashboardGrammar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#202239"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/barDashboardGrammar"
+                                android:layout_width="38dp"
+                                android:layout_height="22dp"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_admin_bar_grammar" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Ngữ pháp"
+                                android:textColor="#292B3D"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="câu"
+                                android:textColor="#9294A6"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <!-- TOEIC -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDashboardToeic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#202239"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/barDashboardToeic"
+                                android:layout_width="38dp"
+                                android:layout_height="22dp"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_admin_bar_toeic" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="TOEIC"
+                                android:textColor="#292B3D"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvDashboardToeicSub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="0 đề"
+                                android:textColor="#9294A6"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Thống kê nhanh"
-                android:textColor="#202239"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvDashboardUsers"
-                    android:layout_width="0dp"
-                    android:layout_height="92dp"
-                    android:layout_weight="1"
-                    android:background="#F0EDFF"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#6255D8"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDashboardVocabulary"
-                    android:layout_width="0dp"
-                    android:layout_height="92dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:background="#EAF7EF"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#25834B"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvDashboardGrammar"
-                    android:layout_width="0dp"
-                    android:layout_height="92dp"
-                    android:layout_weight="1"
-                    android:background="#FFF7E8"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#A46B08"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDashboardToeic"
-                    android:layout_width="0dp"
-                    android:layout_height="92dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:background="#EAF2FF"
-                    android:gravity="center"
-                    android:text="0 đề"
-                    android:textColor="#315FA8"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="26dp"
                 android:text="Quản lý nội dung"
                 android:textColor="#202239"
                 android:textSize="18sp"
@@ -223,8 +386,10 @@
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="19dp"
                 app:cardElevation="0dp"
+                app:rippleColor="#F0EDFF"
                 app:strokeColor="#E6E7F1"
                 app:strokeWidth="1dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -234,6 +399,7 @@
                     android:textColor="#292B3D"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -246,8 +412,10 @@
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="19dp"
                 app:cardElevation="0dp"
+                app:rippleColor="#F0EDFF"
                 app:strokeColor="#E6E7F1"
                 app:strokeWidth="1dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -257,6 +425,7 @@
                     android:textColor="#292B3D"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -269,8 +438,10 @@
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="19dp"
                 app:cardElevation="0dp"
+                app:rippleColor="#F0EDFF"
                 app:strokeColor="#E6E7F1"
                 app:strokeWidth="1dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -280,6 +451,7 @@
                     android:textColor="#292B3D"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -290,23 +462,27 @@
                 android:layout_marginBottom="24dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardBackgroundColor="#F0EDFF"
+                app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="19dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#CEC6FF"
+                app:rippleColor="#F0EDFF"
+                app:strokeColor="#E6E7F1"
                 app:strokeWidth="1dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:padding="18dp"
                     android:text="📘   TOEIC"
-                    android:textColor="#392F55"
+                    android:textColor="#292B3D"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

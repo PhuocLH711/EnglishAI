@@ -12,10 +12,13 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.models.ToeicTest;
+import adu.nttu.englishai.repositories.ToeicProgressRepository;
 
 public class ToeicStudentTestAdapter
         extends RecyclerView.Adapter<ToeicStudentTestAdapter.TestViewHolder> {
@@ -28,6 +31,9 @@ public class ToeicStudentTestAdapter
     private final List<ToeicTest> tests =
             new ArrayList<>();
 
+    private final Map<String, ToeicProgressRepository.TestProgress> progressMap =
+            new HashMap<>();
+
     private final TestListener listener;
 
     public ToeicStudentTestAdapter(
@@ -39,6 +45,7 @@ public class ToeicStudentTestAdapter
     public void submitList(
             List<ToeicTest> newTests
     ) {
+
         tests.clear();
 
         if (newTests != null) {
@@ -46,6 +53,38 @@ public class ToeicStudentTestAdapter
         }
 
         notifyDataSetChanged();
+    }
+
+    public void setProgress(
+            String testId,
+            ToeicProgressRepository.TestProgress progress
+    ) {
+
+        if (testId == null
+                || progress == null) {
+            return;
+        }
+
+        progressMap.put(
+                testId,
+                progress
+        );
+
+        for (int i = 0;
+             i < tests.size();
+             i++) {
+
+            ToeicTest test =
+                    tests.get(i);
+
+            if (testId.equals(
+                    test.getId()
+            )) {
+
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     @NonNull
@@ -57,14 +96,18 @@ public class ToeicStudentTestAdapter
 
         View view =
                 LayoutInflater
-                        .from(parent.getContext())
+                        .from(
+                                parent.getContext()
+                        )
                         .inflate(
                                 R.layout.item_toeic_student_test,
                                 parent,
                                 false
                         );
 
-        return new TestViewHolder(view);
+        return new TestViewHolder(
+                view
+        );
     }
 
     @Override
@@ -83,22 +126,49 @@ public class ToeicStudentTestAdapter
                 )
         );
 
-        String source =
+        holder.tvSource.setText(
                 safe(
                         test.getSourceName(),
-                        "Nguồn chưa ghi"
-                );
-
-        holder.tvSource.setText(
-                source
+                        "EnglishAI TOEIC"
+                )
         );
 
         holder.tvMeta.setText(
                 test.getTotalQuestions()
                         + " câu • "
                         + test.getDurationMinutes()
-                        + " phút • "
-                        + buildParts(test)
+                        + " phút • Part 1-7"
+        );
+
+        ToeicProgressRepository.TestProgress progress =
+                progressMap.get(
+                        test.getId()
+                );
+
+        if (progress == null) {
+
+            holder.tvProgress.setText(
+                    "Tiến độ: đang tải..."
+            );
+
+        } else if (progress.isCompleted()) {
+
+            holder.tvProgress.setText(
+                    "✅ ĐÃ HOÀN TẤT"
+            );
+
+        } else {
+
+            holder.tvProgress.setText(
+                    "Tiến độ: "
+                            + progress.getOverallPercent()
+                            + "%"
+            );
+        }
+
+        holder.card.setOnClickListener(
+                view ->
+                        listener.onPractice(test)
         );
 
         holder.btnPractice.setOnClickListener(
@@ -110,45 +180,11 @@ public class ToeicStudentTestAdapter
                 view ->
                         listener.onMockTest(test)
         );
-
-        holder.card.setOnClickListener(
-                view ->
-                        listener.onPractice(test)
-        );
     }
 
     @Override
     public int getItemCount() {
         return tests.size();
-    }
-
-    private String buildParts(
-            ToeicTest test
-    ) {
-
-        if (test.getAvailableParts().isEmpty()) {
-            return "Part 1-7";
-        }
-
-        StringBuilder builder =
-                new StringBuilder(
-                        "Part "
-                );
-
-        for (int i = 0;
-                i < test.getAvailableParts().size();
-                i++) {
-
-            if (i > 0) {
-                builder.append(", ");
-            }
-
-            builder.append(
-                    test.getAvailableParts().get(i)
-            );
-        }
-
-        return builder.toString();
     }
 
     private String safe(
@@ -172,6 +208,7 @@ public class ToeicStudentTestAdapter
         TextView tvTitle;
         TextView tvSource;
         TextView tvMeta;
+        TextView tvProgress;
 
         MaterialButton btnPractice;
         MaterialButton btnMock;
@@ -199,6 +236,11 @@ public class ToeicStudentTestAdapter
             tvMeta =
                     itemView.findViewById(
                             R.id.tvToeicStudentMeta
+                    );
+
+            tvProgress =
+                    itemView.findViewById(
+                            R.id.tvToeicStudentProgress
                     );
 
             btnPractice =

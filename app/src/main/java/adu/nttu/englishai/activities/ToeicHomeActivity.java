@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,10 +17,10 @@ import java.util.List;
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.adapters.ToeicStudentTestAdapter;
 import adu.nttu.englishai.models.ToeicTest;
+import adu.nttu.englishai.repositories.ToeicProgressRepository;
 import adu.nttu.englishai.repositories.ToeicRepository;
 
-public class ToeicHomeActivity
-        extends AppCompatActivity {
+public class ToeicHomeActivity extends AppCompatActivity {
 
     public static final String EXTRA_TEST_ID =
             "toeic_test_id";
@@ -32,6 +33,9 @@ public class ToeicHomeActivity
 
     public static final String EXTRA_MODE =
             "toeic_mode";
+
+    public static final String EXTRA_PART_FILTER =
+            "toeic_part_filter";
 
     public static final String MODE_PRACTICE =
             "practice";
@@ -46,6 +50,7 @@ public class ToeicHomeActivity
     private RecyclerView recycler;
 
     private ToeicRepository repository;
+    private ToeicProgressRepository progressRepository;
     private ToeicStudentTestAdapter adapter;
 
     @Override
@@ -81,6 +86,9 @@ public class ToeicHomeActivity
         repository =
                 new ToeicRepository();
 
+        progressRepository =
+                new ToeicProgressRepository();
+
         adapter =
                 new ToeicStudentTestAdapter(
                         new ToeicStudentTestAdapter.TestListener() {
@@ -89,9 +97,8 @@ public class ToeicHomeActivity
                             public void onPractice(
                                     ToeicTest test
                             ) {
-                                openTest(
-                                        test,
-                                        MODE_PRACTICE
+                                showPartProgressPicker(
+                                        test
                                 );
                             }
 
@@ -99,19 +106,22 @@ public class ToeicHomeActivity
                             public void onMockTest(
                                     ToeicTest test
                             ) {
-                                openTest(
-                                        test,
-                                        MODE_MOCK
+                                showFullTestConfirmation(
+                                        test
                                 );
                             }
                         }
                 );
 
         recycler.setLayoutManager(
-                new LinearLayoutManager(this)
+                new LinearLayoutManager(
+                        this
+                )
         );
 
-        recycler.setAdapter(adapter);
+        recycler.setAdapter(
+                adapter
+        );
 
         btnBack.setOnClickListener(
                 view -> finish()
@@ -143,10 +153,13 @@ public class ToeicHomeActivity
                             List<ToeicTest> tests
                     ) {
 
-                        adapter.submitList(tests);
+                        adapter.submitList(
+                                tests
+                        );
 
                         boolean empty =
-                                tests.isEmpty();
+                                tests == null
+                                        || tests.isEmpty();
 
                         tvEmpty.setVisibility(
                                 empty
@@ -161,14 +174,25 @@ public class ToeicHomeActivity
                         );
 
                         if (empty) {
+
                             tvStatus.setText(
                                     "Chưa có dữ liệu TOEIC trên Firestore."
                             );
-                        } else {
-                            tvStatus.setText(
-                                    "Có "
-                                            + tests.size()
-                                            + " bộ đề để luyện."
+
+                            return;
+                        }
+
+                        tvStatus.setText(
+                                "Có "
+                                        + tests.size()
+                                        + " bộ đề để luyện."
+                        );
+
+                        for (ToeicTest test
+                                : tests) {
+
+                            loadCardProgress(
+                                    test
                             );
                         }
                     }
@@ -192,9 +216,225 @@ public class ToeicHomeActivity
         );
     }
 
+    private void loadCardProgress(
+            ToeicTest test
+    ) {
+
+        progressRepository.getProgress(
+                test.getId(),
+                new ToeicProgressRepository.ProgressCallback() {
+
+                    @Override
+                    public void onSuccess(
+                            ToeicProgressRepository.TestProgress progress
+                    ) {
+
+                        adapter.setProgress(
+                                test.getId(),
+                                progress
+                        );
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Exception exception
+                    ) {
+                        // Không chặn danh sách đề nếu
+                        // tiến độ chưa tải được.
+                    }
+                }
+        );
+    }
+
+    private void showPartProgressPicker(
+            ToeicTest test
+    ) {
+
+        progressRepository.getProgress(
+                test.getId(),
+                new ToeicProgressRepository.ProgressCallback() {
+
+                    @Override
+                    public void onSuccess(
+                            ToeicProgressRepository.TestProgress progress
+                    ) {
+
+                        String[] items =
+                                new String[8];
+
+                        for (int part = 1;
+                             part <= 7;
+                             part++) {
+
+                            int percent =
+                                    progress.getPartPercent(
+                                            part
+                                    );
+
+                            items[part - 1] =
+                                    getPartName(part)
+                                            + "  •  "
+                                            + formatProgress(
+                                            percent
+                                    );
+                        }
+
+                        items[7] =
+                                "Luyện toàn bộ đề  •  "
+                                        + formatProgress(
+                                        progress.getOverallPercent()
+                                );
+
+                        String title =
+                                test.getTitle();
+
+                        if (progress.isCompleted()) {
+
+                            title +=
+                                    "\n✅ Đã hoàn tất";
+                        }
+
+                        new AlertDialog.Builder(
+                                ToeicHomeActivity.this
+                        )
+                                .setTitle(title)
+                                .setItems(
+                                        items,
+                                        (dialog, which) -> {
+
+                                            int part =
+                                                    which < 7
+                                                            ? which + 1
+                                                            : 0;
+
+                                            openTest(
+                                                    test,
+                                                    MODE_PRACTICE,
+                                                    part
+                                            );
+                                        }
+                                )
+                                .setNegativeButton(
+                                        "Đóng",
+                                        null
+                                )
+                                .show();
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Exception exception
+                    ) {
+
+                        Toast.makeText(
+                                ToeicHomeActivity.this,
+                                "Không tải được tiến độ: "
+                                        + exception.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
+        );
+    }
+
+    private void showFullTestConfirmation(
+            ToeicTest test
+    ) {
+
+        progressRepository.getProgress(
+                test.getId(),
+                new ToeicProgressRepository.ProgressCallback() {
+
+                    @Override
+                    public void onSuccess(
+                            ToeicProgressRepository.TestProgress progress
+                    ) {
+
+                        StringBuilder message =
+                                new StringBuilder();
+
+                        for (int part = 1;
+                             part <= 7;
+                             part++) {
+
+                            message.append(
+                                    "Part "
+                                            + part
+                                            + ": "
+                                            + progress.getPartPercent(part)
+                                            + "%"
+                            );
+
+                            if (part < 7) {
+                                message.append('\n');
+                            }
+                        }
+
+                        message.append(
+                                "\n\nTổng tiến độ: "
+                                        + progress.getOverallPercent()
+                                        + "%"
+                        );
+
+                        if (progress.isCompleted()) {
+
+                            message.append(
+                                    "\n✅ Bộ đề này đã hoàn tất."
+                            );
+                        }
+
+                        message.append(
+                                "\n\nThi thử sẽ làm toàn bộ "
+                                        + test.getTotalQuestions()
+                                        + " câu trong "
+                                        + test.getDurationMinutes()
+                                        + " phút."
+                        );
+
+                        new AlertDialog.Builder(
+                                ToeicHomeActivity.this
+                        )
+                                .setTitle(
+                                        test.getTitle()
+                                )
+                                .setMessage(
+                                        message.toString()
+                                )
+                                .setPositiveButton(
+                                        "Bắt đầu thi",
+                                        (dialog, which) ->
+                                                openTest(
+                                                        test,
+                                                        MODE_MOCK,
+                                                        0
+                                                )
+                                )
+                                .setNegativeButton(
+                                        "Hủy",
+                                        null
+                                )
+                                .show();
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Exception exception
+                    ) {
+
+                        openTest(
+                                test,
+                                MODE_MOCK,
+                                0
+                        );
+                    }
+                }
+        );
+    }
+
     private void openTest(
             ToeicTest test,
-            String mode
+            String mode,
+            int part
     ) {
 
         if (test == null
@@ -236,6 +476,56 @@ public class ToeicHomeActivity
                 mode
         );
 
-        startActivity(intent);
+        intent.putExtra(
+                EXTRA_PART_FILTER,
+                part
+        );
+
+        startActivity(
+                intent
+        );
+    }
+
+    private String getPartName(
+            int part
+    ) {
+
+        switch (part) {
+
+            case 1:
+                return "Part 1 • Photographs";
+
+            case 2:
+                return "Part 2 • Question-Response";
+
+            case 3:
+                return "Part 3 • Conversations";
+
+            case 4:
+                return "Part 4 • Talks";
+
+            case 5:
+                return "Part 5 • Incomplete Sentences";
+
+            case 6:
+                return "Part 6 • Text Completion";
+
+            case 7:
+                return "Part 7 • Reading Comprehension";
+
+            default:
+                return "Part " + part;
+        }
+    }
+
+    private String formatProgress(
+            int percent
+    ) {
+
+        if (percent >= 100) {
+            return "✅ 100%";
+        }
+
+        return percent + "%";
     }
 }

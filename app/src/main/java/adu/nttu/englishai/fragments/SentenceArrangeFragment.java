@@ -848,7 +848,7 @@ public class SentenceArrangeFragment extends Fragment {
         );
 
         btnCheckSentence.setEnabled(
-                false
+                !session.getSelectedWords().isEmpty()
         );
 
         tvVietnameseSentence.setText(
@@ -912,12 +912,11 @@ public class SentenceArrangeFragment extends Fragment {
     // =========================================================
     // RENDER WORDS
     //
-    // UX MỚI:
-    // - Chạm 1 từ trong câu -> chọn vị trí.
-    // - Chạm từ thứ 2 trong câu -> đổi chỗ trực tiếp.
-    // - Nếu còn từ phía dưới: chọn 1 vị trí phía trên rồi
-    //   chạm một từ phía dưới -> thay đúng vị trí đó.
-    // - Không xóa từ giữa câu nên các từ phía sau KHÔNG bị dồn.
+    // UX KÉO THẢ:
+    // - Nhấn giữ một từ để bắt đầu kéo.
+    // - Kéo giữa "Chọn các từ" và "Câu của bạn".
+    // - Kéo trong cùng khu vực để đổi thứ tự.
+    // - Chạm bình thường không còn đổi vị trí từ.
     // =========================================================
 
     private void renderWordLayouts() {
@@ -929,23 +928,49 @@ public class SentenceArrangeFragment extends Fragment {
                 layoutAvailableWords,
                 tvAnswerPlaceholder,
                 btnCheckSentence,
-                new GrammarWordUiHelper.WordClickListener() {
+                new GrammarWordUiHelper.WordDragListener() {
 
                     @Override
-                    public void onSelectedWordClick(
-                            int position
+                    public void onSelectedToSelected(
+                            int fromPosition,
+                            int toPosition
                     ) {
-                        handleSelectedWordClick(
-                                position
+                        moveSelectedWord(
+                                fromPosition,
+                                toPosition
                         );
                     }
 
                     @Override
-                    public void onAvailableWordClick(
-                            int position
+                    public void onAvailableToAvailable(
+                            int fromPosition,
+                            int toPosition
                     ) {
-                        handleAvailableWordClick(
-                                position
+                        moveAvailableWord(
+                                fromPosition,
+                                toPosition
+                        );
+                    }
+
+                    @Override
+                    public void onSelectedToAvailable(
+                            int selectedPosition,
+                            int availablePosition
+                    ) {
+                        moveSelectedToAvailable(
+                                selectedPosition,
+                                availablePosition
+                        );
+                    }
+
+                    @Override
+                    public void onAvailableToSelected(
+                            int availablePosition,
+                            int selectedPosition
+                    ) {
+                        moveAvailableToSelected(
+                                availablePosition,
+                                selectedPosition
                         );
                     }
                 }
@@ -955,54 +980,41 @@ public class SentenceArrangeFragment extends Fragment {
     }
 
     // =========================================================
-    // TAP WORD IN SELECTED SENTENCE
+    // DRAG & DROP WORDS
     // =========================================================
 
-    private void handleSelectedWordClick(
-            int position
+    private void moveSelectedWord(
+            int fromPosition,
+            int toPosition
     ) {
 
         List<String> selectedWords =
                 session.getSelectedWords();
 
-        if (position < 0
-                || position
-                >= selectedWords.size()) {
-
+        if (fromPosition < 0
+                || fromPosition >= selectedWords.size()) {
             return;
         }
 
         hideFeedback();
 
-        int selectedSwapIndex =
-                session.getSelectedSwapIndex();
+        String word =
+                selectedWords.remove(
+                        fromPosition
+                );
 
-        // Chưa chọn từ nào -> chọn từ này
-        if (selectedSwapIndex == -1) {
+        int safeTarget =
+                Math.max(
+                        0,
+                        Math.min(
+                                toPosition,
+                                selectedWords.size()
+                        )
+                );
 
-            session.setSelectedSwapIndex(
-                    position
-            );
-
-            renderWordLayouts();
-
-            return;
-        }
-
-        // Bấm lại đúng từ đang chọn -> bỏ chọn
-        if (selectedSwapIndex == position) {
-
-            session.clearSelectedSwapIndex();
-
-            renderWordLayouts();
-
-            return;
-        }
-
-        // Đã chọn một từ khác -> SWAP trực tiếp hai vị trí
-        session.swapSelectedWords(
-                selectedSwapIndex,
-                position
+        selectedWords.add(
+                safeTarget,
+                word
         );
 
         session.clearSelectedSwapIndex();
@@ -1010,51 +1022,125 @@ public class SentenceArrangeFragment extends Fragment {
         renderWordLayouts();
     }
 
-    // =========================================================
-    // TAP WORD IN WORD BANK
-    // =========================================================
-
-    private void handleAvailableWordClick(
-            int position
+    private void moveAvailableWord(
+            int fromPosition,
+            int toPosition
     ) {
 
         List<String> availableWords =
                 session.getAvailableWords();
 
-        if (position < 0
-                || position
-                >= availableWords.size()) {
-
+        if (fromPosition < 0
+                || fromPosition >= availableWords.size()) {
             return;
         }
 
         hideFeedback();
 
-        int selectedSwapIndex =
-                session.getSelectedSwapIndex();
+        String word =
+                availableWords.remove(
+                        fromPosition
+                );
 
-        // Có một vị trí trên câu đang được chọn:
-        // thay trực tiếp tại vị trí đó.
-        if (selectedSwapIndex >= 0
-                && selectedSwapIndex
-                < session.getSelectedWords().size()) {
+        int safeTarget =
+                Math.max(
+                        0,
+                        Math.min(
+                                toPosition,
+                                availableWords.size()
+                        )
+                );
 
-            session.replaceSelectedWithAvailable(
-                    selectedSwapIndex,
-                    position
-            );
+        availableWords.add(
+                safeTarget,
+                word
+        );
 
-            session.clearSelectedSwapIndex();
+        session.clearSelectedSwapIndex();
 
-            renderWordLayouts();
+        renderWordLayouts();
+    }
 
+    private void moveSelectedToAvailable(
+            int selectedPosition,
+            int availablePosition
+    ) {
+
+        List<String> selectedWords =
+                session.getSelectedWords();
+
+        List<String> availableWords =
+                session.getAvailableWords();
+
+        if (selectedPosition < 0
+                || selectedPosition >= selectedWords.size()) {
             return;
         }
 
-        // Bình thường: thêm từ vào cuối câu
-        session.moveAvailableWordToSelected(
-                position
+        hideFeedback();
+
+        String word =
+                selectedWords.remove(
+                        selectedPosition
+                );
+
+        int safeTarget =
+                Math.max(
+                        0,
+                        Math.min(
+                                availablePosition,
+                                availableWords.size()
+                        )
+                );
+
+        availableWords.add(
+                safeTarget,
+                word
         );
+
+        session.clearSelectedSwapIndex();
+
+        renderWordLayouts();
+    }
+
+    private void moveAvailableToSelected(
+            int availablePosition,
+            int selectedPosition
+    ) {
+
+        List<String> availableWords =
+                session.getAvailableWords();
+
+        List<String> selectedWords =
+                session.getSelectedWords();
+
+        if (availablePosition < 0
+                || availablePosition >= availableWords.size()) {
+            return;
+        }
+
+        hideFeedback();
+
+        String word =
+                availableWords.remove(
+                        availablePosition
+                );
+
+        int safeTarget =
+                Math.max(
+                        0,
+                        Math.min(
+                                selectedPosition,
+                                selectedWords.size()
+                        )
+                );
+
+        selectedWords.add(
+                safeTarget,
+                word
+        );
+
+        session.clearSelectedSwapIndex();
 
         renderWordLayouts();
     }
@@ -1073,13 +1159,20 @@ public class SentenceArrangeFragment extends Fragment {
             return;
         }
 
-        if (!session.getAvailableWords().isEmpty()) {
+        if (session.getSelectedWords().isEmpty()) {
 
             Toast.makeText(
                     requireContext(),
-                    "Hãy sử dụng tất cả các từ trước khi kiểm tra.",
+                    "Hãy kéo ít nhất một từ vào câu của bạn.",
                     Toast.LENGTH_SHORT
             ).show();
+
+            return;
+        }
+
+        if (!session.getAvailableWords().isEmpty()) {
+
+            showIncompleteFeedback();
 
             return;
         }
@@ -1197,6 +1290,46 @@ public class SentenceArrangeFragment extends Fragment {
     // =========================================================
     // WRONG
     // =========================================================
+
+    private void showIncompleteFeedback() {
+
+        int remainingWords =
+                session.getAvailableWords()
+                        .size();
+
+        cardSentenceFeedback.setVisibility(
+                View.VISIBLE
+        );
+
+        tvSentenceFeedback.setText(
+                "⚠️ Câu chưa hoàn chỉnh.\n\n"
+                        + "Bạn còn "
+                        + remainingWords
+                        + " từ chưa sử dụng.\n"
+                        + "Nhấn giữ và kéo các từ vào đúng vị trí rồi kiểm tra lại."
+        );
+
+        tvSentenceFeedback.setTextColor(
+                android.graphics.Color.parseColor(
+                        "#A46B08"
+                )
+        );
+
+        GrammarAnimationHelper.animateFeedbackCard(
+                cardSentenceFeedback,
+                dpToPx(12)
+        );
+
+        GrammarAnimationHelper.shakeWrongAnswer(
+                layoutSelectedWords,
+                dpToPx(7),
+                dpToPx(5)
+        );
+
+        btnCheckSentence.setEnabled(
+                true
+        );
+    }
 
     private void showWrongFeedback() {
 

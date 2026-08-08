@@ -2,6 +2,7 @@ package adu.nttu.englishai.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,10 @@ import adu.nttu.englishai.models.SentenceExercise;
 
 public class ImportSentenceExerciseActivity extends AppCompatActivity {
 
+    private TextView btnGrammarImportBack;
+
     private Button btnImportSentenceExercises;
+
     private FirebaseFirestore db;
 
     @Override
@@ -33,12 +37,22 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
                 R.layout.activity_import_sentence_exercise
         );
 
-        db = FirebaseFirestore.getInstance();
+        btnGrammarImportBack =
+                findViewById(
+                        R.id.btnGrammarImportBack
+                );
 
         btnImportSentenceExercises =
                 findViewById(
                         R.id.btnImportSentenceExercises
                 );
+
+        db =
+                FirebaseFirestore.getInstance();
+
+        btnGrammarImportBack.setOnClickListener(
+                view -> finish()
+        );
 
         btnImportSentenceExercises.setOnClickListener(
                 view -> importSentenceExercises()
@@ -47,8 +61,13 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
 
     private void importSentenceExercises() {
 
-        btnImportSentenceExercises.setEnabled(false);
-        btnImportSentenceExercises.setText("Đang nhập dữ liệu...");
+        btnImportSentenceExercises.setEnabled(
+                false
+        );
+
+        btnImportSentenceExercises.setText(
+                "Đang nhập dữ liệu..."
+        );
 
         try {
 
@@ -79,10 +98,13 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
                 showError(
                         "File JSON không có dữ liệu."
                 );
+
                 return;
             }
 
-            uploadExercises(exerciseList);
+            uploadExercises(
+                    exerciseList
+            );
 
         } catch (Exception exception) {
 
@@ -100,7 +122,8 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
         WriteBatch batch =
                 db.batch();
 
-        int validCount = 0;
+        int validCount =
+                0;
 
         for (SentenceExercise exercise
                 : exerciseList) {
@@ -117,19 +140,29 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
 
             if (id == null
                     || id.trim().isEmpty()) {
+
                 continue;
             }
 
             if (englishSentence == null
                     || englishSentence.trim().isEmpty()) {
+
                 continue;
             }
 
             DocumentReference documentReference =
-                    db.collection("sentenceExercises")
-                            .document(id.trim());
+                    db.collection(
+                                    "sentenceExercises"
+                            )
+                            .document(
+                                    id.trim()
+                            );
 
-            // Dùng set để có thể import lại mà không tạo document trùng.
+            /*
+             * Dùng document ID cố định.
+             * Import lại sẽ ghi đè câu cũ,
+             * không tạo document trùng.
+             */
             batch.set(
                     documentReference,
                     exercise
@@ -139,22 +172,30 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
         }
 
         if (validCount == 0) {
+
             showError(
                     "Không tìm thấy câu hợp lệ để import."
             );
+
             return;
         }
 
-        final int total = validCount;
+        final int total =
+                validCount;
 
         batch.commit()
                 .addOnSuccessListener(
                         unused -> {
 
-                            btnImportSentenceExercises.setEnabled(true);
-                            btnImportSentenceExercises.setText(
-                                    "Nhập 100 câu lên Firestore"
-                            );
+                            btnImportSentenceExercises
+                                    .setEnabled(
+                                            true
+                                    );
+
+                            btnImportSentenceExercises
+                                    .setText(
+                                            "Nhập 100 câu lên Firestore"
+                                    );
 
                             Toast.makeText(
                                     this,
@@ -178,7 +219,10 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
             String message
     ) {
 
-        btnImportSentenceExercises.setEnabled(true);
+        btnImportSentenceExercises.setEnabled(
+                true
+        );
+
         btnImportSentenceExercises.setText(
                 "Nhập 100 câu lên Firestore"
         );

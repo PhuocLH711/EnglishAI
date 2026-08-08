@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,70 +13,176 @@ import com.google.firebase.auth.FirebaseUser;
 
 import adu.nttu.englishai.R;
 
-// =========================================================================
-// SPLASH ACTIVITY: Màn hình chào khởi động & Tự động kiểm tra phiên đăng nhập
-// =========================================================================
 public class SplashActivity extends AppCompatActivity {
 
-    // Khoảng thời gian trễ của màn hình chào: 1500 miligiây (tương đương 1.5 giây)
-    // Giúp màn hình logo hiện lên vừa đủ để người dùng nhận diện thương hiệu app
-    private static final long SPLASH_DELAY = 1500;
+    // Tổng thời gian Splash
+    private static final long SPLASH_DELAY = 1800;
 
-    // Đối tượng quản lý xác thực tài khoản từ Firebase
     private FirebaseAuth firebaseAuth;
+
+    private View splashContent;
+    private View progressSplash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Khởi tạo bộ máy xác thực Firebase Auth
+        // =========================================================
+        // FIREBASE AUTH
+        // =========================================================
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // =========================================================================
-        // CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN (TIMER HƠN 1.5 GIÂY)
-        // =========================================================================
-        // Looper.getMainLooper(): Chỉ định rõ ràng rằng hành động sau khi đếm ngược
-        // phải được thực thi ngay trên Luồng chính (Main/UI Thread) để chuyển màn hình an toàn.
-        // postDelayed: Lệnh đếm ngược đúng 1.5 giây (SPLASH_DELAY) rồi tự động gọi hàm checkLoginStatus()
+        // =========================================================
+        // ÁNH XẠ VIEW
+        // =========================================================
+        splashContent = findViewById(R.id.splashContent);
+        progressSplash = findViewById(R.id.progressSplash);
+
+        // =========================================================
+        // HIỆU ỨNG KHI MỞ APP
+        // =========================================================
+        playEnterAnimation();
+
+        // =========================================================
+        // CHỜ SPLASH CHẠY XONG
+        // =========================================================
         new Handler(Looper.getMainLooper()).postDelayed(
                 this::checkLoginStatus,
                 SPLASH_DELAY
         );
     }
 
-    // HÀM QUAN TRỌNG: Kiểm tra trạng thái đăng nhập để phân luồng người dùng
+    // =============================================================
+    // HIỆU ỨNG LOGO XUẤT HIỆN
+    // =============================================================
+    private void playEnterAnimation() {
+
+        if (splashContent == null) {
+            return;
+        }
+
+        // Trạng thái ban đầu
+        splashContent.setAlpha(0f);
+        splashContent.setScaleX(0.88f);
+        splashContent.setScaleY(0.88f);
+        splashContent.setTranslationY(30f);
+
+        // Logo xuất hiện
+        splashContent.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .translationY(0f)
+                .setDuration(650)
+                .start();
+
+        // Thanh loading xuất hiện sau logo một chút
+        if (progressSplash != null) {
+
+            progressSplash.setAlpha(0f);
+
+            progressSplash.animate()
+                    .alpha(1f)
+                    .setStartDelay(300)
+                    .setDuration(400)
+                    .start();
+        }
+    }
+
+    // =============================================================
+    // KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP
+    // =============================================================
     private void checkLoginStatus() {
-        // getCurrentUser(): Lấy thông tin tài khoản đang đăng nhập hiện tại lưu trong bộ nhớ đệm (Cache token)
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
-        Intent intent;
+        FirebaseUser currentUser =
+                firebaseAuth.getCurrentUser();
 
-        // =========================================================================
-        // PHÂN LUỒNG LOGIC (AUTO-LOGIN)
-        // =========================================================================
+        final Intent intent;
+
         if (currentUser != null) {
-            // Trường hợp 1: Biến currentUser KHÁC null nghĩa là người dùng đã đăng nhập từ trước và chưa bấm Đăng xuất.
-            // -> Kích hoạt tính năng Đăng nhập tự động (Auto-Login), đưa thẳng vào màn hình chính MainActivity
+
+            // Đã đăng nhập
             intent = new Intent(
                     SplashActivity.this,
                     MainActivity.class
             );
+
         } else {
-            // Trường hợp 2: Biến currentUser BẰNG null nghĩa là đây là lần đầu mở app hoặc đã đăng xuất trước đó.
-            // -> Điều hướng người dùng sang màn hình Đăng nhập LoginActivity để xác thực
+
+            // Chưa đăng nhập
             intent = new Intent(
                     SplashActivity.this,
                     LoginActivity.class
             );
         }
 
-        // Kích hoạt chuyến xe Intent để chuyển sang màn hình tiếp theo
-        startActivity(intent);
+        // Chạy animation kết thúc trước
+        playExitAnimation(() -> {
 
-        // QUAN TRỌNG: Đóng và tiêu hủy hoàn toàn màn hình SplashActivity này khỏi bộ nhớ RAM (Backstack)
-        // Đảm bảo khi người dùng ở màn hình trong mà bấm nút Trở về (Back) của điện thoại,
-        // app sẽ thoát ra màn hình chính của điện thoại luôn chứ không bao giờ quay lại màn hình chào này nữa.
-        finish();
+            startActivity(intent);
+
+            // Fade sang màn hình tiếp theo
+            overridePendingTransition(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+            );
+
+            // Không cho quay ngược về Splash
+            finish();
+        });
+    }
+
+    // =============================================================
+    // HIỆU ỨNG KHI SPLASH KẾT THÚC
+    // =============================================================
+    private void playExitAnimation(Runnable onFinished) {
+
+        if (splashContent == null) {
+
+            onFinished.run();
+            return;
+        }
+
+        // ---------------------------------------------------------
+        // THANH LOADING BIẾN MẤT
+        // ---------------------------------------------------------
+        if (progressSplash != null) {
+
+            progressSplash.animate()
+                    .alpha(0f)
+                    .translationY(8f)
+                    .setDuration(180)
+                    .start();
+        }
+
+        // ---------------------------------------------------------
+        // LOGO PHÓNG NHẸ + ĐI LÊN + MỜ DẦN
+        // ---------------------------------------------------------
+        splashContent.animate()
+                .scaleX(1.06f)
+                .scaleY(1.06f)
+                .translationY(-20f)
+                .alpha(0f)
+                .setDuration(420)
+                .withEndAction(onFinished)
+                .start();
+    }
+
+    // =============================================================
+    // DỌN ANIMATION KHI ACTIVITY BỊ HỦY
+    // =============================================================
+    @Override
+    protected void onDestroy() {
+
+        if (splashContent != null) {
+            splashContent.animate().cancel();
+        }
+
+        if (progressSplash != null) {
+            progressSplash.animate().cancel();
+        }
+
+        super.onDestroy();
     }
 }

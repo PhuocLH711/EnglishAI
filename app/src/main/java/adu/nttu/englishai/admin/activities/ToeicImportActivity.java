@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -21,37 +22,33 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.models.ToeicQuestion;
 import adu.nttu.englishai.models.ToeicTest;
 
-/**
- * Công cụ import một bộ đề TOEIC từ assets/toeic_test_import.json lên Firestore.
- *
- * LƯU Ý:
- * - File JSON phải là dữ liệu mà bạn có quyền sử dụng.
- * - Activity này KHÔNG tự sinh câu hỏi TOEIC.
- * - Collection:
- *      toeicTests
- *      toeicQuestions
- */
 public class ToeicImportActivity extends AppCompatActivity {
 
     private static final String ASSET_FILE =
             "toeic_test_import.json";
 
-    // Firestore batch tối đa 500 writes.
-    // Dùng 400 để chừa khoảng an toàn.
     private static final int MAX_BATCH_WRITES =
             400;
 
+    private TextView btnToeicImportBack;
     private MaterialButton btnImportToeic;
     private TextView tvImportStatus;
 
     private FirebaseFirestore firestore;
+
     private final Gson gson =
             new Gson();
+
+    private final List<ImportPackage> packages =
+            new ArrayList<>();
+
+    private int totalImportedQuestions = 0;
 
     @Override
     protected void onCreate(
@@ -66,6 +63,11 @@ public class ToeicImportActivity extends AppCompatActivity {
         firestore =
                 FirebaseFirestore.getInstance();
 
+        btnToeicImportBack =
+                findViewById(
+                        R.id.btnToeicImportBack
+                );
+
         btnImportToeic =
                 findViewById(
                         R.id.btnImportToeic
@@ -75,6 +77,10 @@ public class ToeicImportActivity extends AppCompatActivity {
                 findViewById(
                         R.id.tvImportStatus
                 );
+
+        btnToeicImportBack.setOnClickListener(
+                view -> finish()
+        );
 
         btnImportToeic.setOnClickListener(
                 view -> importToeicFromAssets()
@@ -86,7 +92,7 @@ public class ToeicImportActivity extends AppCompatActivity {
         btnImportToeic.setEnabled(false);
 
         tvImportStatus.setText(
-                "Đang đọc dữ liệu..."
+                "Đang đọc dữ liệu TOEIC..."
         );
 
         try {
@@ -97,199 +103,238 @@ public class ToeicImportActivity extends AppCompatActivity {
                     );
 
             JsonObject root =
-                    JsonParser.parseString(
-                            json
-                    ).getAsJsonObject();
+                    JsonParser.parseString(json)
+                            .getAsJsonObject();
 
-            if (!root.has("test")
-                    || !root.has("questions")) {
+            packages.clear();
+            totalImportedQuestions = 0;
 
-                throw new IllegalArgumentException(
-                        "JSON phải có 2 trường: test và questions."
-                );
-            }
+            // Hỗ trợ file mới gồm nhiều bộ đề.
+            if (root.has("tests")
+                    && root.get("tests").isJsonArray()) {
 
-            JsonObject testObject =
-                    root.getAsJsonObject(
-                            "test"
-                    );
-
-            JsonArray questionArray =
-                    root.getAsJsonArray(
-                            "questions"
-                    );
-
-            ToeicTest test =
-                    gson.fromJson(
-                            testObject,
-                            ToeicTest.class
-                    );
-
-            String testId =
-                    readRequiredString(
-                            testObject,
-                            "id"
-                    );
-
-            validateTest(
-                    testId,
-                    test
-            );
-
-            List<ToeicQuestion> questions =
-                    new ArrayList<>();
-
-            for (int i = 0;
-                 i < questionArray.size();
-                 i++) {
-
-                JsonObject questionObject =
-                        questionArray
-                                .get(i)
-                                .getAsJsonObject();
-
-                ToeicQuestion question =
-                        gson.fromJson(
-                                questionObject,
-                                ToeicQuestion.class
+                JsonArray array =
+                        root.getAsJsonArray(
+                                "tests"
                         );
 
-                String questionId;
+                for (JsonElement element
+                        : array) {
 
-                if (questionObject.has("id")
-                        && !questionObject
-                        .get("id")
-                        .isJsonNull()) {
+                    if (!element.isJsonObject()) {
+                        continue;
+                    }
 
-                    questionId =
-                            questionObject
-                                    .get("id")
-                                    .getAsString()
-                                    .trim();
-
-                } else {
-
-                    questionId =
-                            testId
-                                    + "_q"
-                                    + String.format(
-                                            java.util.Locale.ROOT,
-                                            "%03d",
-                                            question.getQuestionNumber()
-                                    );
-                }
-
-                if (questionId.isEmpty()) {
-
-                    throw new IllegalArgumentException(
-                            "Câu thứ "
-                                    + (i + 1)
-                                    + " không có id hợp lệ."
+                    packages.add(
+                            parsePackage(
+                                    element.getAsJsonObject()
+                            )
                     );
                 }
 
-                question.setId(
-                        questionId
-                );
+            } else {
 
-                // Luôn ép question thuộc đúng test đang import.
-                question.setTestId(
-                        testId
-                );
-
-                validateQuestion(
-                        question,
-                        i + 1
-                );
-
-                questions.add(
-                        question
+                // Vẫn hỗ trợ format cũ:
+                // { "test": {...}, "questions": [...] }
+                packages.add(
+                        parsePackage(root)
                 );
             }
 
-            if (questions.isEmpty()) {
+            if (packages.isEmpty()) {
 
                 throw new IllegalArgumentException(
-                        "Không có câu hỏi nào trong file JSON."
+                        "Không tìm thấy bộ đề TOEIC hợp lệ."
                 );
             }
 
-            // Đồng bộ metadata theo dữ liệu thực tế.
-            test.setId(
-                    testId
-            );
+            int totalQuestions = 0;
 
-            test.setTotalQuestions(
-                    questions.size()
-            );
+            for (ImportPackage value
+                    : packages) {
+
+                totalQuestions +=
+                        value.questions.size();
+            }
 
             tvImportStatus.setText(
-                    "Đã kiểm tra "
-                            + questions.size()
+                    "Đã đọc "
+                            + packages.size()
+                            + " bộ đề / "
+                            + totalQuestions
                             + " câu. Đang tải lên Firestore..."
             );
 
-            uploadTestAndQuestions(
-                    testId,
-                    test,
-                    questions
-            );
+            uploadPackage(0);
 
         } catch (Exception exception) {
 
-            btnImportToeic.setEnabled(true);
-
-            tvImportStatus.setText(
+            showError(
                     "Import thất bại:\n"
                             + exception.getMessage()
             );
-
-            Toast.makeText(
-                    this,
-                    "Không thể import TOEIC.",
-                    Toast.LENGTH_LONG
-            ).show();
         }
     }
 
-    private void uploadTestAndQuestions(
-            String testId,
-            ToeicTest test,
-            List<ToeicQuestion> questions
+    private ImportPackage parsePackage(
+            JsonObject root
     ) {
 
-        // Ghi metadata test trước.
-        firestore
-                .collection("toeicTests")
-                .document(testId)
-                .set(test)
-                .addOnSuccessListener(
-                        unused -> uploadQuestionBatches(
-                                questions,
-                                0
-                        )
-                )
-                .addOnFailureListener(
-                        exception -> {
+        if (!root.has("test")
+                || !root.has("questions")) {
 
-                            btnImportToeic.setEnabled(
-                                    true
-                            );
+            throw new IllegalArgumentException(
+                    "Mỗi bộ đề phải có test và questions."
+            );
+        }
 
-                            tvImportStatus.setText(
-                                    "Không ghi được toeicTests:\n"
-                                            + exception.getMessage()
-                            );
-                        }
+        JsonObject testObject =
+                root.getAsJsonObject(
+                        "test"
                 );
+
+        JsonArray questionArray =
+                root.getAsJsonArray(
+                        "questions"
+                );
+
+        String testId =
+                readRequiredString(
+                        testObject,
+                        "id"
+                );
+
+        ToeicTest test =
+                gson.fromJson(
+                        testObject,
+                        ToeicTest.class
+                );
+
+        if (test == null) {
+            throw new IllegalArgumentException(
+                    "Không đọc được test "
+                            + testId
+            );
+        }
+
+        List<ToeicQuestion> questions =
+                new ArrayList<>();
+
+        for (int i = 0;
+             i < questionArray.size();
+             i++) {
+
+            JsonObject questionObject =
+                    questionArray.get(i)
+                            .getAsJsonObject();
+
+            ToeicQuestion question =
+                    gson.fromJson(
+                            questionObject,
+                            ToeicQuestion.class
+                    );
+
+            if (question == null) {
+                continue;
+            }
+
+            String questionId;
+
+            if (questionObject.has("id")
+                    && !questionObject.get("id").isJsonNull()) {
+
+                questionId =
+                        questionObject.get("id")
+                                .getAsString()
+                                .trim();
+
+            } else {
+
+                questionId =
+                        testId
+                                + "_q"
+                                + String.format(
+                                Locale.ROOT,
+                                "%03d",
+                                question.getQuestionNumber()
+                        );
+            }
+
+            if (questionId.isEmpty()
+                    || question.getQuestionNumber() <= 0
+                    || question.getPart() < 1
+                    || question.getPart() > 7) {
+
+                continue;
+            }
+
+            String correct =
+                    question.getCorrectAnswer();
+
+            if (correct == null) {
+                continue;
+            }
+
+            correct =
+                    correct.trim()
+                            .toUpperCase(
+                                    Locale.ROOT
+                            );
+
+            if (!correct.equals("A")
+                    && !correct.equals("B")
+                    && !correct.equals("C")
+                    && !correct.equals("D")) {
+
+                continue;
+            }
+
+            question.setId(
+                    questionId
+            );
+
+            question.setTestId(
+                    testId
+            );
+
+            question.setCorrectAnswer(
+                    correct
+            );
+
+            questions.add(
+                    question
+            );
+        }
+
+        if (questions.isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    testId
+                            + ": không có câu hỏi hợp lệ."
+            );
+        }
+
+        test.setId(
+                testId
+        );
+
+        test.setTotalQuestions(
+                questions.size()
+        );
+
+        return new ImportPackage(
+                testId,
+                test,
+                questions
+        );
     }
 
-    private void uploadQuestionBatches(
-            List<ToeicQuestion> questions,
-            int startIndex
+    private void uploadPackage(
+            int packageIndex
     ) {
 
-        if (startIndex >= questions.size()) {
+        if (packageIndex
+                >= packages.size()) {
 
             btnImportToeic.setEnabled(
                     true
@@ -297,15 +342,75 @@ public class ToeicImportActivity extends AppCompatActivity {
 
             tvImportStatus.setText(
                     "✅ Import thành công "
-                            + questions.size()
+                            + packages.size()
+                            + " bộ đề / "
+                            + totalImportedQuestions
                             + " câu TOEIC."
             );
 
             Toast.makeText(
                     this,
-                    "Đã import TOEIC thành công.",
+                    "Đã import "
+                            + packages.size()
+                            + " bộ đề TOEIC.",
                     Toast.LENGTH_LONG
             ).show();
+
+            return;
+        }
+
+        ImportPackage value =
+                packages.get(
+                        packageIndex
+                );
+
+        tvImportStatus.setText(
+                "Đang tạo "
+                        + value.test.getTitle()
+                        + "..."
+        );
+
+        firestore.collection("toeicTests")
+                .document(
+                        value.testId
+                )
+                .set(
+                        value.test
+                )
+                .addOnSuccessListener(
+                        unused ->
+                                uploadQuestionBatch(
+                                        packageIndex,
+                                        value,
+                                        0
+                                )
+                )
+                .addOnFailureListener(
+                        exception ->
+                                showError(
+                                        "Không ghi được "
+                                                + value.testId
+                                                + ":\n"
+                                                + exception.getMessage()
+                                )
+                );
+    }
+
+    private void uploadQuestionBatch(
+            int packageIndex,
+            ImportPackage value,
+            int startIndex
+    ) {
+
+        if (startIndex
+                >= value.questions.size()) {
+
+            totalImportedQuestions +=
+                    value.questions.size();
+
+            uploadPackage(
+                    packageIndex + 1
+            );
 
             return;
         }
@@ -314,7 +419,7 @@ public class ToeicImportActivity extends AppCompatActivity {
                 Math.min(
                         startIndex
                                 + MAX_BATCH_WRITES,
-                        questions.size()
+                        value.questions.size()
                 );
 
         WriteBatch batch =
@@ -325,7 +430,7 @@ public class ToeicImportActivity extends AppCompatActivity {
              i++) {
 
             ToeicQuestion question =
-                    questions.get(i);
+                    value.questions.get(i);
 
             batch.set(
                     firestore
@@ -339,208 +444,37 @@ public class ToeicImportActivity extends AppCompatActivity {
             );
         }
 
-        final int nextIndex =
-                endIndex;
-
         tvImportStatus.setText(
-                "Đang tải câu "
+                value.test.getTitle()
+                        + "\nĐang tải câu "
                         + (startIndex + 1)
                         + " - "
                         + endIndex
                         + " / "
-                        + questions.size()
+                        + value.questions.size()
         );
+
+        final int nextIndex =
+                endIndex;
 
         batch.commit()
                 .addOnSuccessListener(
                         unused ->
-                                uploadQuestionBatches(
-                                        questions,
+                                uploadQuestionBatch(
+                                        packageIndex,
+                                        value,
                                         nextIndex
                                 )
                 )
                 .addOnFailureListener(
-                        exception -> {
-
-                            btnImportToeic.setEnabled(
-                                    true
-                            );
-
-                            tvImportStatus.setText(
-                                    "Lỗi khi upload câu "
-                                            + (startIndex + 1)
-                                            + " - "
-                                            + endIndex
-                                            + ":\n"
-                                            + exception.getMessage()
-                            );
-                        }
+                        exception ->
+                                showError(
+                                        "Lỗi upload "
+                                                + value.testId
+                                                + ":\n"
+                                                + exception.getMessage()
+                                )
                 );
-    }
-
-    private void validateTest(
-            String testId,
-            ToeicTest test
-    ) {
-
-        if (testId == null
-                || testId.trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "test.id không được để trống."
-            );
-        }
-
-        if (test == null) {
-
-            throw new IllegalArgumentException(
-                    "Không đọc được metadata của bộ đề."
-            );
-        }
-
-        if (test.getTitle() == null
-                || test.getTitle()
-                .trim()
-                .isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "test.title không được để trống."
-            );
-        }
-    }
-
-    private void validateQuestion(
-            ToeicQuestion question,
-            int index
-    ) {
-
-        if (question.getQuestionNumber() <= 0) {
-
-            throw new IllegalArgumentException(
-                    "Câu "
-                            + index
-                            + ": questionNumber không hợp lệ."
-            );
-        }
-
-        if (question.getPart() < 1
-                || question.getPart() > 7) {
-
-            throw new IllegalArgumentException(
-                    "Câu "
-                            + question.getQuestionNumber()
-                            + ": part phải từ 1 đến 7."
-            );
-        }
-
-        String correct =
-                question.getCorrectAnswer();
-
-        if (correct == null
-                || correct.trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "Câu "
-                            + question.getQuestionNumber()
-                            + ": thiếu correctAnswer."
-            );
-        }
-
-        String normalizedCorrect =
-                correct.trim()
-                        .toUpperCase(
-                                java.util.Locale.ROOT
-                        );
-
-        if (!normalizedCorrect.equals("A")
-                && !normalizedCorrect.equals("B")
-                && !normalizedCorrect.equals("C")
-                && !normalizedCorrect.equals("D")) {
-
-            throw new IllegalArgumentException(
-                    "Câu "
-                            + question.getQuestionNumber()
-                            + ": correctAnswer phải là A/B/C/D."
-            );
-        }
-
-        question.setCorrectAnswer(
-                normalizedCorrect
-        );
-
-        // Reading Part 5 bắt buộc có câu và 4 lựa chọn.
-        if (question.getPart() == 5) {
-
-            requireNonEmpty(
-                    question.getQuestionText(),
-                    "questionText",
-                    question.getQuestionNumber()
-            );
-
-            requireNonEmpty(
-                    question.getOptionA(),
-                    "optionA",
-                    question.getQuestionNumber()
-            );
-
-            requireNonEmpty(
-                    question.getOptionB(),
-                    "optionB",
-                    question.getQuestionNumber()
-            );
-
-            requireNonEmpty(
-                    question.getOptionC(),
-                    "optionC",
-                    question.getQuestionNumber()
-            );
-
-            requireNonEmpty(
-                    question.getOptionD(),
-                    "optionD",
-                    question.getQuestionNumber()
-            );
-        }
-
-        // Listening phải có audio URL nếu đang import dữ liệu để thi.
-        if (question.getPart() >= 1
-                && question.getPart() <= 4) {
-
-            requireNonEmpty(
-                    question.getAudioUrl(),
-                    "audioUrl",
-                    question.getQuestionNumber()
-            );
-        }
-
-        // Part 1 cần hình ảnh.
-        if (question.getPart() == 1) {
-
-            requireNonEmpty(
-                    question.getImageUrl(),
-                    "imageUrl",
-                    question.getQuestionNumber()
-            );
-        }
-    }
-
-    private void requireNonEmpty(
-            String value,
-            String fieldName,
-            int questionNumber
-    ) {
-
-        if (value == null
-                || value.trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "Câu "
-                            + questionNumber
-                            + ": thiếu "
-                            + fieldName
-                            + "."
-            );
-        }
     }
 
     private String readRequiredString(
@@ -554,7 +488,6 @@ public class ToeicImportActivity extends AppCompatActivity {
             throw new IllegalArgumentException(
                     "Thiếu trường "
                             + key
-                            + "."
             );
         }
 
@@ -583,7 +516,9 @@ public class ToeicImportActivity extends AppCompatActivity {
 
         try (
                 InputStream inputStream =
-                        getAssets().open(fileName);
+                        getAssets().open(
+                                fileName
+                        );
 
                 BufferedReader reader =
                         new BufferedReader(
@@ -599,11 +534,47 @@ public class ToeicImportActivity extends AppCompatActivity {
             while ((line = reader.readLine())
                     != null) {
 
-                builder.append(line);
-                builder.append('\n');
+                builder.append(line)
+                        .append('\n');
             }
         }
 
         return builder.toString();
+    }
+
+    private void showError(
+            String message
+    ) {
+
+        btnImportToeic.setEnabled(
+                true
+        );
+
+        tvImportStatus.setText(
+                message
+        );
+
+        Toast.makeText(
+                this,
+                "Không thể import TOEIC.",
+                Toast.LENGTH_LONG
+        ).show();
+    }
+
+    private static class ImportPackage {
+
+        final String testId;
+        final ToeicTest test;
+        final List<ToeicQuestion> questions;
+
+        ImportPackage(
+                String testId,
+                ToeicTest test,
+                List<ToeicQuestion> questions
+        ) {
+            this.testId = testId;
+            this.test = test;
+            this.questions = questions;
+        }
     }
 }

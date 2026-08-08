@@ -4458,10 +4458,10 @@
           "part": 1,
           "questionNumber": 1,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "He is printing a document.",
-          "optionB": "He is repairing a ceiling.",
-          "optionC": "He is opening a suitcase.",
-          "optionD": "He is watering a plant.",
+          "optionA": "She is choosing some clothing.",
+          "optionB": "She is washing a window.",
+          "optionC": "She is serving a meal.",
+          "optionD": "She is opening a suitcase.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -4472,8 +4472,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. He is printing a document. B. He is repairing a ceiling. C. He is opening a suitcase. D. He is watering a plant.",
-            "sceneDescription": "A man is operating a photocopier in an office."
+            "transcript": "Look at the picture. A. She is choosing some clothing. B. She is washing a window. C. She is serving a meal. D. She is opening a suitcase.",
+            "sceneDescription": "A woman is looking through clothes in a store."
           }
         },
         {
@@ -4482,10 +4482,10 @@
           "part": 1,
           "questionNumber": 2,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "People are boarding a train.",
-          "optionB": "People are swimming in a pool.",
-          "optionC": "People are entering a theater.",
-          "optionD": "People are loading a truck.",
+          "optionA": "They are boarding or leaving a train.",
+          "optionB": "They are waiting at an airport gate.",
+          "optionC": "They are loading a truck.",
+          "optionD": "They are sitting in a restaurant.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -4496,8 +4496,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. People are boarding a train. B. People are swimming in a pool. C. People are entering a theater. D. People are loading a truck.",
-            "sceneDescription": "Passengers are waiting beside a train at a platform."
+            "transcript": "Look at the picture. A. They are boarding or leaving a train. B. They are waiting at an airport gate. C. They are loading a truck. D. They are sitting in a restaurant.",
+            "sceneDescription": "Passengers are walking beside a train at a station."
           }
         },
         {
@@ -4506,11 +4506,11 @@
           "part": 1,
           "questionNumber": 3,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "They are painting a fence.",
-          "optionB": "They are building a structure.",
-          "optionC": "They are washing a vehicle.",
-          "optionD": "They are planting flowers.",
-          "correctAnswer": "B",
+          "optionA": "He is typing at a computer.",
+          "optionB": "He is answering a telephone outside.",
+          "optionC": "He is carrying boxes.",
+          "optionD": "He is painting a wall.",
+          "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
           "vocabulary": [],
@@ -4520,8 +4520,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. They are painting a fence. B. They are building a structure. C. They are washing a vehicle. D. They are planting flowers.",
-            "sceneDescription": "Construction workers are assembling a concrete structure."
+            "transcript": "Look at the picture. A. He is typing at a computer. B. He is answering a telephone outside. C. He is carrying boxes. D. He is painting a wall.",
+            "sceneDescription": "A man is working at a computer in an office."
           }
         },
         {
@@ -4530,10 +4530,10 @@
           "part": 1,
           "questionNumber": 4,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "She is choosing some produce.",
-          "optionB": "She is paying a parking fee.",
-          "optionC": "She is signing a contract.",
-          "optionD": "She is folding clothes.",
+          "optionA": "They are building a structure.",
+          "optionB": "They are washing a vehicle.",
+          "optionC": "They are arranging flowers.",
+          "optionD": "They are setting a dining table.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -4544,8 +4544,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. She is choosing some produce. B. She is paying a parking fee. C. She is signing a contract. D. She is folding clothes.",
-            "sceneDescription": "A woman is selecting fruit in a supermarket."
+            "transcript": "Look at the picture. A. They are building a structure. B. They are washing a vehicle. C. They are arranging flowers. D. They are setting a dining table.",
+            "sceneDescription": "Construction workers are working at a building site."
           }
         },
         {
@@ -4554,10 +4554,10 @@
           "part": 1,
           "questionNumber": 5,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "He is working at a computer.",
-          "optionB": "He is answering a door.",
-          "optionC": "He is carrying a ladder.",
-          "optionD": "He is serving a meal.",
+          "optionA": "She is checking out a customer's groceries.",
+          "optionB": "She is stocking a bookshelf.",
+          "optionC": "She is repairing a machine.",
+          "optionD": "She is watering plants.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -4568,8 +4568,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. He is working at a computer. B. He is answering a door. C. He is carrying a ladder. D. He is serving a meal.",
-            "sceneDescription": "A man is typing at a computer in an office."
+            "transcript": "Look at the picture. A. She is checking out a customer's groceries. B. She is stocking a bookshelf. C. She is repairing a machine. D. She is watering plants.",
+            "sceneDescription": "A cashier is scanning groceries at a checkout counter."
           }
         },
         {
@@ -4578,11 +4578,11 @@
           "part": 1,
           "questionNumber": 6,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "She is hanging a picture.",
-          "optionB": "She is loading a washing machine.",
-          "optionC": "She is sweeping a hallway.",
-          "optionD": "She is packing a suitcase.",
-          "correctAnswer": "B",
+          "optionA": "He is unloading packages.",
+          "optionB": "He is repairing a bicycle.",
+          "optionC": "He is washing the van.",
+          "optionD": "He is directing traffic.",
+          "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
           "vocabulary": [],
@@ -4592,8 +4592,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. She is hanging a picture. B. She is loading a washing machine. C. She is sweeping a hallway. D. She is packing a suitcase.",
-            "sceneDescription": "A woman is loading clothes into a washing machine."
+            "transcript": "Look at the picture. A. He is unloading packages. B. He is repairing a bicycle. C. He is washing the van. D. He is directing traffic.",
+            "sceneDescription": "A delivery worker is unloading boxes from a van."
           }
         },
         {
@@ -8888,10 +8888,10 @@
           "part": 1,
           "questionNumber": 1,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "They are having a picnic.",
-          "optionB": "They are waiting for a train.",
-          "optionC": "They are attending a concert.",
-          "optionD": "They are repairing a bicycle.",
+          "optionA": "She is painting a picture.",
+          "optionB": "She is reading a newspaper.",
+          "optionC": "She is typing an e-mail.",
+          "optionD": "She is folding clothes.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -8902,8 +8902,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. They are having a picnic. B. They are waiting for a train. C. They are attending a concert. D. They are repairing a bicycle.",
-            "sceneDescription": "Several people are having a picnic in a park."
+            "transcript": "Look at the picture. A. She is painting a picture. B. She is reading a newspaper. C. She is typing an e-mail. D. She is folding clothes.",
+            "sceneDescription": "A woman is painting a landscape on a canvas."
           }
         },
         {
@@ -8912,10 +8912,10 @@
           "part": 1,
           "questionNumber": 2,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "She is teaching a class.",
-          "optionB": "She is checking into a hotel.",
-          "optionC": "She is serving customers.",
-          "optionD": "She is driving a bus.",
+          "optionA": "They are greeting each other.",
+          "optionB": "They are eating lunch.",
+          "optionC": "They are carrying luggage.",
+          "optionD": "They are looking at a map.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -8926,8 +8926,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. She is teaching a class. B. She is checking into a hotel. C. She is serving customers. D. She is driving a bus.",
-            "sceneDescription": "A teacher is explaining a lesson to students in a classroom."
+            "transcript": "Look at the picture. A. They are greeting each other. B. They are eating lunch. C. They are carrying luggage. D. They are looking at a map.",
+            "sceneDescription": "Two businesspeople are shaking hands across a table."
           }
         },
         {
@@ -8936,10 +8936,10 @@
           "part": 1,
           "questionNumber": 3,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "He is delivering a package.",
-          "optionB": "He is repairing a door.",
-          "optionC": "He is washing a window.",
-          "optionD": "He is planting a tree.",
+          "optionA": "She is making a beverage.",
+          "optionB": "She is cleaning a window.",
+          "optionC": "She is opening a package.",
+          "optionD": "She is taking a photograph.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -8950,8 +8950,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. He is delivering a package. B. He is repairing a door. C. He is washing a window. D. He is planting a tree.",
-            "sceneDescription": "A delivery worker is handing a package to a customer."
+            "transcript": "Look at the picture. A. She is making a beverage. B. She is cleaning a window. C. She is opening a package. D. She is taking a photograph.",
+            "sceneDescription": "A barista is preparing a drink behind a café counter."
           }
         },
         {
@@ -8960,11 +8960,11 @@
           "part": 1,
           "questionNumber": 4,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "He is washing a car.",
-          "optionB": "He is pumping gas.",
-          "optionC": "He is checking into a hotel.",
-          "optionD": "He is moving furniture.",
-          "correctAnswer": "B",
+          "optionA": "She is arranging the bedding.",
+          "optionB": "She is vacuuming the floor.",
+          "optionC": "She is painting the room.",
+          "optionD": "She is moving a chair.",
+          "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
           "vocabulary": [],
@@ -8974,8 +8974,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. He is washing a car. B. He is pumping gas. C. He is checking into a hotel. D. He is moving furniture.",
-            "sceneDescription": "A man is pumping fuel into a car at a service station."
+            "transcript": "Look at the picture. A. She is arranging the bedding. B. She is vacuuming the floor. C. She is painting the room. D. She is moving a chair.",
+            "sceneDescription": "A hotel housekeeper is making a bed."
           }
         },
         {
@@ -8984,10 +8984,10 @@
           "part": 1,
           "questionNumber": 5,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "She is painting a picture.",
-          "optionB": "She is taking inventory.",
-          "optionC": "She is setting a table.",
-          "optionD": "She is reading a newspaper.",
+          "optionA": "She is running outdoors.",
+          "optionB": "She is riding a bicycle.",
+          "optionC": "She is waiting for a bus.",
+          "optionD": "She is planting flowers.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -8998,8 +8998,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. She is painting a picture. B. She is taking inventory. C. She is setting a table. D. She is reading a newspaper.",
-            "sceneDescription": "A woman is painting a landscape on a canvas."
+            "transcript": "Look at the picture. A. She is running outdoors. B. She is riding a bicycle. C. She is waiting for a bus. D. She is planting flowers.",
+            "sceneDescription": "A woman is jogging along a path in a park."
           }
         },
         {
@@ -9008,10 +9008,10 @@
           "part": 1,
           "questionNumber": 6,
           "questionText": "Choose the statement that best describes the picture.",
-          "optionA": "They are having a meeting.",
-          "optionB": "They are waiting at a bus stop.",
-          "optionC": "They are shopping for groceries.",
-          "optionD": "They are watching a movie.",
+          "optionA": "He is teaching a class.",
+          "optionB": "He is serving customers.",
+          "optionC": "He is repairing a computer.",
+          "optionD": "He is packing a suitcase.",
           "correctAnswer": "A",
           "explanation": "Choose the statement that most accurately describes the photograph.",
           "grammarTopic": "Photo description",
@@ -9022,8 +9022,8 @@
           "passageId": "",
           "passageText": "",
           "extraData": {
-            "transcript": "Look at the picture. A. They are having a meeting. B. They are waiting at a bus stop. C. They are shopping for groceries. D. They are watching a movie.",
-            "sceneDescription": "Businesspeople are seated around a conference table."
+            "transcript": "Look at the picture. A. He is teaching a class. B. He is serving customers. C. He is repairing a computer. D. He is packing a suitcase.",
+            "sceneDescription": "A teacher is explaining something to students in a classroom."
           }
         },
         {

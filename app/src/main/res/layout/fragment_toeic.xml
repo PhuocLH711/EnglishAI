@@ -358,7 +358,7 @@
             android:textColor="#9799AA"
             android:textSize="13sp" />
 
-        <!-- PART 5 FEATURED -->
+        <!-- PART 5 -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardToeicPart5"
             android:layout_width="match_parent"
@@ -366,10 +366,10 @@
             android:layout_marginTop="14dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="#F0EDFF"
-            app:cardCornerRadius="22dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:strokeColor="#CFC7FF"
+            app:strokeColor="#E8E9F2"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -377,27 +377,27 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
                     android:text="✍️"
-                    android:textSize="27sp" />
+                    android:textSize="25sp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Part 5 • Incomplete Sentences"
-                        android:textColor="#39304F"
+                        android:text="Part 5 · Incomplete Sentences"
+                        android:textColor="#292B3D"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -406,27 +406,23 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="Ngữ pháp và từ vựng trong câu đơn."
-                        android:textColor="#746E87"
+                        android:textColor="#8A8C9E"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:text="BẮT ĐẦU TỪ ĐÂY"
-                        android:textColor="#6C5CE7"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
                     android:text="›"
-                    android:textColor="#6C5CE7"
+                    android:textColor="#A5A7B5"
                     android:textSize="28sp" />
+
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
+
 
         <!-- PART 6 -->
         <com.google.android.material.card.MaterialCardView
@@ -441,7 +437,6 @@
             app:cardElevation="0dp"
             app:strokeColor="#E8E9F2"
             app:strokeWidth="1dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

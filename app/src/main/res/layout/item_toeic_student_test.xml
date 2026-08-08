@@ -24,7 +24,7 @@
             android:id="@+id/tvToeicStudentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TOEIC Reading Demo 01"
+            android:text="TOEIC Full Practice Demo 01"
             android:textColor="#242638"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="EnglishAI Original Demo"
+            android:text="EnglishAI Original TOEIC-style Demo"
             android:textColor="#898B9E"
             android:textSize="12sp" />
 
@@ -42,10 +42,20 @@
             android:id="@+id/tvToeicStudentMeta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:text="30 câu • 45 phút • Part 5, 6, 7"
+            android:layout_marginTop="8dp"
+            android:text="200 câu • 120 phút • Part 1-7"
             android:textColor="#6558E8"
             android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvToeicStudentProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Tiến độ: 0%"
+            android:textColor="#2F6F5E"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <LinearLayout

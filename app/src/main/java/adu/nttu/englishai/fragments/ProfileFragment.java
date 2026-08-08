@@ -71,7 +71,6 @@ public class ProfileFragment extends Fragment {
     private TextView tvLearnedCount;
     private TextView tvFavoriteCount;
 
-    private MaterialCardView cardAdminPanel;
 
     private final Set<String> validVocabularyIds = new HashSet<>();
     private final Map<String, DocumentSnapshot> vocabularyMap = new HashMap<>();
@@ -129,11 +128,6 @@ public class ProfileFragment extends Fragment {
         tvLearningCount = view.findViewById(R.id.tvLearningCount);
         tvLearnedCount = view.findViewById(R.id.tvMasteredCount);
         tvFavoriteCount = view.findViewById(R.id.tvFavoriteCount);
-
-        cardAdminPanel = view.findViewById(R.id.cardAdminPanel);
-        if (cardAdminPanel != null) {
-            cardAdminPanel.setVisibility(View.GONE);
-        }
     }
 
     private void setupEvents(View view) {
@@ -156,16 +150,6 @@ public class ProfileFragment extends Fragment {
         if (cardLeaderboard != null) {
             cardLeaderboard.setOnClickListener(v -> {
                 startActivity(new Intent(requireContext(), LeaderboardActivity.class));
-            });
-        }
-
-        if (cardAdminPanel != null) {
-            cardAdminPanel.setOnClickListener(v -> {
-                Intent intent = new Intent(
-                        requireContext(),
-                        AdminDashboardActivity.class
-                );
-                startActivity(intent);
             });
         }
     }
@@ -231,7 +215,6 @@ public class ProfileFragment extends Fragment {
         if (currentUser == null) {
             if (tvProfileName != null) tvProfileName.setText("Khách");
             if (tvProfileEmail != null) tvProfileEmail.setText("Chưa đăng nhập");
-            if (cardAdminPanel != null) cardAdminPanel.setVisibility(View.GONE);
             resetStatistics();
             return;
         }
@@ -264,10 +247,6 @@ public class ProfileFragment extends Fragment {
 
                     String role = document.getString("role");
                     boolean isAdmin = role != null && "admin".equalsIgnoreCase(role.trim());
-
-                    if (cardAdminPanel != null) {
-                        cardAdminPanel.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-                    }
 
                     String avatarData = document.getString("avatarUrl");
                     if (imgAvatar != null) {
@@ -306,23 +285,108 @@ public class ProfileFragment extends Fragment {
     private void showSettingsBottomSheet() {
         if (getContext() == null) return;
 
-        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_settings, null);
+        BottomSheetDialog dialog =
+                new BottomSheetDialog(requireContext());
+
+        View dialogView =
+                getLayoutInflater().inflate(
+                        R.layout.dialog_settings,
+                        null
+                );
+
         dialog.setContentView(dialogView);
 
-        LinearLayout itemAvatar = dialogView.findViewById(R.id.itemChangeAvatar);
-        LinearLayout itemInfo = dialogView.findViewById(R.id.itemUpdateInfo);
-        LinearLayout itemAdminImport = dialogView.findViewById(R.id.itemAdminImport);
-        if (itemAdminImport != null) {
-            itemAdminImport.setVisibility(View.GONE);
+        LinearLayout itemAvatar =
+                dialogView.findViewById(
+                        R.id.itemChangeAvatar
+                );
+
+        LinearLayout itemInfo =
+                dialogView.findViewById(
+                        R.id.itemUpdateInfo
+                );
+
+        LinearLayout itemHelp =
+                dialogView.findViewById(
+                        R.id.itemHelp
+                );
+
+        LinearLayout itemAdminPanel =
+                dialogView.findViewById(
+                        R.id.itemAdminPanel
+                );
+
+        Button dialogBtnLogout =
+                dialogView.findViewById(
+                        R.id.dialogBtnLogout
+                );
+
+        /*
+         * Mặc định ẩn Admin.
+         * Chỉ hiện sau khi xác nhận role == admin từ Firestore.
+         */
+        if (itemAdminPanel != null) {
+            itemAdminPanel.setVisibility(
+                    View.GONE
+            );
         }
-        Button dialogBtnLogout = dialogView.findViewById(R.id.dialogBtnLogout);
+
+        FirebaseUser currentUser =
+                firebaseAuth == null
+                        ? null
+                        : firebaseAuth.getCurrentUser();
+
+        if (currentUser != null
+                && itemAdminPanel != null) {
+
+            firestore.collection("users")
+                    .document(
+                            currentUser.getUid()
+                    )
+                    .get()
+                    .addOnSuccessListener(document -> {
+
+                        if (!isAdded()) {
+                            return;
+                        }
+
+                        String role =
+                                document.getString(
+                                        "role"
+                                );
+
+                        boolean isAdmin =
+                                role != null
+                                        && "admin".equalsIgnoreCase(
+                                        role.trim()
+                                );
+
+                        itemAdminPanel.setVisibility(
+                                isAdmin
+                                        ? View.VISIBLE
+                                        : View.GONE
+                        );
+                    })
+                    .addOnFailureListener(exception ->
+                            itemAdminPanel.setVisibility(
+                                    View.GONE
+                            )
+                    );
+        }
 
         if (itemAvatar != null) {
             itemAvatar.setOnClickListener(v -> {
                 dialog.dismiss();
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                imagePickerLauncher.launch(intent);
+
+                Intent intent =
+                        new Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        );
+
+                imagePickerLauncher.launch(
+                        intent
+                );
             });
         }
 
@@ -333,16 +397,59 @@ public class ProfileFragment extends Fragment {
             });
         }
 
+        if (itemHelp != null) {
+            itemHelp.setOnClickListener(v ->
+                    Toast.makeText(
+                            requireContext(),
+                            "Tính năng trợ giúp sẽ được cập nhật.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+            );
+        }
+
+        if (itemAdminPanel != null) {
+            itemAdminPanel.setOnClickListener(v -> {
+                dialog.dismiss();
+
+                Intent intent =
+                        new Intent(
+                                requireContext(),
+                                AdminDashboardActivity.class
+                        );
+
+                startActivity(
+                        intent
+                );
+            });
+        }
+
         if (dialogBtnLogout != null) {
             dialogBtnLogout.setOnClickListener(v -> {
                 dialog.dismiss();
-                if (firebaseAuth != null) firebaseAuth.signOut();
-                Intent intent = new Intent(requireActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+
+                if (firebaseAuth != null) {
+                    firebaseAuth.signOut();
+                }
+
+                Intent intent =
+                        new Intent(
+                                requireActivity(),
+                                LoginActivity.class
+                        );
+
+                intent.setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                );
+
+                startActivity(
+                        intent
+                );
+
                 requireActivity().finish();
             });
         }
+
         dialog.show();
     }
 

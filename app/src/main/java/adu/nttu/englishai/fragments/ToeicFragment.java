@@ -1,5 +1,6 @@
 package adu.nttu.englishai.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,23 +9,28 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import adu.nttu.englishai.R;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Trang chính của module TOEIC.
- *
- * Giai đoạn hiện tại:
- * - Dashboard TOEIC độc lập.
- * - Hiển thị Listening Part 1-4.
- * - Hiển thị Reading Part 5-7.
- * - Có Quick Practice và Full Test.
- *
- * Chưa gắn logic thi vào từng Part ở file này.
- * Part 5 sẽ được triển khai ở bước tiếp theo.
- */
+import adu.nttu.englishai.R;
+import adu.nttu.englishai.activities.ToeicHomeActivity;
+import adu.nttu.englishai.activities.ToeicPracticeActivity;
+import adu.nttu.englishai.models.ToeicTest;
+import adu.nttu.englishai.repositories.ToeicProgressRepository;
+import adu.nttu.englishai.repositories.ToeicRepository;
+
 public class ToeicFragment extends Fragment {
+
+    private ToeicRepository repository;
+    private ToeicProgressRepository progressRepository;
+
+    private final List<ToeicTest> tests =
+            new ArrayList<>();
+
+    private boolean loadingTests = false;
 
     public ToeicFragment() {
     }
@@ -35,6 +41,7 @@ public class ToeicFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
+
         return inflater.inflate(
                 R.layout.fragment_toeic,
                 container,
@@ -47,105 +54,97 @@ public class ToeicFragment extends Fragment {
             @NonNull View view,
             @Nullable Bundle savedInstanceState
     ) {
+
         super.onViewCreated(
                 view,
                 savedInstanceState
         );
 
-        setupPartButtons(view);
-        setupPracticeButtons(view);
+        repository =
+                new ToeicRepository();
+
+        progressRepository =
+                new ToeicProgressRepository();
+
+        setupPartButtons(
+                view
+        );
+
+        setupPracticeButtons(
+                view
+        );
+
+        loadTests(
+                null
+        );
     }
 
     private void setupPartButtons(
             @NonNull View view
     ) {
 
-        View cardPart1 =
-                view.findViewById(
-                        R.id.cardToeicPart1
+        bindPart(
+                view,
+                R.id.cardToeicPart1,
+                1
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart2,
+                2
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart3,
+                3
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart4,
+                4
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart5,
+                5
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart6,
+                6
+        );
+
+        bindPart(
+                view,
+                R.id.cardToeicPart7,
+                7
+        );
+    }
+
+    private void bindPart(
+            View root,
+            int viewId,
+            int part
+    ) {
+
+        View card =
+                root.findViewById(
+                        viewId
                 );
 
-        View cardPart2 =
-                view.findViewById(
-                        R.id.cardToeicPart2
-                );
+        if (card != null) {
 
-        View cardPart3 =
-                view.findViewById(
-                        R.id.cardToeicPart3
-                );
-
-        View cardPart4 =
-                view.findViewById(
-                        R.id.cardToeicPart4
-                );
-
-        View cardPart5 =
-                view.findViewById(
-                        R.id.cardToeicPart5
-                );
-
-        View cardPart6 =
-                view.findViewById(
-                        R.id.cardToeicPart6
-                );
-
-        View cardPart7 =
-                view.findViewById(
-                        R.id.cardToeicPart7
-                );
-
-        View.OnClickListener comingSoon =
-                v -> Toast.makeText(
-                        requireContext(),
-                        "Phần này sẽ được hoàn thiện sau Part 5.",
-                        Toast.LENGTH_SHORT
-                ).show();
-
-        if (cardPart1 != null) {
-            cardPart1.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart2 != null) {
-            cardPart2.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart3 != null) {
-            cardPart3.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart4 != null) {
-            cardPart4.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart6 != null) {
-            cardPart6.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart7 != null) {
-            cardPart7.setOnClickListener(
-                    comingSoon
-            );
-        }
-
-        if (cardPart5 != null) {
-
-            cardPart5.setOnClickListener(
-                    v -> Toast.makeText(
-                            requireContext(),
-                            "Part 5 đã sẵn sàng để triển khai ở bước tiếp theo.",
-                            Toast.LENGTH_SHORT
-                    ).show()
+            card.setOnClickListener(
+                    view ->
+                            showTestPicker(
+                                    part,
+                                    ToeicHomeActivity.MODE_PRACTICE
+                            )
             );
         }
     }
@@ -167,23 +166,332 @@ public class ToeicFragment extends Fragment {
         if (cardQuickPractice != null) {
 
             cardQuickPractice.setOnClickListener(
-                    v -> Toast.makeText(
-                            requireContext(),
-                            "Quick Practice sẽ dùng chung bộ câu TOEIC sau khi Part 5 hoàn thiện.",
-                            Toast.LENGTH_SHORT
-                    ).show()
+                    clicked ->
+                            startActivity(
+                                    new Intent(
+                                            requireContext(),
+                                            ToeicHomeActivity.class
+                                    )
+                            )
             );
         }
 
         if (cardFullTest != null) {
 
             cardFullTest.setOnClickListener(
-                    v -> Toast.makeText(
-                            requireContext(),
-                            "Full Test sẽ được mở sau khi hoàn thiện đủ các Part.",
-                            Toast.LENGTH_SHORT
-                    ).show()
+                    clicked ->
+                            showTestPicker(
+                                    0,
+                                    ToeicHomeActivity.MODE_MOCK
+                            )
             );
         }
+    }
+
+    private void loadTests(
+            @Nullable Runnable afterLoad
+    ) {
+
+        if (loadingTests) {
+            return;
+        }
+
+        loadingTests = true;
+
+        repository.getAllTests(
+                new ToeicRepository.TestsCallback() {
+
+                    @Override
+                    public void onSuccess(
+                            List<ToeicTest> loaded
+                    ) {
+
+                        loadingTests = false;
+
+                        tests.clear();
+
+                        if (loaded != null) {
+                            tests.addAll(
+                                    loaded
+                            );
+                        }
+
+                        if (afterLoad != null) {
+                            afterLoad.run();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Exception exception
+                    ) {
+
+                        loadingTests = false;
+
+                        if (!isAdded()) {
+                            return;
+                        }
+
+                        Toast.makeText(
+                                requireContext(),
+                                "Không tải được danh sách đề TOEIC.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
+        );
+    }
+
+    private void showTestPicker(
+            int preferredPart,
+            String mode
+    ) {
+
+        if (tests.isEmpty()) {
+
+            loadTests(
+                    () ->
+                            showTestPicker(
+                                    preferredPart,
+                                    mode
+                            )
+            );
+
+            return;
+        }
+
+        String[] labels =
+                new String[
+                        tests.size()
+                        ];
+
+        for (int i = 0;
+             i < tests.size();
+             i++) {
+
+            ToeicTest test =
+                    tests.get(i);
+
+            labels[i] =
+                    test.getTitle();
+        }
+
+        new AlertDialog.Builder(
+                requireContext()
+        )
+                .setTitle(
+                        preferredPart == 0
+                                ? "Chọn bộ đề thi thử"
+                                : "Chọn bộ đề • Part "
+                                  + preferredPart
+                )
+                .setItems(
+                        labels,
+                        (dialog, which) -> {
+
+                            ToeicTest selected =
+                                    tests.get(
+                                            which
+                                    );
+
+                            showSelectedTestProgress(
+                                    selected,
+                                    preferredPart,
+                                    mode
+                            );
+                        }
+                )
+                .setNegativeButton(
+                        "Đóng",
+                        null
+                )
+                .show();
+    }
+
+    private void showSelectedTestProgress(
+            ToeicTest test,
+            int preferredPart,
+            String mode
+    ) {
+
+        progressRepository.getProgress(
+                test.getId(),
+                new ToeicProgressRepository.ProgressCallback() {
+
+                    @Override
+                    public void onSuccess(
+                            ToeicProgressRepository.TestProgress progress
+                    ) {
+
+                        if (!isAdded()) {
+                            return;
+                        }
+
+                        StringBuilder message =
+                                new StringBuilder();
+
+                        for (int part = 1;
+                             part <= 7;
+                             part++) {
+
+                            int percent =
+                                    progress.getPartPercent(
+                                            part
+                                    );
+
+                            message.append(
+                                    "Part "
+                                            + part
+                                            + ": "
+                            );
+
+                            if (percent >= 100) {
+
+                                message.append(
+                                        "✅ 100%"
+                                );
+
+                            } else {
+
+                                message.append(
+                                        percent
+                                                + "%"
+                                );
+                            }
+
+                            if (part < 7) {
+                                message.append('\n');
+                            }
+                        }
+
+                        message.append(
+                                "\n\nTổng tiến độ: "
+                                        + progress.getOverallPercent()
+                                        + "%"
+                        );
+
+                        if (progress.isCompleted()) {
+
+                            message.append(
+                                    "\n✅ ĐÃ HOÀN TẤT"
+                            );
+                        }
+
+                        String positiveText;
+
+                        if (ToeicHomeActivity.MODE_MOCK
+                                .equals(mode)) {
+
+                            positiveText =
+                                    "Bắt đầu thi";
+
+                        } else {
+
+                            positiveText =
+                                    preferredPart == 0
+                                            ? "Luyện toàn bộ"
+                                            : "Mở Part "
+                                              + preferredPart;
+                        }
+
+                        new AlertDialog.Builder(
+                                requireContext()
+                        )
+                                .setTitle(
+                                        test.getTitle()
+                                )
+                                .setMessage(
+                                        message.toString()
+                                )
+                                .setPositiveButton(
+                                        positiveText,
+                                        (dialog, which) ->
+                                                openTest(
+                                                        test,
+                                                        mode,
+                                                        preferredPart
+                                                )
+                                )
+                                .setNeutralButton(
+                                        "Chọn Part khác",
+                                        (dialog, which) ->
+                                                openTestHome()
+                                )
+                                .setNegativeButton(
+                                        "Hủy",
+                                        null
+                                )
+                                .show();
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Exception exception
+                    ) {
+
+                        if (!isAdded()) {
+                            return;
+                        }
+
+                        openTest(
+                                test,
+                                mode,
+                                preferredPart
+                        );
+                    }
+                }
+        );
+    }
+
+    private void openTestHome() {
+
+        startActivity(
+                new Intent(
+                        requireContext(),
+                        ToeicHomeActivity.class
+                )
+        );
+    }
+
+    private void openTest(
+            ToeicTest test,
+            String mode,
+            int part
+    ) {
+
+        Intent intent =
+                new Intent(
+                        requireContext(),
+                        ToeicPracticeActivity.class
+                );
+
+        intent.putExtra(
+                ToeicHomeActivity.EXTRA_TEST_ID,
+                test.getId()
+        );
+
+        intent.putExtra(
+                ToeicHomeActivity.EXTRA_TEST_TITLE,
+                test.getTitle()
+        );
+
+        intent.putExtra(
+                ToeicHomeActivity.EXTRA_DURATION,
+                test.getDurationMinutes()
+        );
+
+        intent.putExtra(
+                ToeicHomeActivity.EXTRA_MODE,
+                mode
+        );
+
+        intent.putExtra(
+                ToeicHomeActivity.EXTRA_PART_FILTER,
+                part
+        );
+
+        startActivity(
+                intent
+        );
     }
 }

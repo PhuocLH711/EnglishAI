@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,7 +46,12 @@ import adu.nttu.englishai.models.Vocabulary;
 public class VocabularyFragment extends Fragment {
 
 
-    private Button btnFilterVocabulary;
+    private MaterialButton btnFilterVocabulary;
+    private MaterialButton btnClearVocabularyFilter;
+    private Chip chipAllLevels;
+    private Chip chipEasy;
+    private Chip chipMedium;
+    private Chip chipHard;
     private TextView tvFilterStatus;
     private TextView tvVocabularySummary;
     private RecyclerView recyclerVocabulary;
@@ -108,6 +114,21 @@ public class VocabularyFragment extends Fragment {
         btnFilterVocabulary =
                 view.findViewById(R.id.btnFilterVocabulary);
 
+        btnClearVocabularyFilter =
+                view.findViewById(R.id.btnClearVocabularyFilter);
+
+        chipAllLevels =
+                view.findViewById(R.id.chipAllLevels);
+
+        chipEasy =
+                view.findViewById(R.id.chipEasy);
+
+        chipMedium =
+                view.findViewById(R.id.chipMedium);
+
+        chipHard =
+                view.findViewById(R.id.chipHard);
+
         tvFilterStatus =
                 view.findViewById(R.id.tvFilterStatus);
 
@@ -119,6 +140,8 @@ public class VocabularyFragment extends Fragment {
         setupRecyclerView();
         setupSearch();
         setupFilterButton();
+        setupQuickLevelFilters();
+        setupClearFilterButton();
 
         // Cấu hình SearchView: Mở rộng ô tìm kiếm sẵn nhưng bỏ focus
         // để bàn phím không tự bật lên khi vừa mở màn hình
@@ -527,9 +550,144 @@ public class VocabularyFragment extends Fragment {
     }
 
     private void setupFilterButton() {
+
+        if (btnFilterVocabulary == null) {
+            return;
+        }
+
+        btnFilterVocabulary.setEnabled(
+                true
+        );
+
+        btnFilterVocabulary.setClickable(
+                true
+        );
+
         btnFilterVocabulary.setOnClickListener(
                 view -> showFilterDialog()
         );
+    }
+
+    private void setupQuickLevelFilters() {
+
+        if (chipAllLevels != null) {
+            chipAllLevels.setOnClickListener(
+                    view -> applyQuickLevelFilter(
+                            "Tất cả"
+                    )
+            );
+        }
+
+        if (chipEasy != null) {
+            chipEasy.setOnClickListener(
+                    view -> applyQuickLevelFilter(
+                            "Easy"
+                    )
+            );
+        }
+
+        if (chipMedium != null) {
+            chipMedium.setOnClickListener(
+                    view -> applyQuickLevelFilter(
+                            "Medium"
+                    )
+            );
+        }
+
+        if (chipHard != null) {
+            chipHard.setOnClickListener(
+                    view -> applyQuickLevelFilter(
+                            "Hard"
+                    )
+            );
+        }
+
+        syncQuickFilterChips();
+    }
+
+    private void applyQuickLevelFilter(
+            String level
+    ) {
+
+        selectedLevel =
+                level == null
+                        ? "Tất cả"
+                        : level;
+
+        syncQuickFilterChips();
+        updateFilterStatus();
+        applyCurrentFilter();
+    }
+
+    private void syncQuickFilterChips() {
+
+        if (chipAllLevels != null) {
+            chipAllLevels.setChecked(
+                    "Tất cả".equalsIgnoreCase(
+                            selectedLevel
+                    )
+            );
+        }
+
+        if (chipEasy != null) {
+            chipEasy.setChecked(
+                    "Easy".equalsIgnoreCase(
+                            selectedLevel
+                    )
+            );
+        }
+
+        if (chipMedium != null) {
+            chipMedium.setChecked(
+                    "Medium".equalsIgnoreCase(
+                            selectedLevel
+                    )
+            );
+        }
+
+        if (chipHard != null) {
+            chipHard.setChecked(
+                    "Hard".equalsIgnoreCase(
+                            selectedLevel
+                    )
+            );
+        }
+    }
+
+    private void setupClearFilterButton() {
+
+        if (btnClearVocabularyFilter == null) {
+            return;
+        }
+
+        btnClearVocabularyFilter.setOnClickListener(
+                view -> clearAllFilters()
+        );
+    }
+
+    private void clearAllFilters() {
+
+        selectedCategory =
+                "Tất cả";
+
+        selectedLevel =
+                "Tất cả";
+
+        currentKeyword =
+                "";
+
+        if (searchVocabulary != null) {
+            searchVocabulary.setQuery(
+                    "",
+                    false
+            );
+
+            searchVocabulary.clearFocus();
+        }
+
+        syncQuickFilterChips();
+        updateFilterStatus();
+        applyCurrentFilter();
     }
 
     // =========================================================================
@@ -604,6 +762,7 @@ public class VocabularyFragment extends Fragment {
                                                     .getSelectedItem()
                                                     .toString();
 
+                                    syncQuickFilterChips();
                                     updateFilterStatus();
                                     applyCurrentFilter();
                                 }
@@ -614,6 +773,7 @@ public class VocabularyFragment extends Fragment {
                                     selectedCategory = "Tất cả";
                                     selectedLevel = "Tất cả";
 
+                                    syncQuickFilterChips();
                                     updateFilterStatus();
                                     applyCurrentFilter();
                                 }
@@ -776,15 +936,23 @@ public class VocabularyFragment extends Fragment {
                             || level.contains(searchText);
 
             boolean matchesCategory =
-                    "Tất cả".equals(selectedCategory)
+                    "Tất cả".equalsIgnoreCase(
+                            selectedCategory
+                    )
                             || category.equals(
-                            safeLower(selectedCategory)
+                            safeLower(
+                                    selectedCategory
+                            )
                     );
 
             boolean matchesLevel =
-                    "Tất cả".equals(selectedLevel)
+                    "Tất cả".equalsIgnoreCase(
+                            selectedLevel
+                    )
                             || level.equals(
-                            safeLower(selectedLevel)
+                            safeLower(
+                                    selectedLevel
+                            )
                     );
 
             if (matchesKeyword
@@ -821,7 +989,13 @@ public class VocabularyFragment extends Fragment {
 
         if (!hasFilter) {
             tvFilterStatus.setVisibility(View.GONE);
-            btnFilterVocabulary.setText("Lọc");
+
+            if (btnFilterVocabulary != null) {
+                btnFilterVocabulary.setAlpha(
+                        1f
+                );
+            }
+
             return;
         }
 
@@ -848,7 +1022,11 @@ public class VocabularyFragment extends Fragment {
                 statusBuilder.toString()
         );
 
-        btnFilterVocabulary.setText("Đang lọc");
+        if (btnFilterVocabulary != null) {
+            btnFilterVocabulary.setAlpha(
+                    0.78f
+            );
+        }
     }
 
     // Quản lý hiển thị Màn hình trống khi không tìm thấy kết quả
