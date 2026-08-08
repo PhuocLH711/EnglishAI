@@ -1,15 +1,620 @@
 {
   "test": {
-    "id": "YOUR_TEST_ID",
-    "title": "Tên bộ đề",
-    "sourceName": "Nguồn dữ liệu hợp lệ của bạn",
-    "sourceReference": "Ghi chú hoặc mã tài liệu",
-    "year": 0,
-    "totalQuestions": 0,
-    "durationMinutes": 120,
+    "id": "demo_reading_01",
+    "title": "TOEIC Reading Demo 01",
+    "sourceName": "EnglishAI Original Demo",
+    "sourceReference": "Synthetic TOEIC-style practice for UI testing",
+    "year": 2026,
+    "totalQuestions": 30,
+    "durationMinutes": 45,
     "hasListening": false,
     "hasReading": true,
-    "availableParts": [5]
+    "availableParts": [
+      5,
+      6,
+      7
+    ]
   },
-  "questions": []
+  "questions": [
+    {
+      "id": "demo_reading_q001",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 1,
+      "questionText": "The marketing team will review the proposal _____ Friday afternoon.",
+      "optionA": "at",
+      "optionB": "on",
+      "optionC": "in",
+      "optionD": "from",
+      "correctAnswer": "B",
+      "explanation": "Use 'on' with days and specific dates: on Friday afternoon.",
+      "grammarTopic": "Prepositions of time",
+      "vocabulary": [
+        "proposal",
+        "review"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q002",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 2,
+      "questionText": "Ms. Rivera is responsible for _____ all customer complaints within two business days.",
+      "optionA": "respond",
+      "optionB": "responded",
+      "optionC": "responding to",
+      "optionD": "response",
+      "correctAnswer": "C",
+      "explanation": "'Be responsible for' is followed by a noun or gerund. 'Respond' also requires 'to'.",
+      "grammarTopic": "Gerunds",
+      "vocabulary": [
+        "responsible",
+        "complaint"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q003",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 3,
+      "questionText": "The new software is expected to make the ordering process more _____.",
+      "optionA": "efficient",
+      "optionB": "efficiency",
+      "optionC": "efficiently",
+      "optionD": "efficiencies",
+      "correctAnswer": "A",
+      "explanation": "After 'make + object + complement', an adjective is needed: efficient.",
+      "grammarTopic": "Word forms",
+      "vocabulary": [
+        "efficient",
+        "ordering process"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q004",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 4,
+      "questionText": "Employees must submit travel receipts _____ they wish to receive reimbursement.",
+      "optionA": "if",
+      "optionB": "unless",
+      "optionC": "despite",
+      "optionD": "whereas",
+      "correctAnswer": "A",
+      "explanation": "'If' introduces the condition for receiving reimbursement.",
+      "grammarTopic": "Conditionals",
+      "vocabulary": [
+        "receipt",
+        "reimbursement"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q005",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 5,
+      "questionText": "The conference room has been reserved _____ the regional sales meeting.",
+      "optionA": "for",
+      "optionB": "by",
+      "optionC": "among",
+      "optionD": "during",
+      "correctAnswer": "A",
+      "explanation": "'Reserved for' indicates the intended purpose or event.",
+      "grammarTopic": "Prepositions",
+      "vocabulary": [
+        "reserve",
+        "regional"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q006",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 6,
+      "questionText": "Neither the manager nor the assistants _____ available to answer questions yesterday.",
+      "optionA": "was",
+      "optionB": "were",
+      "optionC": "is",
+      "optionD": "be",
+      "correctAnswer": "B",
+      "explanation": "With 'neither...nor', the verb agrees with the nearer subject 'assistants', and 'yesterday' requires past tense.",
+      "grammarTopic": "Subject-verb agreement",
+      "vocabulary": [
+        "assistant",
+        "available"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q007",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 7,
+      "questionText": "Customers who register online will receive a confirmation e-mail _____.",
+      "optionA": "automatic",
+      "optionB": "automatically",
+      "optionC": "automation",
+      "optionD": "automate",
+      "correctAnswer": "B",
+      "explanation": "An adverb is needed to modify the verb 'receive'.",
+      "grammarTopic": "Word forms",
+      "vocabulary": [
+        "register",
+        "confirmation"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q008",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 8,
+      "questionText": "The factory will remain closed until the safety inspection has been _____.",
+      "optionA": "complete",
+      "optionB": "completing",
+      "optionC": "completed",
+      "optionD": "completion",
+      "correctAnswer": "C",
+      "explanation": "The passive present perfect form is 'has been completed'.",
+      "grammarTopic": "Passive voice",
+      "vocabulary": [
+        "inspection",
+        "remain"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q009",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 9,
+      "questionText": "Our supplier offered a ten-percent discount because we placed a _____ order than usual.",
+      "optionA": "large",
+      "optionB": "larger",
+      "optionC": "largest",
+      "optionD": "largely",
+      "correctAnswer": "B",
+      "explanation": "'Than usual' signals a comparative adjective: larger.",
+      "grammarTopic": "Comparatives",
+      "vocabulary": [
+        "supplier",
+        "discount"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q010",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 10,
+      "questionText": "Please contact the technical support desk _____ you experience any difficulty installing the update.",
+      "optionA": "should",
+      "optionB": "until",
+      "optionC": "although",
+      "optionD": "because of",
+      "correctAnswer": "A",
+      "explanation": "'Should you experience...' is a formal conditional meaning 'if you experience'.",
+      "grammarTopic": "Inverted conditionals",
+      "vocabulary": [
+        "technical support",
+        "install"
+      ],
+      "difficulty": "Hard"
+    },
+    {
+      "id": "demo_reading_q011",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 11,
+      "questionText": "The board will not make a final decision _____ it has reviewed the revised budget.",
+      "optionA": "since",
+      "optionB": "until",
+      "optionC": "during",
+      "optionD": "beside",
+      "correctAnswer": "B",
+      "explanation": "'Not ... until' means the action will happen only after another action is completed.",
+      "grammarTopic": "Conjunctions",
+      "vocabulary": [
+        "board",
+        "revised budget"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q012",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 12,
+      "questionText": "All visitors are required to wear identification badges while _____ the research facility.",
+      "optionA": "enter",
+      "optionB": "entered",
+      "optionC": "entering",
+      "optionD": "entrance",
+      "correctAnswer": "C",
+      "explanation": "After 'while' in a reduced clause, use the -ing form: while entering.",
+      "grammarTopic": "Reduced clauses",
+      "vocabulary": [
+        "identification badge",
+        "facility"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q013",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 13,
+      "questionText": "The annual report contains _____ information about the company's overseas operations.",
+      "optionA": "detail",
+      "optionB": "details",
+      "optionC": "detailed",
+      "optionD": "detailing",
+      "correctAnswer": "C",
+      "explanation": "An adjective is needed before 'information': detailed information.",
+      "grammarTopic": "Word forms",
+      "vocabulary": [
+        "annual report",
+        "overseas"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q014",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 14,
+      "questionText": "By the time the guests arrive, the catering staff _____ the dining area.",
+      "optionA": "prepared",
+      "optionB": "will prepare",
+      "optionC": "will have prepared",
+      "optionD": "prepares",
+      "correctAnswer": "C",
+      "explanation": "Use future perfect for an action completed before a future time: will have prepared.",
+      "grammarTopic": "Future perfect",
+      "vocabulary": [
+        "catering",
+        "dining area"
+      ],
+      "difficulty": "Hard"
+    },
+    {
+      "id": "demo_reading_q015",
+      "testId": "demo_reading_01",
+      "part": 5,
+      "questionNumber": 15,
+      "questionText": "The company has expanded rapidly _____ opening its first branch office five years ago.",
+      "optionA": "since",
+      "optionB": "while",
+      "optionC": "for",
+      "optionD": "during",
+      "correctAnswer": "A",
+      "explanation": "'Since' introduces the starting point of a period continuing to the present.",
+      "grammarTopic": "Present perfect",
+      "vocabulary": [
+        "expand",
+        "branch office"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q016",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 16,
+      "passageId": "p6_01",
+      "passageText": "To: All Staff\nSubject: Office Renovation\n\nBeginning next Monday, the third-floor meeting rooms will be unavailable for two weeks while new lighting and presentation equipment are installed. Employees should reserve rooms on the second or fourth floor instead. The facilities team expects the work to be completed by September 18. We apologize for any inconvenience and appreciate your cooperation.",
+      "questionText": "Why will the third-floor meeting rooms be unavailable?",
+      "optionA": "They are being renovated.",
+      "optionB": "They are reserved for visitors.",
+      "optionC": "They are used for training.",
+      "optionD": "They are being relocated.",
+      "correctAnswer": "A",
+      "explanation": "The notice says new lighting and presentation equipment will be installed.",
+      "grammarTopic": "Reading - Notice",
+      "vocabulary": [
+        "renovation",
+        "facilities"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q017",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 17,
+      "passageId": "p6_01",
+      "passageText": "To: All Staff\nSubject: Office Renovation\n\nBeginning next Monday, the third-floor meeting rooms will be unavailable for two weeks while new lighting and presentation equipment are installed. Employees should reserve rooms on the second or fourth floor instead. The facilities team expects the work to be completed by September 18. We apologize for any inconvenience and appreciate your cooperation.",
+      "questionText": "What are employees advised to do?",
+      "optionA": "Work from home",
+      "optionB": "Use rooms on other floors",
+      "optionC": "Cancel all meetings",
+      "optionD": "Contact the equipment supplier",
+      "correctAnswer": "B",
+      "explanation": "Employees are told to reserve rooms on the second or fourth floor.",
+      "grammarTopic": "Reading - Notice",
+      "vocabulary": [
+        "reserve",
+        "cooperation"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q018",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 18,
+      "passageId": "p6_01",
+      "passageText": "To: All Staff\nSubject: Office Renovation\n\nBeginning next Monday, the third-floor meeting rooms will be unavailable for two weeks while new lighting and presentation equipment are installed. Employees should reserve rooms on the second or fourth floor instead. The facilities team expects the work to be completed by September 18. We apologize for any inconvenience and appreciate your cooperation.",
+      "questionText": "When is the work expected to be finished?",
+      "optionA": "Next Monday",
+      "optionB": "In one week",
+      "optionC": "By September 18",
+      "optionD": "At the end of the month",
+      "correctAnswer": "C",
+      "explanation": "The message states that the work is expected to be completed by September 18.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "complete",
+        "inconvenience"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q019",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 19,
+      "passageId": "p6_02",
+      "passageText": "Dear Ms. Chen,\n\nThank you for your interest in the Lakeside Business Center. We can offer you a furnished office on the fifth floor beginning October 1. The monthly fee includes Internet service, use of shared conference rooms, and weekday reception service. Parking spaces are available for an additional fee. Please let us know by Friday if you would like us to prepare a lease agreement.\n\nSincerely,\nOwen Brooks",
+      "questionText": "What is included in the monthly fee?",
+      "optionA": "Weekend reception service",
+      "optionB": "A private parking space",
+      "optionC": "Use of shared conference rooms",
+      "optionD": "Daily cleaning service",
+      "correctAnswer": "C",
+      "explanation": "Shared conference rooms are explicitly included in the monthly fee.",
+      "grammarTopic": "Reading - Email",
+      "vocabulary": [
+        "furnished",
+        "lease"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q020",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 20,
+      "passageId": "p6_02",
+      "passageText": "Dear Ms. Chen,\n\nThank you for your interest in the Lakeside Business Center. We can offer you a furnished office on the fifth floor beginning October 1. The monthly fee includes Internet service, use of shared conference rooms, and weekday reception service. Parking spaces are available for an additional fee. Please let us know by Friday if you would like us to prepare a lease agreement.\n\nSincerely,\nOwen Brooks",
+      "questionText": "What costs extra?",
+      "optionA": "Internet service",
+      "optionB": "Parking",
+      "optionC": "Office furniture",
+      "optionD": "Reception service",
+      "correctAnswer": "B",
+      "explanation": "The email says parking spaces are available for an additional fee.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "additional fee",
+        "parking"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q021",
+      "testId": "demo_reading_01",
+      "part": 6,
+      "questionNumber": 21,
+      "passageId": "p6_02",
+      "passageText": "Dear Ms. Chen,\n\nThank you for your interest in the Lakeside Business Center. We can offer you a furnished office on the fifth floor beginning October 1. The monthly fee includes Internet service, use of shared conference rooms, and weekday reception service. Parking spaces are available for an additional fee. Please let us know by Friday if you would like us to prepare a lease agreement.\n\nSincerely,\nOwen Brooks",
+      "questionText": "Why should Ms. Chen reply by Friday?",
+      "optionA": "To request new furniture",
+      "optionB": "To arrange a building tour",
+      "optionC": "To confirm whether she wants a lease prepared",
+      "optionD": "To pay the first month's fee",
+      "correctAnswer": "C",
+      "explanation": "The final sentence asks her to reply by Friday if she wants a lease agreement prepared.",
+      "grammarTopic": "Reading - Purpose",
+      "vocabulary": [
+        "prepare",
+        "agreement"
+      ],
+      "difficulty": "Medium"
+    },
+    {
+      "id": "demo_reading_q022",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 22,
+      "passageId": "p7_01",
+      "passageText": "CITY BIKE SERVICE UPDATE\n\nStarting June 3, the Riverside bicycle station will open one hour earlier, at 6:00 A.M., on weekdays. This change is being introduced in response to requests from commuters who use the station before work. Weekend hours will remain 8:00 A.M. to 8:00 P.M. Members can check bicycle availability through the City Bike mobile application before arriving at a station.",
+      "questionText": "Why are the weekday hours changing?",
+      "optionA": "A new station is opening.",
+      "optionB": "Commuters requested earlier service.",
+      "optionC": "The mobile application was updated.",
+      "optionD": "Weekend demand has increased.",
+      "correctAnswer": "B",
+      "explanation": "The update says the change responds to requests from commuters who use the station before work.",
+      "grammarTopic": "Reading - Notice",
+      "vocabulary": [
+        "commuter",
+        "availability"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q023",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 23,
+      "passageId": "p7_01",
+      "passageText": "CITY BIKE SERVICE UPDATE\n\nStarting June 3, the Riverside bicycle station will open one hour earlier, at 6:00 A.M., on weekdays. This change is being introduced in response to requests from commuters who use the station before work. Weekend hours will remain 8:00 A.M. to 8:00 P.M. Members can check bicycle availability through the City Bike mobile application before arriving at a station.",
+      "questionText": "What will remain unchanged?",
+      "optionA": "The weekday opening time",
+      "optionB": "The station location",
+      "optionC": "The weekend operating hours",
+      "optionD": "The membership fee",
+      "correctAnswer": "C",
+      "explanation": "The notice explicitly states that weekend hours will remain 8:00 A.M. to 8:00 P.M.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "remain",
+        "operating hours"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q024",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 24,
+      "passageId": "p7_01",
+      "passageText": "CITY BIKE SERVICE UPDATE\n\nStarting June 3, the Riverside bicycle station will open one hour earlier, at 6:00 A.M., on weekdays. This change is being introduced in response to requests from commuters who use the station before work. Weekend hours will remain 8:00 A.M. to 8:00 P.M. Members can check bicycle availability through the City Bike mobile application before arriving at a station.",
+      "questionText": "What can members do using the mobile application?",
+      "optionA": "Pay parking fees",
+      "optionB": "Reserve conference rooms",
+      "optionC": "Check whether bicycles are available",
+      "optionD": "Change weekend hours",
+      "correctAnswer": "C",
+      "explanation": "Members can check bicycle availability through the app.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "mobile application",
+        "availability"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q025",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 25,
+      "passageId": "p7_02",
+      "passageText": "From: Nadia Patel\nTo: Project Team\nSubject: Client presentation\n\nThe client has asked us to move Thursday's presentation from 2:00 P.M. to 4:30 P.M. The location is unchanged: Conference Room B. Please send me your final slides by noon on Wednesday so I can combine them into one file. Daniel will bring printed copies of the market analysis, so there is no need to print that section yourself.",
+      "questionText": "What has the client requested?",
+      "optionA": "A different conference room",
+      "optionB": "A later presentation time",
+      "optionC": "Additional market research",
+      "optionD": "Printed copies of all slides",
+      "correctAnswer": "B",
+      "explanation": "The presentation is moved from 2:00 P.M. to 4:30 P.M.",
+      "grammarTopic": "Reading - Email",
+      "vocabulary": [
+        "presentation",
+        "unchanged"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q026",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 26,
+      "passageId": "p7_02",
+      "passageText": "From: Nadia Patel\nTo: Project Team\nSubject: Client presentation\n\nThe client has asked us to move Thursday's presentation from 2:00 P.M. to 4:30 P.M. The location is unchanged: Conference Room B. Please send me your final slides by noon on Wednesday so I can combine them into one file. Daniel will bring printed copies of the market analysis, so there is no need to print that section yourself.",
+      "questionText": "What should team members send Nadia?",
+      "optionA": "Their final slides",
+      "optionB": "A room reservation",
+      "optionC": "The client's contact details",
+      "optionD": "Printed market analyses",
+      "correctAnswer": "A",
+      "explanation": "Nadia asks team members to send their final slides by noon on Wednesday.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "combine",
+        "final slides"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q027",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 27,
+      "passageId": "p7_02",
+      "passageText": "From: Nadia Patel\nTo: Project Team\nSubject: Client presentation\n\nThe client has asked us to move Thursday's presentation from 2:00 P.M. to 4:30 P.M. The location is unchanged: Conference Room B. Please send me your final slides by noon on Wednesday so I can combine them into one file. Daniel will bring printed copies of the market analysis, so there is no need to print that section yourself.",
+      "questionText": "What will Daniel do?",
+      "optionA": "Meet the client at noon",
+      "optionB": "Combine the presentation files",
+      "optionC": "Bring printed copies of a report section",
+      "optionD": "Reserve Conference Room B",
+      "correctAnswer": "C",
+      "explanation": "Daniel will bring printed copies of the market analysis.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "market analysis",
+        "printed copy"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q028",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 28,
+      "passageId": "p7_03",
+      "passageText": "GRAND OPENING — NORTH HILL MARKET\n\nVisit us this Saturday from 9:00 A.M. to 6:00 P.M. for our grand opening celebration. The first 100 customers will receive a reusable shopping bag, and all bakery items will be 20 percent off throughout the day. At 11:00 A.M., local chef Maria Gomez will give a free cooking demonstration near the produce section. Free parking is available behind the store.",
+      "questionText": "What will the first 100 customers receive?",
+      "optionA": "A cookbook",
+      "optionB": "A shopping bag",
+      "optionC": "A parking voucher",
+      "optionD": "A bakery coupon",
+      "correctAnswer": "B",
+      "explanation": "The advertisement says the first 100 customers will receive a reusable shopping bag.",
+      "grammarTopic": "Reading - Advertisement",
+      "vocabulary": [
+        "grand opening",
+        "reusable"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q029",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 29,
+      "passageId": "p7_03",
+      "passageText": "GRAND OPENING — NORTH HILL MARKET\n\nVisit us this Saturday from 9:00 A.M. to 6:00 P.M. for our grand opening celebration. The first 100 customers will receive a reusable shopping bag, and all bakery items will be 20 percent off throughout the day. At 11:00 A.M., local chef Maria Gomez will give a free cooking demonstration near the produce section. Free parking is available behind the store.",
+      "questionText": "What is scheduled for 11:00 A.M.?",
+      "optionA": "A cooking demonstration",
+      "optionB": "A bakery sale",
+      "optionC": "A parking inspection",
+      "optionD": "A customer meeting",
+      "correctAnswer": "A",
+      "explanation": "Chef Maria Gomez will give a cooking demonstration at 11:00 A.M.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "demonstration",
+        "produce section"
+      ],
+      "difficulty": "Easy"
+    },
+    {
+      "id": "demo_reading_q030",
+      "testId": "demo_reading_01",
+      "part": 7,
+      "questionNumber": 30,
+      "passageId": "p7_03",
+      "passageText": "GRAND OPENING — NORTH HILL MARKET\n\nVisit us this Saturday from 9:00 A.M. to 6:00 P.M. for our grand opening celebration. The first 100 customers will receive a reusable shopping bag, and all bakery items will be 20 percent off throughout the day. At 11:00 A.M., local chef Maria Gomez will give a free cooking demonstration near the produce section. Free parking is available behind the store.",
+      "questionText": "Where can customers park for free?",
+      "optionA": "Across from the market",
+      "optionB": "Next to the bakery",
+      "optionC": "Behind the store",
+      "optionD": "Near the produce section",
+      "correctAnswer": "C",
+      "explanation": "The last sentence states that free parking is available behind the store.",
+      "grammarTopic": "Reading - Detail",
+      "vocabulary": [
+        "parking",
+        "behind"
+      ],
+      "difficulty": "Easy"
+    }
+  ]
 }

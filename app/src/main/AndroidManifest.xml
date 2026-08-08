@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Xin quyền thu âm cho chức năng Luyện Nói -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -26,42 +25,73 @@
             </intent-filter>
 
         </activity>
+
+        <!-- ================= ADMIN ================= -->
         <activity
-            android:name=".activities.AdminDashboardActivity"
+            android:name=".admin.activities.GrammarManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ToeicImportActivity"
+            android:name=".admin.activities.VocabularyManagementActivity"
             android:exported="false" />
+        <activity
+            android:name=".admin.activities.UserManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.activities.AdminDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.activities.ToeicAdminActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.activities.ToeicImportActivity"
+            android:exported="false" />
+
+        <!-- ================= STUDENT ================= -->
+        <activity
+            android:name=".activities.ToeicHomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.ToeicPracticeActivity"
+            android:exported="false" />
+
         <activity
             android:name=".activities.ImportSentenceExerciseActivity"
             android:exported="false" />
+
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activities.RegisterActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activities.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activities.VocabularyDetailActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activities.AiTutorActivity"
             android:exported="false"
-        android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".activities.ChatHistoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".activities.ImportVocabularyActivity"
             android:exported="false" />
+
         <activity
             android:name=".activities.LeaderboardActivity"
             android:exported="false" />

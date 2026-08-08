@@ -1,4 +1,4 @@
-package adu.nttu.englishai.activities;
+package adu.nttu.englishai.admin.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;

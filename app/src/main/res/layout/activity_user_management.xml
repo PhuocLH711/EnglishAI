@@ -2,19 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootToeicAdmin"
+    android:id="@+id/rootUserManagement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F8FD">
 
     <LinearLayout
-        android:id="@+id/layoutToeicAdminTop"
+        android:id="@+id/layoutUserAdminTop"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="20dp"
-        android:paddingTop="12dp"
+        android:paddingTop="18dp"
         android:paddingEnd="20dp"
         android:paddingBottom="14dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,17 +22,17 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/btnToeicAdminBack"
+            android:id="@+id/btnUserAdminBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Quay lại"
-            android:focusable="true"
             android:gravity="center"
             android:text="‹"
             android:textColor="#292B3D"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Quay lại"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TOEIC Admin"
+                android:text="Người dùng"
                 android:textColor="#202239"
                 android:textSize="23sp"
                 android:textStyle="bold" />
@@ -53,31 +53,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Quản lý bộ đề và dữ liệu TOEIC"
+                android:text="Quản lý tài khoản EnglishAI"
                 android:textColor="#85879A"
                 android:textSize="12sp" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAdminToeicRefresh"
-            android:layout_width="54dp"
-            android:layout_height="48dp"
+            android:id="@+id/btnAdminUserRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
             android:text="↻"
             android:textAllCaps="false"
             android:textColor="#6255D8"
-            android:textSize="19sp"
+            android:textSize="20sp"
             app:backgroundTint="#F0EDFF"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="14dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutToeicStats"
+        android:id="@+id/layoutUserAdminStats"
         android:layout_width="0dp"
         android:layout_height="86dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/layoutToeicAdminTop"
+        app:layout_constraintTop_toBottomOf="@id/layoutUserAdminTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -96,7 +96,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvAdminTotalTests"
+                    android:id="@+id/tvAdminUserTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -107,7 +107,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bộ đề"
+                    android:text="Tổng user"
                     android:textColor="#77798E"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -118,7 +118,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="#EAF2FF"
+            app:cardBackgroundColor="#FFF7E8"
             app:cardCornerRadius="18dp"
             app:cardElevation="0dp">
 
@@ -129,111 +129,73 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvAdminTotalQuestions"
+                    android:id="@+id/tvAdminRoleCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="#315FA8"
+                    android:textColor="#A46B08"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Câu khai báo"
+                    android:text="Admin"
                     android:textColor="#77798E"
                     android:textSize="12sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layoutToeicAdminActions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/layoutToeicStats"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAdminToeicAdd"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="+ Tạo đề"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:backgroundTint="#6C5CE7"
-            app:cornerRadius="16dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAdminToeicImport"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="📥 Import"
-            android:textAllCaps="false"
-            android:textColor="#6255D8"
-            android:textStyle="bold"
-            app:backgroundTint="#F0EDFF"
-            app:cornerRadius="16dp" />
-    </LinearLayout>
-
     <EditText
-        android:id="@+id/edtAdminToeicSearch"
+        android:id="@+id/edtAdminUserSearch"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="20dp"
         android:background="@android:drawable/edit_text"
-        android:hint="Tìm tên đề, nguồn, năm hoặc độ khó..."
+        android:hint="Tìm tên, email hoặc UID..."
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:singleLine="true"
         android:textColor="#292B3D"
         android:textColorHint="#9A9CAD"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/layoutToeicAdminActions"
+        app:layout_constraintTop_toBottomOf="@id/layoutUserAdminStats"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvAdminToeicStatus"
+        android:id="@+id/tvAdminUserStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:text="Đang tải..."
         android:textColor="#898B9E"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@id/edtAdminToeicSearch"
+        app:layout_constraintTop_toBottomOf="@id/edtAdminUserSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvAdminToeicEmpty"
+        android:id="@+id/tvAdminUserEmpty"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="📘 Chưa có đề TOEIC.\nBấm “Tạo đề” hoặc “Import” để bắt đầu."
+        android:text="👥 Chưa có người dùng."
         android:textColor="#989AAC"
         android:textSize="15sp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tvAdminToeicStatus"
+        app:layout_constraintTop_toBottomOf="@id/tvAdminUserStatus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAdminTests"
+        android:id="@+id/recyclerAdminUsers"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -241,7 +203,7 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:paddingBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tvAdminToeicStatus"
+        app:layout_constraintTop_toBottomOf="@id/tvAdminUserStatus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

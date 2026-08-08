@@ -2,30 +2,32 @@ package adu.nttu.englishai.repositories;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import adu.nttu.englishai.models.ToeicQuestion;
 import adu.nttu.englishai.models.ToeicTest;
 
 /**
- * Repository duy nhất đọc dữ liệu TOEIC từ Firestore.
+ * Repository dữ liệu TOEIC dành cho người học.
  *
- * Collections:
+ * Dùng cùng schema với ToeicImportActivity:
  * - toeicTests
  * - toeicQuestions
+ *
+ * Không cần composite index vì dữ liệu được sort ở client.
  */
 public class ToeicRepository {
 
-    private final FirebaseFirestore db;
     private final CollectionReference testsRef;
     private final CollectionReference questionsRef;
 
     public ToeicRepository() {
 
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db =
+                FirebaseFirestore.getInstance();
 
         testsRef =
                 db.collection("toeicTests");
@@ -35,33 +37,20 @@ public class ToeicRepository {
     }
 
     public interface TestsCallback {
-
-        void onSuccess(
-                List<ToeicTest> tests
-        );
-
-        void onFailure(
-                Exception exception
-        );
+        void onSuccess(List<ToeicTest> tests);
+        void onFailure(Exception exception);
     }
 
     public interface QuestionsCallback {
-
-        void onSuccess(
-                List<ToeicQuestion> questions
-        );
-
-        void onFailure(
-                Exception exception
-        );
+        void onSuccess(List<ToeicQuestion> questions);
+        void onFailure(Exception exception);
     }
 
     public void getAllTests(
             TestsCallback callback
     ) {
 
-        testsRef
-                .get()
+        testsRef.get()
                 .addOnSuccessListener(
                         snapshots -> {
 
@@ -76,6 +65,10 @@ public class ToeicRepository {
                                                 ToeicTest.class
                                         );
 
+                                if (test == null) {
+                                    continue;
+                                }
+
                                 test.setId(
                                         document.getId()
                                 );
@@ -83,9 +76,17 @@ public class ToeicRepository {
                                 list.add(test);
                             }
 
-                            callback.onSuccess(
-                                    list
+                            list.sort(
+                                    Comparator.comparing(
+                                            test ->
+                                                    safe(
+                                                            test.getTitle()
+                                                    ),
+                                            String.CASE_INSENSITIVE_ORDER
+                                    )
                             );
+
+                            callback.onSuccess(list);
                         }
                 )
                 .addOnFailureListener(
@@ -108,52 +109,22 @@ public class ToeicRepository {
                         "part",
                         part
                 )
-                .orderBy(
-                        "questionNumber",
-                        Query.Direction.ASCENDING
-                )
                 .get()
                 .addOnSuccessListener(
                         snapshots -> {
 
                             List<ToeicQuestion> list =
-                                    new ArrayList<>();
+                                    mapQuestions(
+                                            snapshots
+                                                    .getDocuments()
+                                    );
 
-                            for (var document
-                                    : snapshots) {
-
-                                ToeicQuestion question =
-                                        document.toObject(
-                                                ToeicQuestion.class
-                                        );
-
-                                question.setId(
-                                        document.getId()
-                                );
-
-                                list.add(question);
-                            }
-
-                            callback.onSuccess(
-                                    list
-                            );
+                            callback.onSuccess(list);
                         }
                 )
                 .addOnFailureListener(
                         callback::onFailure
                 );
-    }
-
-    public void getPart5Questions(
-            String testId,
-            QuestionsCallback callback
-    ) {
-
-        getQuestionsByTestAndPart(
-                testId,
-                5,
-                callback
-        );
     }
 
     public void getFullTestQuestions(
@@ -166,39 +137,63 @@ public class ToeicRepository {
                         "testId",
                         testId
                 )
-                .orderBy(
-                        "questionNumber",
-                        Query.Direction.ASCENDING
-                )
                 .get()
                 .addOnSuccessListener(
                         snapshots -> {
 
                             List<ToeicQuestion> list =
-                                    new ArrayList<>();
+                                    mapQuestions(
+                                            snapshots
+                                                    .getDocuments()
+                                    );
 
-                            for (var document
-                                    : snapshots) {
-
-                                ToeicQuestion question =
-                                        document.toObject(
-                                                ToeicQuestion.class
-                                        );
-
-                                question.setId(
-                                        document.getId()
-                                );
-
-                                list.add(question);
-                            }
-
-                            callback.onSuccess(
-                                    list
-                            );
+                            callback.onSuccess(list);
                         }
                 )
                 .addOnFailureListener(
                         callback::onFailure
                 );
+    }
+
+    private List<ToeicQuestion> mapQuestions(
+            List<com.google.firebase.firestore.DocumentSnapshot> documents
+    ) {
+
+        List<ToeicQuestion> list =
+                new ArrayList<>();
+
+        for (var document : documents) {
+
+            ToeicQuestion question =
+                    document.toObject(
+                            ToeicQuestion.class
+                    );
+
+            if (question == null) {
+                continue;
+            }
+
+            question.setId(
+                    document.getId()
+            );
+
+            list.add(question);
+        }
+
+        list.sort(
+                Comparator.comparingInt(
+                        ToeicQuestion::getQuestionNumber
+                )
+        );
+
+        return list;
+    }
+
+    private String safe(
+            String value
+    ) {
+        return value == null
+                ? ""
+                : value;
     }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,30 +17,21 @@ import java.util.List;
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.models.ToeicTest;
 
-/**
- * Adapter hiển thị các bộ đề trong TOEIC Admin.
- */
-public class ToeicAdminTestAdapter
-        extends RecyclerView.Adapter<ToeicAdminTestAdapter.TestViewHolder> {
+public class ToeicStudentTestAdapter
+        extends RecyclerView.Adapter<ToeicStudentTestAdapter.TestViewHolder> {
 
-    public interface TestActionListener {
-
-        void onViewTest(
-                ToeicTest test
-        );
-
-        void onDeleteTest(
-                ToeicTest test
-        );
+    public interface TestListener {
+        void onPractice(ToeicTest test);
+        void onMockTest(ToeicTest test);
     }
 
     private final List<ToeicTest> tests =
             new ArrayList<>();
 
-    private final TestActionListener listener;
+    private final TestListener listener;
 
-    public ToeicAdminTestAdapter(
-            TestActionListener listener
+    public ToeicStudentTestAdapter(
+            TestListener listener
     ) {
         this.listener = listener;
     }
@@ -47,13 +39,10 @@ public class ToeicAdminTestAdapter
     public void submitList(
             List<ToeicTest> newTests
     ) {
-
         tests.clear();
 
         if (newTests != null) {
-            tests.addAll(
-                    newTests
-            );
+            tests.addAll(newTests);
         }
 
         notifyDataSetChanged();
@@ -70,14 +59,12 @@ public class ToeicAdminTestAdapter
                 LayoutInflater
                         .from(parent.getContext())
                         .inflate(
-                                R.layout.item_toeic_admin_test,
+                                R.layout.item_toeic_student_test,
                                 parent,
                                 false
                         );
 
-        return new TestViewHolder(
-                view
-        );
+        return new TestViewHolder(view);
     }
 
     @Override
@@ -89,40 +76,44 @@ public class ToeicAdminTestAdapter
         ToeicTest test =
                 tests.get(position);
 
-        String title =
-                test.getTitle() == null
-                        || test.getTitle().trim().isEmpty()
-                        ? "Bộ đề TOEIC"
-                        : test.getTitle();
-
         holder.tvTitle.setText(
-                title
+                safe(
+                        test.getTitle(),
+                        "TOEIC Practice"
+                )
         );
 
-        holder.tvId.setText(
-                test.getId() == null
-                        ? ""
-                        : test.getId()
+        String source =
+                safe(
+                        test.getSourceName(),
+                        "Nguồn chưa ghi"
+                );
+
+        holder.tvSource.setText(
+                source
         );
 
         holder.tvMeta.setText(
                 test.getTotalQuestions()
-                        + " câu"
-                        + buildPartText(test)
+                        + " câu • "
+                        + test.getDurationMinutes()
+                        + " phút • "
+                        + buildParts(test)
         );
 
-        holder.btnView.setOnClickListener(
+        holder.btnPractice.setOnClickListener(
                 view ->
-                        listener.onViewTest(
-                                test
-                        )
+                        listener.onPractice(test)
         );
 
-        holder.btnDelete.setOnClickListener(
+        holder.btnMock.setOnClickListener(
                 view ->
-                        listener.onDeleteTest(
-                                test
-                        )
+                        listener.onMockTest(test)
+        );
+
+        holder.card.setOnClickListener(
+                view ->
+                        listener.onPractice(test)
         );
     }
 
@@ -131,24 +122,22 @@ public class ToeicAdminTestAdapter
         return tests.size();
     }
 
-    private String buildPartText(
+    private String buildParts(
             ToeicTest test
     ) {
 
-        if (test.getAvailableParts() == null
-                || test.getAvailableParts().isEmpty()) {
-
-            return "";
+        if (test.getAvailableParts().isEmpty()) {
+            return "Part 1-7";
         }
 
         StringBuilder builder =
                 new StringBuilder(
-                        " • Part "
+                        "Part "
                 );
 
         for (int i = 0;
-             i < test.getAvailableParts().size();
-             i++) {
+                i < test.getAvailableParts().size();
+                i++) {
 
             if (i > 0) {
                 builder.append(", ");
@@ -162,44 +151,64 @@ public class ToeicAdminTestAdapter
         return builder.toString();
     }
 
+    private String safe(
+            String value,
+            String fallback
+    ) {
+
+        if (value == null
+                || value.trim().isEmpty()) {
+            return fallback;
+        }
+
+        return value.trim();
+    }
+
     static class TestViewHolder
             extends RecyclerView.ViewHolder {
 
+        MaterialCardView card;
+
         TextView tvTitle;
-        TextView tvId;
+        TextView tvSource;
         TextView tvMeta;
 
-        MaterialButton btnView;
-        MaterialButton btnDelete;
+        MaterialButton btnPractice;
+        MaterialButton btnMock;
 
-        public TestViewHolder(
+        TestViewHolder(
                 @NonNull View itemView
         ) {
             super(itemView);
 
-            tvTitle =
+            card =
                     itemView.findViewById(
-                            R.id.tvAdminTestTitle
+                            R.id.cardToeicStudentTest
                     );
 
-            tvId =
+            tvTitle =
                     itemView.findViewById(
-                            R.id.tvAdminTestId
+                            R.id.tvToeicStudentTitle
+                    );
+
+            tvSource =
+                    itemView.findViewById(
+                            R.id.tvToeicStudentSource
                     );
 
             tvMeta =
                     itemView.findViewById(
-                            R.id.tvAdminTestMeta
+                            R.id.tvToeicStudentMeta
                     );
 
-            btnView =
+            btnPractice =
                     itemView.findViewById(
-                            R.id.btnAdminViewTest
+                            R.id.btnToeicPractice
                     );
 
-            btnDelete =
+            btnMock =
                     itemView.findViewById(
-                            R.id.btnAdminDeleteTest
+                            R.id.btnToeicMock
                     );
         }
     }

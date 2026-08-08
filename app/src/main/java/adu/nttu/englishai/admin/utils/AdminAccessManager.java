@@ -1,4 +1,4 @@
-package adu.nttu.englishai.utils;
+package adu.nttu.englishai.admin.utils;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

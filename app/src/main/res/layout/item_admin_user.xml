@@ -2,10 +2,10 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardToeicAdminTest"
+    android:id="@+id/cardAdminUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="11dp"
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="#FFFFFF"
@@ -25,7 +25,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:gravity="center"
-            android:text="📘"
+            android:text="👤"
             android:textSize="25sp" />
 
         <LinearLayout
@@ -36,43 +36,45 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvToeicAdminTitle"
+                android:id="@+id/tvAdminUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TOEIC Test 01"
-                android:textColor="#292B3D"
+                android:text="User name"
+                android:textColor="#27293B"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvToeicAdminSource"
+                android:id="@+id/tvAdminUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="Nguồn • 2026"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="email@example.com"
                 android:textColor="#8A8C9D"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tvToeicAdminMeta"
+                android:id="@+id/tvAdminUserStats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Mixed • 120 phút • 200 câu"
+                android:text="0 XP • 🔥 0 ngày"
                 android:textColor="#66697B"
                 android:textSize="12sp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvToeicAdminPublished"
+            android:id="@+id/tvAdminUserRole"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:gravity="center"
-            android:paddingStart="9dp"
-            android:paddingEnd="9dp"
-            android:text="DRAFT"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="USER"
             android:textColor="#6255D8"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold" />
 
     </LinearLayout>

@@ -13,6 +13,9 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -42,6 +45,8 @@ public class SentenceArrangeFragment extends Fragment {
     // =========================================================
     // VIEW
     // =========================================================
+
+    private View rootSentenceArrange;
 
     private TextView tvGrammarTopic;
     private TextView tvGrammarLevel;
@@ -160,6 +165,13 @@ public class SentenceArrangeFragment extends Fragment {
     ) {
         super.onViewCreated(view, savedInstanceState);
 
+        rootSentenceArrange =
+                view.findViewById(
+                        R.id.rootSentenceArrange
+                );
+
+        applyTopSystemInset();
+
         tvGrammarTopic =
                 view.findViewById(R.id.tvGrammarTopic);
 
@@ -248,6 +260,50 @@ public class SentenceArrangeFragment extends Fragment {
         setupCheckButton();
         setupResultButtons();
         loadExercises();
+    }
+
+    private void applyTopSystemInset() {
+
+        if (rootSentenceArrange == null) {
+            return;
+        }
+
+        final int initialLeft =
+                rootSentenceArrange.getPaddingLeft();
+
+        final int initialTop =
+                rootSentenceArrange.getPaddingTop();
+
+        final int initialRight =
+                rootSentenceArrange.getPaddingRight();
+
+        final int initialBottom =
+                rootSentenceArrange.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                rootSentenceArrange,
+                (view, insets) -> {
+
+                    Insets topInsets =
+                            insets.getInsets(
+                                    WindowInsetsCompat.Type.statusBars()
+                                            | WindowInsetsCompat.Type.displayCutout()
+                            );
+
+                    view.setPadding(
+                            initialLeft,
+                            initialTop + topInsets.top,
+                            initialRight,
+                            initialBottom
+                    );
+
+                    return insets;
+                }
+        );
+
+        ViewCompat.requestApplyInsets(
+                rootSentenceArrange
+        );
     }
 
     // =========================================================
@@ -629,7 +685,10 @@ public class SentenceArrangeFragment extends Fragment {
                 .setMessage(
                         "Bạn có một bài đang làm dở.\n\n"
                                 + "Tiến trình: "
-                                + savedIndex
+                                + Math.min(
+                                savedIndex + 1,
+                                TOTAL_QUESTIONS
+                        )
                                 + "/"
                                 + TOTAL_QUESTIONS
                                 + " câu."
@@ -1258,6 +1317,8 @@ public class SentenceArrangeFragment extends Fragment {
                 View.GONE
         );
 
+        updateGameStatsUi();
+
         GrammarResultUiHelper.showResult(
                 layoutGrammarResult,
                 cardGrammarResult,
@@ -1381,6 +1442,20 @@ public class SentenceArrangeFragment extends Fragment {
                             + gameStats.getFormattedTime()
             );
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        stopTimer();
+
+        timerHandler.removeCallbacksAndMessages(
+                null
+        );
+
+        rootSentenceArrange = null;
+
+        super.onDestroyView();
     }
 
     private int dpToPx(

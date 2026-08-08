@@ -23,7 +23,6 @@ import adu.nttu.englishai.models.SentenceExercise;
 public class ImportSentenceExerciseActivity extends AppCompatActivity {
 
     private Button btnImportSentenceExercises;
-
     private FirebaseFirestore db;
 
     @Override
@@ -49,10 +48,7 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
     private void importSentenceExercises() {
 
         btnImportSentenceExercises.setEnabled(false);
-
-        btnImportSentenceExercises.setText(
-                "Đang nhập dữ liệu..."
-        );
+        btnImportSentenceExercises.setText("Đang nhập dữ liệu...");
 
         try {
 
@@ -83,7 +79,6 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
                 showError(
                         "File JSON không có dữ liệu."
                 );
-
                 return;
             }
 
@@ -122,26 +117,19 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
 
             if (id == null
                     || id.trim().isEmpty()) {
-
                 continue;
             }
 
             if (englishSentence == null
-                    || englishSentence
-                    .trim()
-                    .isEmpty()) {
-
+                    || englishSentence.trim().isEmpty()) {
                 continue;
             }
 
             DocumentReference documentReference =
-                    db.collection(
-                                    "sentenceExercises"
-                            )
-                            .document(
-                                    id.trim()
-                            );
+                    db.collection("sentenceExercises")
+                            .document(id.trim());
 
+            // Dùng set để có thể import lại mà không tạo document trùng.
             batch.set(
                     documentReference,
                     exercise
@@ -151,28 +139,22 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
         }
 
         if (validCount == 0) {
-
             showError(
                     "Không tìm thấy câu hợp lệ để import."
             );
-
             return;
         }
 
-        final int total =
-                validCount;
+        final int total = validCount;
 
         batch.commit()
                 .addOnSuccessListener(
                         unused -> {
 
-                            btnImportSentenceExercises
-                                    .setEnabled(true);
-
-                            btnImportSentenceExercises
-                                    .setText(
-                                            "Nhập 100 câu lên Firestore"
-                                    );
+                            btnImportSentenceExercises.setEnabled(true);
+                            btnImportSentenceExercises.setText(
+                                    "Nhập 100 câu lên Firestore"
+                            );
 
                             Toast.makeText(
                                     this,
@@ -187,8 +169,7 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
                         exception ->
                                 showError(
                                         "Import thất bại: "
-                                                + exception
-                                                .getMessage()
+                                                + exception.getMessage()
                                 )
                 );
     }
@@ -197,13 +178,10 @@ public class ImportSentenceExerciseActivity extends AppCompatActivity {
             String message
     ) {
 
-        btnImportSentenceExercises
-                .setEnabled(true);
-
-        btnImportSentenceExercises
-                .setText(
-                        "Nhập 100 câu lên Firestore"
-                );
+        btnImportSentenceExercises.setEnabled(true);
+        btnImportSentenceExercises.setText(
+                "Nhập 100 câu lên Firestore"
+        );
 
         Toast.makeText(
                 this,

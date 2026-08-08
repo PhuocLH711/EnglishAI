@@ -1,5 +1,7 @@
 package adu.nttu.englishai.fragments;
 
+import adu.nttu.englishai.admin.activities.AdminDashboardActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -68,6 +70,8 @@ public class ProfileFragment extends Fragment {
     private TextView tvLearnedCount;
     private TextView tvFavoriteCount;
 
+    private MaterialCardView cardAdminPanel;
+
     private final Set<String> validVocabularyIds = new HashSet<>();
     private final Map<String, DocumentSnapshot> vocabularyMap = new HashMap<>();
     private final Map<String, DocumentSnapshot> progressMap = new HashMap<>();
@@ -115,6 +119,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initViews(View view) {
+
         imgAvatar = view.findViewById(R.id.imgAvatar);
         tvProfileName = view.findViewById(R.id.tvProfileName);
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
@@ -124,6 +129,11 @@ public class ProfileFragment extends Fragment {
         tvLearningCount = view.findViewById(R.id.tvLearningCount);
         tvLearnedCount = view.findViewById(R.id.tvMasteredCount);
         tvFavoriteCount = view.findViewById(R.id.tvFavoriteCount);
+
+        cardAdminPanel = view.findViewById(R.id.cardAdminPanel);
+        if (cardAdminPanel != null) {
+            cardAdminPanel.setVisibility(View.GONE);
+        }
     }
 
     private void setupEvents(View view) {
@@ -146,6 +156,16 @@ public class ProfileFragment extends Fragment {
         if (tvTotalScore != null) {
             ((View)tvTotalScore.getParent()).setOnClickListener(v -> {
                 startActivity(new Intent(requireContext(), adu.nttu.englishai.activities.LeaderboardActivity.class));
+            });
+        }
+
+        if (cardAdminPanel != null) {
+            cardAdminPanel.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        requireContext(),
+                        AdminDashboardActivity.class
+                );
+                startActivity(intent);
             });
         }
     }
@@ -220,6 +240,7 @@ public class ProfileFragment extends Fragment {
         if (currentUser == null) {
             if (tvProfileName != null) tvProfileName.setText("Khách");
             if (tvProfileEmail != null) tvProfileEmail.setText("Chưa đăng nhập");
+            if (cardAdminPanel != null) cardAdminPanel.setVisibility(View.GONE);
             resetStatistics();
             return;
         }
@@ -248,6 +269,17 @@ public class ProfileFragment extends Fragment {
                     String firestoreName = firstNonEmpty(document.getString("name"), document.getString("fullName"));
                     if (tvProfileName != null && !firestoreName.isEmpty()) {
                         tvProfileName.setText(firestoreName);
+                    }
+
+                    String role = document.getString("role");
+                    boolean isAdmin =
+                            role != null
+                                    && "admin".equalsIgnoreCase(role.trim());
+
+                    if (cardAdminPanel != null) {
+                        cardAdminPanel.setVisibility(
+                                isAdmin ? View.VISIBLE : View.GONE
+                        );
                     }
 
                     // 👉 TẢI VÀ GIẢI MÃ ẢNH BASE64 TỪ FIRESTORE XUỐNG
@@ -295,6 +327,9 @@ public class ProfileFragment extends Fragment {
         LinearLayout itemAvatar = dialogView.findViewById(R.id.itemChangeAvatar);
         LinearLayout itemInfo = dialogView.findViewById(R.id.itemUpdateInfo);
         LinearLayout itemAdminImport = dialogView.findViewById(R.id.itemAdminImport);
+        if (itemAdminImport != null) {
+            itemAdminImport.setVisibility(View.GONE);
+        }
         Button dialogBtnLogout = dialogView.findViewById(R.id.dialogBtnLogout);
 
         if (itemAvatar != null) {
@@ -309,14 +344,6 @@ public class ProfileFragment extends Fragment {
             itemInfo.setOnClickListener(v -> {
                 dialog.dismiss();
                 showEditProfileDialog();
-            });
-        }
-
-        if (itemAdminImport != null) {
-            itemAdminImport.setOnClickListener(v -> {
-                dialog.dismiss();
-                Intent intent = new Intent(requireContext(), adu.nttu.englishai.activities.ImportVocabularyActivity.class);
-                startActivity(intent);
             });
         }
 
