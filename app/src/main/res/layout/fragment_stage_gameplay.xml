@@ -48,17 +48,17 @@
             android:textColor="#F44336"/>
     </LinearLayout>
 
-    <!-- Khu vực Câu Hỏi -->
+    <!-- Khu vực Câu Hỏi chung -->
     <TextView
         android:id="@+id/tvQuestionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layoutHeader"
         android:text="Chọn nghĩa đúng của từ này:"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#37474F"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/tvTargetWord"
@@ -66,13 +66,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvQuestionTitle"
         android:text="Apple"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#1A73E8"
         android:gravity="center"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="24dp"/>
 
-    <!-- Khu vực Đáp án (Trắc nghiệm) -->
+    <!-- ============================================== -->
+    <!-- DẠNG 1: TRẮC NGHIỆM -->
+    <!-- ============================================== -->
     <LinearLayout
         android:id="@+id/layoutMultipleChoice"
         android:layout_width="match_parent"
@@ -128,7 +130,9 @@
             android:textColor="#37474F"/>
     </LinearLayout>
 
-    <!-- Khu vực Đáp án (Gõ phím) -->
+    <!-- ============================================== -->
+    <!-- DẠNG 2: GÕ PHÍM TỰ LUẬN -->
+    <!-- ============================================== -->
     <LinearLayout
         android:id="@+id/layoutTyping"
         android:layout_width="match_parent"
@@ -147,6 +151,53 @@
             android:background="@drawable/bg_button_quiz"
             android:backgroundTint="#F5F7FA"
             android:textColor="#1A1A1A"/>
+    </LinearLayout>
+
+    <!-- ============================================== -->
+    <!-- DẠNG 3: KÉO THẢ XẾP CÂU (VỪA THÊM VÀO) 👉 -->
+    <!-- ============================================== -->
+    <LinearLayout
+        android:id="@+id/layoutSentenceArrange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTargetWord"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvAnswerPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:background="@drawable/bg_button_quiz"
+            android:backgroundTint="#F5F7FA"
+            android:gravity="center"
+            android:text="Chạm vào các từ bên dưới để ghép thành câu..."
+            android:textColor="#90A4AE"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/layoutSelectedWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:chipSpacing="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Các từ có sẵn:"
+            android:textStyle="bold"
+            android:textColor="#757575"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/layoutAvailableWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacing="8dp"/>
     </LinearLayout>
 
     <!-- Thông báo kết quả (Đúng/Sai) -->

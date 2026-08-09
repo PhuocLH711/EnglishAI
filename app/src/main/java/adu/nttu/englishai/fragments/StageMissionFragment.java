@@ -39,7 +39,7 @@ public class StageMissionFragment extends Fragment {
         }
 
         // 2. Gắn thông tin lên UI
-        View btnBackToHome = view.findViewById(R.id.btnBackToHome);
+        View btnBackToHome = view.findViewById(R.id.btnBackToStage);
         if (btnBackToHome != null) btnBackToHome.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         TextView tvStageTitle = view.findViewById(R.id.tvStageTitle);

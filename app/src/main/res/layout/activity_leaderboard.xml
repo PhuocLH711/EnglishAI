@@ -1,67 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
+    android:background="#1A73E8"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <!-- Header xanh đậm -->
-    <LinearLayout
+    <!-- KHỐI 1: HEADER XANH ĐẬM (Không gian rộng rãi, cố định) -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1A73E8"
-        android:orientation="vertical"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="56dp"> <!-- Khoảng đệm siêu rộng chống lẹm chữ -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
+        <!-- Nút Back tinh tế ở góc -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#E6E7F1"
+            app:strokeWidth="1.5dp">
 
             <TextView
                 android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="8dp"
-                android:text="⬅️ Quay lại"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:text="‹"
+                android:textColor="#202239"
+                android:textSize="28sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Trục Tiêu đề ở chính giữa (Cúp + Chữ) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <!-- Đưa chiếc cúp ra làm điểm nhấn -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏆"
+                android:textSize="56sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bảng Xếp Hạng"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Những học viên chăm chỉ nhất tuần"
+                android:textColor="#BBDEFB"
+                android:textSize="14sp" />
         </LinearLayout>
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="🏆 Bảng Xếp Hạng"
-            android:textColor="#FFFFFF"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="Những học viên chăm chỉ nhất tuần"
-            android:textColor="#BBDEFB"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <!-- Danh sách người chơi -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewLeaderboard"
+    <!-- KHỐI 2: KHUNG DANH SÁCH (Bo tròn góc đè lên Header) -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-16dp"
-        android:clipToPadding="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="24dp" />
+        android:layout_marginTop="-28dp"
+        app:cardBackgroundColor="#F5F7FA"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp">
+        <!-- layout_marginTop âm giúp khối này trượt lên,
+             cardCornerRadius tạo đường cong thanh lịch -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewLeaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="20dp"
+            android:paddingBottom="24dp" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
