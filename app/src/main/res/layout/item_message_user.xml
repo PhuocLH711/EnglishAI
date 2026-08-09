@@ -8,6 +8,15 @@
     android:paddingTop="5dp"
     android:paddingEnd="4dp"
     android:paddingBottom="5dp">
+    <ImageView
+        android:id="@+id/imgUserMessage"
+        android:layout_width="220dp"
+        android:layout_height="160dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:contentDescription="Ảnh người dùng gửi" />
 
     <TextView
         android:id="@+id/tvUserMessage"

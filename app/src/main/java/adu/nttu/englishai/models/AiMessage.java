@@ -10,6 +10,9 @@ public class AiMessage {
     private String content;
     private long createdAt;
 
+    // Ảnh người dùng gửi
+    private String imageUri;
+
     public AiMessage() {
         // Constructor rỗng cho Firestore
     }
@@ -20,14 +23,36 @@ public class AiMessage {
             String content,
             long createdAt
     ) {
+        this(
+                id,
+                role,
+                content,
+                createdAt,
+                null
+        );
+    }
+
+    public AiMessage(
+            String id,
+            String role,
+            String content,
+            long createdAt,
+            String imageUri
+    ) {
         this.id = id;
         this.role = role;
         this.content = content;
         this.createdAt = createdAt;
+        this.imageUri = imageUri;
     }
 
     public boolean isUser() {
         return ROLE_USER.equals(role);
+    }
+
+    public boolean hasImage() {
+        return imageUri != null
+                && !imageUri.trim().isEmpty();
     }
 
     public String getId() {
@@ -47,7 +72,7 @@ public class AiMessage {
     }
 
     public String getContent() {
-        return content;
+        return content == null ? "" : content;
     }
 
     public void setContent(String content) {
@@ -60,5 +85,13 @@ public class AiMessage {
 
     public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }
