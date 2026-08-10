@@ -24,6 +24,7 @@ public class HomeFragment extends Fragment {
 
     private MaterialCardView cardStage1, cardStage2, cardStage3, cardStage4, cardStageChest;
     private Button btnStartDaily;
+    private TextView tvBannerDescription;
 
     public HomeFragment() {}
 
@@ -31,63 +32,76 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // 1. Ánh xạ thông tin User
         TextView tvGreeting = view.findViewById(R.id.tvGreeting);
         TextView tvHomeStreak = view.findViewById(R.id.tvHomeStreak);
         TextView tvHomeXP = view.findViewById(R.id.tvHomeXP);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser != null) {
-            SharedPreferences sharedPref = requireActivity().getSharedPreferences("EnglishAI_Prefs", Context.MODE_PRIVATE);
-            String cachedName = sharedPref.getString("USER_REAL_NAME", null);
-
-            if (cachedName != null && !cachedName.isEmpty()) {
-                tvGreeting.setText("Chào " + cachedName + "!");
-            } else {
-                String email = currentUser.getEmail();
-                String fallbackName = (email != null && email.contains("@")) ? email.substring(0, email.indexOf("@")) : "bạn";
-                tvGreeting.setText("Chào " + fallbackName + "!");
-            }
-
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(currentUser.getUid())
-                    .addSnapshotListener((document, error) -> {
-                        if (!isAdded() || error != null || document == null || !document.exists()) return;
-
-                        String realName = document.getString("name");
-                        if (realName == null || realName.trim().isEmpty()) {
-                            realName = document.getString("fullName");
-                        }
-                        if (realName != null && !realName.trim().isEmpty()) {
-                            String finalName = realName.trim();
-                            if (!finalName.equals(cachedName)) {
-                                tvGreeting.setText("Chào " + finalName + "!");
-                                sharedPref.edit().putString("USER_REAL_NAME", finalName).apply();
-                            }
-                        }
-
-                        Long scoreObj = document.getLong("score");
-                        long realScore = (scoreObj != null) ? scoreObj : 0;
-                        if (tvHomeXP != null) tvHomeXP.setText("💎 " + realScore);
-
-                        Long streakObj = document.getLong("streak");
-                        long realStreak = (streakObj != null) ? streakObj : 0;
-                        if (tvHomeStreak != null) tvHomeStreak.setText("🔥 " + realStreak + " ngày");
-                    });
-        }
-
+        // 2. Ánh xạ các nút và thẻ Ải
         btnStartDaily = view.findViewById(R.id.btnStartDaily);
+        tvBannerDescription = view.findViewById(R.id.tvBannerDescription); // Đã bắt được dòng chữ cần đổi!
         cardStage1 = view.findViewById(R.id.cardStage1);
         cardStage2 = view.findViewById(R.id.cardStage2);
         cardStage3 = view.findViewById(R.id.cardStage3);
         cardStage4 = view.findViewById(R.id.cardStage4);
         cardStageChest = view.findViewById(R.id.cardStageChest);
 
+        // 3. Tải dữ liệu người dùng từ Firebase
+        loadUserData(tvGreeting, tvHomeStreak, tvHomeXP);
+
         return view;
     }
 
-    // 👉 ĐƯA LOGIC KHÓA ẢI VÀO ONRESUME ĐỂ NÓ CẬP NHẬT NGAY LẬP TỨC KHI VỪA CHIẾN THẮNG TRỞ VỀ
+    private void loadUserData(TextView tvGreeting, TextView tvHomeStreak, TextView tvHomeXP) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        SharedPreferences sharedPref = requireActivity().getSharedPreferences("EnglishAI_Prefs", Context.MODE_PRIVATE);
+        String cachedName = sharedPref.getString("USER_REAL_NAME", null);
+
+        // Set tạm tên cũ cho nhanh, tránh giật lag chờ mạng
+        if (cachedName != null && !cachedName.isEmpty()) {
+            tvGreeting.setText("Chào " + cachedName + "! 👋");
+        } else {
+            String email = currentUser.getEmail();
+            String fallbackName = (email != null && email.contains("@")) ? email.substring(0, email.indexOf("@")) : "bạn";
+            tvGreeting.setText("Chào " + fallbackName + "! 👋");
+        }
+
+        // Lắng nghe dữ liệu Realtime từ Firebase
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(currentUser.getUid())
+                .addSnapshotListener((document, error) -> {
+                    if (!isAdded() || error != null || document == null || !document.exists()) return;
+
+                    // Lấy tên
+                    String realName = document.getString("name");
+                    if (realName == null || realName.trim().isEmpty()) {
+                        realName = document.getString("fullName");
+                    }
+                    if (realName != null && !realName.trim().isEmpty()) {
+                        String finalName = realName.trim();
+                        if (!finalName.equals(cachedName)) {
+                            tvGreeting.setText("Chào " + finalName + "! 👋");
+                            sharedPref.edit().putString("USER_REAL_NAME", finalName).apply();
+                        }
+                    }
+
+                    // Lấy Điểm XP và Chuỗi ngày
+                    Long scoreObj = document.getLong("score");
+                    long realScore = (scoreObj != null) ? scoreObj : 0;
+                    if (tvHomeXP != null) tvHomeXP.setText("💎 " + realScore);
+
+                    Long streakObj = document.getLong("streak");
+                    long realStreak = (streakObj != null) ? streakObj : 0;
+                    if (tvHomeStreak != null) tvHomeStreak.setText("🔥 " + realStreak + " ngày");
+                });
+    }
+
+    // =====================================================================
+    // KIỂM TRA & CẬP NHẬT ẢI (CHẠY MỖI KHI VÀO LẠI TRANG CHỦ)
+    // =====================================================================
     @Override
     public void onResume() {
         super.onResume();
@@ -95,16 +109,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void refreshStageLocks() {
-        // Lấy tiến độ mở khóa (Nếu chưa chơi bao giờ thì mặc định mở Ải 1)
+        // Lấy Ải hiện tại (Mặc định là 1 nếu chưa có)
         int unlockedStage = requireActivity().getSharedPreferences("EnglishAI_Prefs", Context.MODE_PRIVATE)
                 .getInt("UNLOCKED_STAGE", 1);
 
-        setupStage(cardStage1, 1, unlockedStage, "Easy", "Ải 1: Khởi Động");
-        setupStage(cardStage2, 2, unlockedStage, "Medium", "Ải 2: Tăng Tốc");
-        setupStage(cardStage3, 3, unlockedStage, "Hard", "Ải 3: Bứt Phá");
-        setupStage(cardStage4, 4, unlockedStage, "Boss", "Ải 4: Trùm Cuối 👑");
+        // 1. Tự động đổi chữ Banner: Đang ở Ải nào thì chữ hiện Ải đó (Tối đa Ải 4)
+        if (tvBannerDescription != null) {
+            int displayStage = Math.min(unlockedStage, 4);
+            tvBannerDescription.setText("Vượt qua Ải " + displayStage + " để giữ vững chuỗi ngày học chăm chỉ nhé!");
+        }
 
-        // Nút Vượt Ải Ngay sẽ thông minh tự động trỏ vào Ải cao nhất bạn đã mở
+        // 2. Nút "VƯỢT ẢI NGAY" tự động trỏ tới Ải cao nhất
         if (btnStartDaily != null) {
             btnStartDaily.setOnClickListener(v -> {
                 if (unlockedStage == 1) openStageQuiz("Easy", "Ải 1: Khởi Động");
@@ -114,7 +129,13 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Logic của Rương báu
+        // 3. Khóa/Mở giao diện các thẻ Ải bên dưới bản đồ
+        setupStage(cardStage1, 1, unlockedStage, "Easy", "Ải 1: Khởi Động");
+        setupStage(cardStage2, 2, unlockedStage, "Medium", "Ải 2: Tăng Tốc");
+        setupStage(cardStage3, 3, unlockedStage, "Hard", "Ải 3: Bứt Phá");
+        setupStage(cardStage4, 4, unlockedStage, "Boss", "Ải 4: Trùm Cuối 👑");
+
+        // 4. Xử lý phần thưởng Rương báu
         if (cardStageChest != null) {
             if (unlockedStage >= 5) {
                 cardStageChest.setAlpha(1.0f);
@@ -126,17 +147,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // Hàm phụ trợ Khóa/Mở Giao Diện
     private void setupStage(MaterialCardView card, int stageNumber, int unlockedStage, String difficulty, String name) {
         if (card == null) return;
 
         if (stageNumber <= unlockedStage) {
-            // 👉 ĐÃ MỞ KHÓA: Sáng rực rỡ, cho phép ấn vào
-            card.setAlpha(1.0f);
+            card.setAlpha(1.0f); // Mở khóa: Sáng rõ
             card.setOnClickListener(v -> openStageQuiz(difficulty, name));
         } else {
-            // 👉 ĐANG KHÓA: Làm mờ đi 60%, bấm vào sẽ báo lỗi
-            card.setAlpha(0.4f);
+            card.setAlpha(0.4f); // Khóa: Mờ đi
             card.setOnClickListener(v -> Toast.makeText(requireContext(), "🔒 Bạn phải hoàn thành Ải " + (stageNumber - 1) + " trước!", Toast.LENGTH_SHORT).show());
         }
     }

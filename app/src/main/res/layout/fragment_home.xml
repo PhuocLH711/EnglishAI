@@ -126,9 +126,10 @@
                         android:letterSpacing="0.1"/>
 
                     <TextView
+                        android:id="@+id/tvBannerDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Vượt qua Ải 1 để giữ vững chuỗi ngày học chăm chỉ nhé!"
+                        android:text="Vượt Ải mỗi ngày để giữ vững chuỗi ngày học chăm chỉ nhé!"
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
