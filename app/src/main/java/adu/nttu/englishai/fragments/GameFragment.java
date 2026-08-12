@@ -8,16 +8,13 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import adu.nttu.englishai.R;
 
-// =========================================================================
 // GAME FRAGMENT: Màn hình Menu điều hướng tới các trò chơi ôn luyện
-// =========================================================================
+
 public class GameFragment extends Fragment {
 
     public GameFragment() {}
 
-    // =========================================================================
     // HÀM TẠO GIAO DIỆN VÀ GÁN SỰ KIỆN ĐIỀU HƯỚNG
-    // =========================================================================
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
@@ -26,9 +23,7 @@ public class GameFragment extends Fragment {
         Button btnOpenQuiz = view.findViewById(R.id.btnOpenQuiz);
         Button btnOpenFlashcard = view.findViewById(R.id.btnOpenFlashcard);
 
-        // =========================================================================
         // 1. SỰ KIỆN MỞ TRÒ CHƠI TRẮC NGHIỆM (QUIZ FRAGMENT)
-        // =========================================================================
         btnOpenQuiz.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new QuizFragment())
@@ -36,9 +31,7 @@ public class GameFragment extends Fragment {
                     .commit();
         });
 
-        // =========================================================================
         // 2. SỰ KIỆN MỞ TRÒ CHƠI LẬT THẺ
-        // =========================================================================
         btnOpenFlashcard.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new FlashcardFragment())
@@ -46,9 +39,7 @@ public class GameFragment extends Fragment {
                     .commit();
         });
 
-        // =========================================================================
         // 3. SỰ KIỆN MỞ TRÒ CHƠI TÌM CẶP TỪ
-        // =========================================================================
         View cardMemoryMatch = view.findViewById(R.id.cardMemoryMatch);
         View btnOpenMemoryMatch = view.findViewById(R.id.btnOpenMemoryMatch);
 
@@ -63,9 +54,7 @@ public class GameFragment extends Fragment {
         if (cardMemoryMatch != null) cardMemoryMatch.setOnClickListener(openMemory);
         if (btnOpenMemoryMatch != null) btnOpenMemoryMatch.setOnClickListener(openMemory);
 
-        // =========================================================================
         // 4. SỰ KIỆN MỞ TRÒ CHƠI LUYỆN PHÁT ÂM (MICROPHONE)
-        // =========================================================================
         View cardSpeaking = view.findViewById(R.id.cardSpeaking);
         View btnOpenSpeaking = view.findViewById(R.id.btnOpenSpeaking);
 
@@ -80,9 +69,7 @@ public class GameFragment extends Fragment {
         if (cardSpeaking != null) cardSpeaking.setOnClickListener(openSpeaking);
         if (btnOpenSpeaking != null) btnOpenSpeaking.setOnClickListener(openSpeaking);
 
-        // =========================================================================
         // 5. SỰ KIỆN MỞ TRÒ CHƠI XẾP CÂU NGỮ PHÁP
-        // =========================================================================
         View cardGrammarSprint = view.findViewById(R.id.cardGrammarSprint);
         View btnOpenGrammar = view.findViewById(R.id.btnOpenGrammar);
 

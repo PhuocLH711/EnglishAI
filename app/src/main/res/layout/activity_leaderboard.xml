@@ -7,16 +7,15 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <!-- KHỐI 1: HEADER XANH ĐẬM (Không gian rộng rãi, cố định) -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingTop="20dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="56dp"> <!-- Khoảng đệm siêu rộng chống lẹm chữ -->
+        android:paddingBottom="56dp">
 
-        <!-- Nút Back tinh tế ở góc -->
+        <!-- Nút Back -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -42,7 +41,6 @@
                 android:textSize="28sp" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Trục Tiêu đề ở chính giữa (Cúp + Chữ) -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +49,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- Đưa chiếc cúp ra làm điểm nhấn -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +74,6 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- KHỐI 2: KHUNG DANH SÁCH (Bo tròn góc đè lên Header) -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -85,8 +81,6 @@
         app:cardBackgroundColor="#F5F7FA"
         app:cardCornerRadius="28dp"
         app:cardElevation="0dp">
-        <!-- layout_marginTop âm giúp khối này trượt lên,
-             cardCornerRadius tạo đường cong thanh lịch -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewLeaderboard"

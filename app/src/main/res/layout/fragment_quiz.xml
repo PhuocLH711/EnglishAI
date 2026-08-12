@@ -6,7 +6,6 @@
     android:background="#F5F7FA"
     android:padding="20dp">
 
-    <!-- Khung nội dung câu hỏi và đáp án -->
     <LinearLayout
         android:id="@+id/layoutContent"
         android:layout_width="match_parent"
@@ -14,7 +13,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- ================= NÚT BACK QUAY LẠI DANH SÁCH ẢI ================= -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +54,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Thẻ chứa Câu hỏi có đổ bóng xịn sò -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,7 +91,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 4 Nút đáp án bo góc, có đổ bóng elevation -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAnswer1"
             android:layout_width="match_parent"
@@ -152,7 +148,6 @@
             android:elevation="4dp"/>
     </LinearLayout>
 
-    <!-- Nút "Câu tiếp theo" nhỏ gọn nằm ở góc dưới bên phải -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnNextQuestion"
         android:layout_width="wrap_content"
@@ -170,7 +165,6 @@
         android:visibility="gone"
         android:elevation="6dp"/>
 
-    <!-- 👉 ĐÃ SỬA: Khung chứa hiệu ứng bắn pháo hoa vật lý (Konfetti) -->
     <nl.dionsegijn.konfetti.xml.KonfettiView
         android:id="@+id/konfettiView"
         android:layout_width="match_parent"

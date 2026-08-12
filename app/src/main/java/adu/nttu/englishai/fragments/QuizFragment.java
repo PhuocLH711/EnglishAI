@@ -21,9 +21,7 @@ import adu.nttu.englishai.R;
 import adu.nttu.englishai.models.DataRepository;
 import adu.nttu.englishai.models.Vocabulary;
 
-// =========================================================================
 // QUIZ FRAGMENT: Màn hình Trò chơi Trắc nghiệm Từ vựng
-// =========================================================================
 public class QuizFragment extends Fragment {
 
     private TextView tvQuestion;
@@ -61,7 +59,7 @@ public class QuizFragment extends Fragment {
         btnAnswer4 = view.findViewById(R.id.btnAnswer4);
         btnNextQuestion = view.findViewById(R.id.btnNextQuestion);
 
-        // 👉 KHỞI TẠO ÂM THANH
+        // KHỞI TẠO ÂM THANH
         soundCorrect = MediaPlayer.create(requireContext(), R.raw.correct);
         soundWrong = MediaPlayer.create(requireContext(), R.raw.wrong);
 
@@ -112,7 +110,7 @@ public class QuizFragment extends Fragment {
         if (isQuestionAnswered) return;
 
         if (selectedAnswer.equals(currentQuestionWord.getVietnameseMeaning())) {
-            // 👉 TRẢ LỜI ĐÚNG
+            // TRẢ LỜI ĐÚNG
             isQuestionAnswered = true;
             selectedButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#E8F5E9")));
             selectedButton.setTextColor(Color.parseColor("#1B5E20"));
@@ -132,7 +130,7 @@ public class QuizFragment extends Fragment {
             Toast.makeText(getContext(), "Chính xác! Bạn giỏi quá 🎉", Toast.LENGTH_SHORT).show();
 
         } else {
-            // 👉 TRẢ LỜI SAI
+            // TRẢ LỜI SAI
             selectedButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#FFEBEE")));
             selectedButton.setTextColor(Color.parseColor("#B71C1C"));
             selectedButton.setEnabled(false);
@@ -147,9 +145,7 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    // =========================================================================
-    // HÀM 3: BẮN PHÁO HOA KONFETTI CHUYÊN NGHIỆP
-    // =========================================================================
+    // BẮN PHÁO HOA KONFETTI
     private void showConfettiAnimation() {
         // Cấu hình số lượng pháo (100 hạt) bắn ra trong 100 mili-giây
         nl.dionsegijn.konfetti.core.emitter.EmitterConfig emitterConfig =
@@ -161,7 +157,7 @@ public class QuizFragment extends Fragment {
                         .spread(360) // Bắn tỏa ra 360 độ
                         .colors(java.util.Arrays.asList(Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.RED, Color.CYAN))
                         .setSpeedBetween(0f, 30f)
-                        .position(new nl.dionsegijn.konfetti.core.Position.Relative(0.5, 0.3)) // Bắn từ giữa màn hình (nhích lên trên 1 tí)
+                        .position(new nl.dionsegijn.konfetti.core.Position.Relative(0.5, 0.3)) // Bắn từ giữa màn hình
                         .build()
         );
     }
@@ -182,7 +178,7 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    // 👉 QUAN TRỌNG: Dọn dẹp RAM khi thoát Trò chơi để không bị giật lag
+    // Dọn dẹp RAM khi thoát Trò chơi
     @Override
     public void onDestroyView() {
         super.onDestroyView();

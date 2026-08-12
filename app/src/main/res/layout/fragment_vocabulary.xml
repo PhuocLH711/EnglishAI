@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#F6F8FF">
 
-    <!-- ================= 1. PHẦN TIÊU ĐỀ (Ghim lên top màn hình) ================= -->
     <LinearLayout
         android:id="@+id/layoutVocabularyHeader"
         android:layout_width="0dp"
@@ -38,7 +37,6 @@
             android:textColor="#72758C"
             android:textSize="14sp" />
 
-        <!-- Thẻ thống kê -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +94,6 @@
 
     </LinearLayout>
 
-    <!-- ================= 2. THANH TÌM KIẾM VÀ NÚT LỌC ================= -->
     <LinearLayout
         android:id="@+id/layoutVocabularySearch"
         android:layout_width="0dp"
@@ -152,7 +149,6 @@
 
     </LinearLayout>
 
-    <!-- ================= 3. CHIP LỌC NHANH ================= -->
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupQuickFilter"
         android:layout_width="0dp"
@@ -219,7 +215,6 @@
 
     </com.google.android.material.chip.ChipGroup>
 
-    <!-- ================= 4. TRẠNG THÁI LỌC ================= -->
     <TextView
         android:id="@+id/tvFilterStatus"
         android:layout_width="0dp"
@@ -235,7 +230,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ================= 5. DANH SÁCH TỪ VỰNG ================= -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerVocabulary"
         android:layout_width="0dp"
@@ -250,7 +244,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ================= 6. TRẠNG THÁI RỖNG ================= -->
     <LinearLayout
         android:id="@+id/emptyStateLayout"
         android:layout_width="0dp"

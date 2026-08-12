@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
 
         // 2. Ánh xạ các nút và thẻ Ải
         btnStartDaily = view.findViewById(R.id.btnStartDaily);
-        tvBannerDescription = view.findViewById(R.id.tvBannerDescription); // Đã bắt được dòng chữ cần đổi!
+        tvBannerDescription = view.findViewById(R.id.tvBannerDescription);
         cardStage1 = view.findViewById(R.id.cardStage1);
         cardStage2 = view.findViewById(R.id.cardStage2);
         cardStage3 = view.findViewById(R.id.cardStage3);
@@ -99,9 +99,7 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    // =====================================================================
     // KIỂM TRA & CẬP NHẬT ẢI (CHẠY MỖI KHI VÀO LẠI TRANG CHỦ)
-    // =====================================================================
     @Override
     public void onResume() {
         super.onResume();
@@ -109,11 +107,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void refreshStageLocks() {
-        // Lấy Ải hiện tại (Mặc định là 1 nếu chưa có)
+        // Lấy Ải hiện tại
         int unlockedStage = requireActivity().getSharedPreferences("EnglishAI_Prefs", Context.MODE_PRIVATE)
                 .getInt("UNLOCKED_STAGE", 1);
 
-        // 1. Tự động đổi chữ Banner: Đang ở Ải nào thì chữ hiện Ải đó (Tối đa Ải 4)
+        // 1. Tự động đổi chữ Banner: Đang ở Ải nào thì chữ hiện Ải đó
         if (tvBannerDescription != null) {
             int displayStage = Math.min(unlockedStage, 4);
             tvBannerDescription.setText("Vượt qua Ải " + displayStage + " để giữ vững chuỗi ngày học chăm chỉ nhé!");

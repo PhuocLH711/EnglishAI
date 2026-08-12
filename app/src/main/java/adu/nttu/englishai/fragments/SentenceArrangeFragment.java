@@ -46,10 +46,6 @@ import adu.nttu.englishai.utils.GrammarResultUiHelper;
 
 public class SentenceArrangeFragment extends Fragment {
 
-    // =========================================================
-    // VIEW
-    // =========================================================
-
     private View rootSentenceArrange;
     private TextView tvGrammarTopic;
     private TextView tvGrammarLevel;
@@ -78,10 +74,7 @@ public class SentenceArrangeFragment extends Fragment {
     private ChipGroup layoutAvailableWords;
     private MaterialButton btnCheckSentence;
 
-    // =========================================================
     // DATA
-    // =========================================================
-
     private SentenceExerciseRepository sentenceExerciseRepository;
     private final List<SentenceExercise> allExercisePool = new ArrayList<>();
     private final GrammarSession session = new GrammarSession();
@@ -104,19 +97,13 @@ public class SentenceArrangeFragment extends Fragment {
 
     public SentenceArrangeFragment() {}
 
-    // =========================================================
     // CREATE VIEW
-    // =========================================================
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sentence_arrange, container, false);
     }
 
-    // =========================================================
     // VIEW CREATED
-    // =========================================================
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -152,7 +139,7 @@ public class SentenceArrangeFragment extends Fragment {
         progressManager = new GrammarProgressManager(requireContext());
         sentenceExerciseRepository = new SentenceExerciseRepository();
 
-        setupDragAndDropZones(); // 👉 KHỞI ĐỘNG CƠ CHẾ KÉO THẢ LIVE
+        setupDragAndDropZones(); //KHỞI ĐỘNG CƠ CHẾ KÉO THẢ LIVE
         setupBackButton();
         setupSystemBackButton();
         setupCheckButton();
@@ -426,9 +413,7 @@ public class SentenceArrangeFragment extends Fragment {
         return value.trim();
     }
 
-    // =======================================================================
-    // 🛡️ ĐỘNG CƠ KÉO THẢ LIVE SWAP (TÀNG HÌNH HOÀN HẢO NATIVE)
-    // =======================================================================
+    // ĐỘNG CƠ KÉO THẢ LIVE SWAP (TÀNG HÌNH HOÀN HẢO NATIVE)
     private void setupDragAndDropZones() {
         if (layoutSelectedWords == null || layoutAvailableWords == null) return;
 
@@ -456,7 +441,7 @@ public class SentenceArrangeFragment extends Fragment {
                     return true;
                 case DragEvent.ACTION_DROP:
                 case DragEvent.ACTION_DRAG_ENDED:
-                    // 👉 Khôi phục hiển thị (Tắt tàng hình)
+                    // Khôi phục hiển thị
                     draggedView.setVisibility(View.VISIBLE);
                     if (layoutSelectedWords.getChildCount() == 0) tvAnswerPlaceholder.setVisibility(View.VISIBLE);
                     syncSessionWithUI();
@@ -482,7 +467,7 @@ public class SentenceArrangeFragment extends Fragment {
                     return true;
                 case DragEvent.ACTION_DROP:
                 case DragEvent.ACTION_DRAG_ENDED:
-                    // 👉 Khôi phục hiển thị (Tắt tàng hình)
+                    // Khôi phục hiển thị (Tắt tàng hình)
                     draggedView.setVisibility(View.VISIBLE);
                     syncSessionWithUI();
                     return true;
@@ -513,7 +498,7 @@ public class SentenceArrangeFragment extends Fragment {
 
     private void setupChipEvents(Chip chip) {
 
-        // CHẠM NHANH (TAP)
+        // CHẠM NHANH
         chip.setOnClickListener(v -> {
             if (btnCheckSentence.getText().toString().equals("TIẾP TỤC")) return;
 
@@ -530,19 +515,19 @@ public class SentenceArrangeFragment extends Fragment {
             syncSessionWithUI();
         });
 
-        // BẮT ĐẦU KÉO (LONG PRESS)
+        // BẮT ĐẦU KÉO
         chip.setOnLongClickListener(v -> {
             if (btnCheckSentence.getText().toString().equals("TIẾP TỤC")) return false;
             ClipData data = ClipData.newPlainText("", "");
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
             androidx.core.view.ViewCompat.startDragAndDrop(v, data, shadowBuilder, v, 0);
 
-            // 👉 Tàng hình 100% để ép thẻ khác dạt ra nhường chỗ trống
+            // Tàng hình 100% để ép thẻ khác dạt ra nhường chỗ trống
             v.setVisibility(View.INVISIBLE);
             return true;
         });
 
-        // BÓNG BAY NGANG QUA TỪ KHÁC (LIVE SWAP)
+        // BÓNG BAY NGANG QUA TỪ KHÁC
         chip.setOnDragListener((v, event) -> {
             if (btnCheckSentence.getText().toString().equals("TIẾP TỤC")) return false;
             View draggedView = (View) event.getLocalState();
@@ -562,7 +547,7 @@ public class SentenceArrangeFragment extends Fragment {
                     return true;
                 case DragEvent.ACTION_DROP:
                 case DragEvent.ACTION_DRAG_ENDED:
-                    // 👉 Khôi phục hiển thị
+                    // Khôi phục hiển thị
                     draggedView.setVisibility(View.VISIBLE);
                     syncSessionWithUI();
                     return true;
@@ -602,7 +587,6 @@ public class SentenceArrangeFragment extends Fragment {
         saveProgress();
     }
 
-    // =========================================================
 
     private void checkAnswer() {
         if (session.isCompleted()) return;

@@ -80,7 +80,7 @@ public class MemoryMatchFragment extends Fragment {
         btnPlayAgain = view.findViewById(R.id.btnPlayAgain);
         konfettiView = view.findViewById(R.id.konfettiView);
 
-        // 👉 KHỞI TẠO ÂM THANH
+        // KHỞI TẠO ÂM THANH
         soundCorrect = MediaPlayer.create(requireContext(), R.raw.correct);
         soundWrong = MediaPlayer.create(requireContext(), R.raw.wrong);
 
@@ -235,9 +235,7 @@ public class MemoryMatchFragment extends Fragment {
         }
     }
 
-    // =========================================================================
-    // HÀM 3: BẮN PHÁO HOA KONFETTI
-    // =========================================================================
+    // BẮN PHÁO HOA KONFETTI
     private void showConfettiAnimation() {
         nl.dionsegijn.konfetti.core.emitter.EmitterConfig emitterConfig =
                 new nl.dionsegijn.konfetti.core.emitter.Emitter(100L, java.util.concurrent.TimeUnit.MILLISECONDS).max(100);
@@ -266,7 +264,7 @@ public class MemoryMatchFragment extends Fragment {
         isProcessing = false;
     }
 
-    // 👉 Dọn dẹp RAM khi thoát
+    // Dọn dẹp RAM khi thoát
     @Override
     public void onDestroyView() {
         super.onDestroyView();

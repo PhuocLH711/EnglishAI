@@ -40,9 +40,7 @@ import adu.nttu.englishai.adapters.VocabularyAdapter;
 import adu.nttu.englishai.models.DataRepository;
 import adu.nttu.englishai.models.Vocabulary;
 
-// =========================================================================
 // VOCABULARY FRAGMENT: Màn hình Từ điển Từ vựng, Tìm kiếm & Lọc nâng cao
-// =========================================================================
 public class VocabularyFragment extends Fragment {
 
 
@@ -89,9 +87,7 @@ public class VocabularyFragment extends Fragment {
         );
     }
 
-    // =========================================================================
     // HÀM KHỞI TẠO LOGIC SAU KHI GIAO DIỆN ĐÃ TẠO XONG
-    // =========================================================================
     @Override
     public void onViewCreated(
             @NonNull View view,
@@ -154,10 +150,7 @@ public class VocabularyFragment extends Fragment {
         loadVocabularyFromFirestore();
     }
 
-
-    // =========================================================================
     // ĐỒNG BỘ TIẾN ĐỘ KHI QUAY LẠI MÀN HÌNH
-    // =========================================================================
     @Override
     public void onResume() {
         super.onResume();
@@ -186,9 +179,7 @@ public class VocabularyFragment extends Fragment {
         recyclerVocabulary.setAdapter(vocabularyAdapter);
     }
 
-    // =========================================================================
-    // HÀM 1: TẢI DANH SÁCH TỪ VỰNG CHUNG
-    // =========================================================================
+    // TẢI DANH SÁCH TỪ VỰNG CHUNG
     private void loadVocabularyFromFirestore() {
         firestore.collection("vocabularies")
                 .get()
@@ -245,9 +236,7 @@ public class VocabularyFragment extends Fragment {
                 });
     }
 
-    // =========================================================================
-    // HÀM 2: PARSE DỮ LIỆU BAO DUNG
-    // =========================================================================
+    // PARSE DỮ LIỆU BAO DUNG
     private Vocabulary createVocabularyFromDocument(
             DocumentSnapshot document
     ) {
@@ -331,9 +320,7 @@ public class VocabularyFragment extends Fragment {
         return vocabulary;
     }
 
-    // =========================================================================
-    // HÀM 3: GHÉP NỐI DỮ LIỆU CÁ NHÂN VÀO TỪ VỰNG CHUNG
-    // =========================================================================
+    // GHÉP NỐI DỮ LIỆU CÁ NHÂN VÀO TỪ VỰNG CHUNG
     private void loadUserProgress() {
         FirebaseUser currentUser =
                 firebaseAuth.getCurrentUser();
@@ -433,9 +420,7 @@ public class VocabularyFragment extends Fragment {
         }
     }
 
-    // =========================================================================
-    // HÀM 4: LƯU YÊU THÍCH BẰNG KỸ THUẬT MERGE
-    // =========================================================================
+    // LƯU YÊU THÍCH BẰNG KỸ THUẬT MERGE
     private void saveFavoriteStatus(
             Vocabulary vocabulary,
             boolean newState
@@ -514,9 +499,7 @@ public class VocabularyFragment extends Fragment {
                 });
     }
 
-    // =========================================================================
     // CẤU HÌNH TÌM KIẾM TRONG THỜI GIAN THỰC
-    // =========================================================================
     private void setupSearch() {
         searchVocabulary.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
@@ -690,9 +673,7 @@ public class VocabularyFragment extends Fragment {
         applyCurrentFilter();
     }
 
-    // =========================================================================
-    // HÀM 5: HỘP THOẠI LỌC NÂNG CAO
-    // =========================================================================
+    // HỘP THOẠI LỌC NÂNG CAO
     private void showFilterDialog() {
         View dialogView = LayoutInflater
                 .from(requireContext())
@@ -831,9 +812,7 @@ public class VocabularyFragment extends Fragment {
         return adapter;
     }
 
-    // =========================================================================
-    // HÀM 6: TẠO DANH SÁCH CHỦ ĐỀ KHÔNG TRÙNG LẶP
-    // =========================================================================
+    // TẠO DANH SÁCH CHỦ ĐỀ KHÔNG TRÙNG LẶP
     private String[] buildCategoryArray() {
         // LinkedHashSet: Vừa giữ đúng thứ tự thêm vào, vừa tự động loại bỏ phần tử trùng lặp
         Set<String> categorySet =
@@ -884,9 +863,7 @@ public class VocabularyFragment extends Fragment {
         return categorySet.toArray(new String[0]);
     }
 
-    // =========================================================================
-    // HÀM QUAN TRỌNG: THUẬT TOÁN LỌC TỔNG HỢP
-    // =========================================================================
+    // THUẬT TOÁN LỌC TỔNG HỢP
     private void applyCurrentFilter() {
         filteredList.clear();
 

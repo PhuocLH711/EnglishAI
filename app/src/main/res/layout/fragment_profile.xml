@@ -6,7 +6,6 @@
     android:background="#F0F4F8"
     android:padding="20dp">
 
-    <!-- Header: Tiêu đề + Nút Cài đặt -->
     <RelativeLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
@@ -47,7 +46,6 @@
         </com.google.android.material.card.MaterialCardView>
     </RelativeLayout>
 
-    <!-- Khung cuộn toàn bộ nội dung bên dưới -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -62,7 +60,6 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- Avatar -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
@@ -107,7 +104,6 @@
                 android:textColor="#757575"
                 android:textSize="14sp" />
 
-            <!-- Hàng 1: Chuỗi Lửa + Tổng Điểm (XP) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -186,7 +182,6 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- 👉 NÚT BẢNG XẾP HẠNG ĐƯA RA NGOÀI -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLeaderboard"
                 android:layout_width="match_parent"
@@ -250,7 +245,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- THẺ BỔ SUNG: Tổng số từ vựng trong hệ thống -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -311,7 +305,6 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <!-- Hàng 2: Đã thuộc + Đang học -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -400,7 +393,6 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Hàng 3: Chưa học + Yêu thích -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

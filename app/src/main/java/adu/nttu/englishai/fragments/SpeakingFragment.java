@@ -140,7 +140,7 @@ public class SpeakingFragment extends Fragment {
 
         // Kiểm tra xem từ người dùng đọc có chứa từ gốc không
         if (spoken.contains(target)) {
-            // 👉 ĐỌC ĐÚNG
+            // ĐỌC ĐÚNG
             isAnsweredCorrectly = true;
             tvUserSpeech.setTextColor(Color.parseColor("#2E7D32"));
             tvUserSpeech.setText("Bạn đọc: \"" + spokenText + "\" - Chính xác! 🌟");
@@ -155,7 +155,7 @@ public class SpeakingFragment extends Fragment {
             updateProgressAndStreak(15);
 
         } else {
-            // 👉 ĐỌC SAI
+            // ĐỌC SAI
             tvUserSpeech.setTextColor(Color.parseColor("#C62828"));
             tvUserSpeech.setText("Bạn đọc: \"" + spokenText + "\" - Gần đúng rồi, đọc lại nhé! 💪");
 
@@ -174,7 +174,7 @@ public class SpeakingFragment extends Fragment {
         );
     }
 
-    // Hàm đẩy điểm XP và tính toán Chuỗi lửa lên Firebase (Giống y 2 màn kia)
+    // Hàm đẩy điểm XP và tính toán Chuỗi lửa lên Firebase
     private void updateProgressAndStreak(int xpAmount) {
         com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;

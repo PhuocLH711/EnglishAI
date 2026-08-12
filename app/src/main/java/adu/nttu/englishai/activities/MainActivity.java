@@ -29,10 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-        // Khởi tạo Firestore
         db = FirebaseFirestore.getInstance();
 
         // Cấu hình bong bóng AI

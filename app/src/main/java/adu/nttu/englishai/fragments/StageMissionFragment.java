@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import adu.nttu.englishai.R;
 
-// =========================================================================
 // STAGE MISSION FRAGMENT: Màn hình Chờ chuẩn bị vượt Ải
-// =========================================================================
 public class StageMissionFragment extends Fragment {
 
     private String difficultyLevel = "Easy";

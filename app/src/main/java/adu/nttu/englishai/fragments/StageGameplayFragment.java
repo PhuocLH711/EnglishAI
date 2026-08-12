@@ -61,7 +61,7 @@ public class StageGameplayFragment extends Fragment {
 
     // Class đại diện cho Câu hỏi
     private static class GameQuestion {
-        int type; // 0: Trắc nghiệm, 1: Gõ phím, 2: Xếp câu
+        int type;
         Vocabulary vocab;
         String engSentence;
         String vieSentence;
@@ -301,19 +301,17 @@ public class StageGameplayFragment extends Fragment {
 
                 for (String word : shuffledWords) {
                     Chip chip = createChip(word);
-                    setupChipEvents(chip); // 👉 SỬ DỤNG HÀM DRAG & DROP MỚI
+                    setupChipEvents(chip); // SỬ DỤNG HÀM DRAG & DROP
                     if (layoutAvailableWords != null) layoutAvailableWords.addView(chip);
                 }
             }
         }
     }
 
-    // =======================================================================
-    // 🛡️ BỘ ĐỘNG CƠ KÉO THẢ (DRAG & DROP) SIÊU MƯỢT VÀ AN TOÀN
-    // =======================================================================
+    // BỘ ĐỘNG CƠ KÉO THẢ (DRAG & DROP)
     private void setupChipEvents(Chip chip) {
 
-        // 1. CHẠM NHANH: Đẩy từ lên hoặc ném từ xuống (Như cũ)
+        // 1. CHẠM NHANH: Đẩy từ lên hoặc ném từ xuống
         chip.setOnClickListener(v -> {
             if (isChecked) return;
             ViewGroup currentParent = (ViewGroup) chip.getParent();

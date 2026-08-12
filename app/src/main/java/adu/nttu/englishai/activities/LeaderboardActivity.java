@@ -37,7 +37,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         TextView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        // Cài đặt danh sách (RecyclerView)
+        // Cài đặt danh sách
         recyclerView = findViewById(R.id.recyclerViewLeaderboard);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -72,7 +72,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                 userList.add(new LeaderboardAdapter.UserItem(name, avatarUrl, score));
             }
 
-            // Sắp xếp danh sách giảm dần theo XP (Đua TOP)
+            // Sắp xếp danh sách giảm dần theo XP
             Collections.sort(userList, (u1, u2) -> Integer.compare(u2.score, u1.score));
 
             // Cập nhật giao diện

@@ -154,9 +154,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    // =========================================================================
     // KỸ THUẬT XỬ LÝ ẢNH BASE64 (KHÔNG CẦN FIREBASE STORAGE)
-    // =========================================================================
     private void processAndUploadBase64Avatar(Uri imageUri) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user == null || getContext() == null) return;
@@ -279,9 +277,7 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    // =========================================================================
     // HỘP THOẠI CÀI ĐẶT
-    // =========================================================================
     private void showSettingsBottomSheet() {
         if (getContext() == null) return;
 

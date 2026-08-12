@@ -6,7 +6,6 @@
     android:background="#F0F4F8"
     android:padding="20dp">
 
-    <!-- Nút Quay lại -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnBackToStage"
         android:layout_width="44dp"
@@ -30,7 +29,6 @@
             android:paddingBottom="4dp"/>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Nội dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +53,6 @@
             android:textColor="#546E7A"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Thẻ chứa từ vựng cần đọc -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +97,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- NÚT MICRO KHỔNG LỒ -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnMic"
             android:layout_width="100dp"
@@ -120,7 +116,6 @@
                 android:background="?attr/selectableItemBackground"/>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Kết quả nhận diện -->
         <TextView
             android:id="@+id/tvUserSpeech"
             android:layout_width="match_parent"
@@ -149,7 +144,6 @@
 
     </LinearLayout>
 
-    <!-- Pháo hoa 🎇 -->
     <nl.dionsegijn.konfetti.xml.KonfettiView
         android:id="@+id/konfettiView"
         android:layout_width="match_parent"

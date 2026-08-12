@@ -17,7 +17,6 @@
         android:paddingHorizontal="24dp"
         android:gravity="center">
 
-        <!-- Biểu tượng hoành tráng -->
         <TextView
             android:id="@+id/tvDialogIcon"
             android:layout_width="86dp"
@@ -29,7 +28,6 @@
             android:backgroundTint="#FFF3E0"
             android:layout_marginBottom="20dp"/>
 
-        <!-- Tiêu đề Dialog -->
         <TextView
             android:id="@+id/tvDialogTitle"
             android:layout_width="wrap_content"
@@ -41,7 +39,6 @@
             android:gravity="center"
             android:layout_marginBottom="12dp"/>
 
-        <!-- Lời nhắn -->
         <TextView
             android:id="@+id/tvDialogMessage"
             android:layout_width="wrap_content"
@@ -53,7 +50,6 @@
             android:lineSpacingExtra="4dp"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Nút Chính (Chiến tiếp / Tuyệt vời) -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDialogPositive"
             android:layout_width="match_parent"
@@ -67,7 +63,6 @@
             android:elevation="4dp"
             android:layout_marginBottom="12dp"/>
 
-        <!-- Nút Phụ (Về bản đồ) -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDialogNegative"
             android:layout_width="match_parent"

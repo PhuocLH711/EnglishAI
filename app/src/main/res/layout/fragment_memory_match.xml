@@ -110,7 +110,6 @@
         android:visibility="gone"
         android:elevation="4dp"/>
 
-    <!-- 👉 Thêm khung pháo hoa (Nằm dưới cùng để hiển thị đè lên trên tất cả) -->
     <nl.dionsegijn.konfetti.xml.KonfettiView
         android:id="@+id/konfettiView"
         android:layout_width="match_parent"

@@ -17,12 +17,10 @@ import adu.nttu.englishai.R;
 import adu.nttu.englishai.models.DataRepository;
 import adu.nttu.englishai.models.Vocabulary;
 
-// =========================================================================
 // FLASHCARD FRAGMENT: Màn hình học từ vựng bằng thẻ lật 3D tương tác
-// =========================================================================
 public class FlashcardFragment extends Fragment {
 
-    // Các thành phần giao diện (UI Components)
+    // Các thành phần giao diện
     private FrameLayout cardContainer;
     private TextView tvCardFront, tvCardBack;
     private Button btnNextCard;
@@ -63,10 +61,6 @@ public class FlashcardFragment extends Fragment {
 
         vocabularyList = DataRepository.getInstance().getVocabularyList();
 
-        /*
-         * THIẾT LẬP KHOẢNG CÁCH CAMERA 3D
-         * Công thức: distance * density giúp nhân khoảng cách lên 8000 pixel
-         */
         float distance = 8000;
         float scale = getResources().getDisplayMetrics().density;
         cardContainer.setCameraDistance(distance * scale);

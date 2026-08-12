@@ -6,9 +6,7 @@
     android:background="#F0F4F8"
     android:orientation="vertical">
 
-    <!-- ========================================================================= -->
     <!-- 1. PHẦN HEADER CỐ ĐỊNH -->
-    <!-- ========================================================================= -->
     <LinearLayout
         android:id="@+id/layoutFixedHeader"
         android:layout_width="match_parent"
@@ -61,7 +59,6 @@
                 android:layout_marginEnd="8dp"
                 android:elevation="2dp"
                 android:gravity="center">
-                <!-- 👉 ĐÃ THÊM ID CHO CHUỖI LỬA -->
                 <TextView
                     android:id="@+id/tvHomeStreak"
                     android:layout_width="wrap_content"
@@ -81,7 +78,6 @@
                 android:paddingVertical="8dp"
                 android:elevation="2dp"
                 android:gravity="center">
-                <!-- 👉 ĐÃ THÊM ID CHO ĐIỂM XP -->
                 <TextView
                     android:id="@+id/tvHomeXP"
                     android:layout_width="wrap_content"
@@ -192,9 +188,7 @@
 
     </LinearLayout>
 
-    <!-- ========================================================================= -->
-    <!-- 2. PHẦN BẢN ĐỒ CÁC ẢI (CUỘN MƯỢT MÀ BÊN DƯỚI)                            -->
-    <!-- ========================================================================= -->
+    <!-- 2. PHẦN BẢN ĐỒ CÁC ẢI-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

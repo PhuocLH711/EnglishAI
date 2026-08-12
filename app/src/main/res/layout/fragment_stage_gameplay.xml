@@ -6,7 +6,6 @@
     android:background="#FFFFFF"
     android:padding="20dp">
 
-    <!-- Header: Nút Xóa, Thanh Tiến Trình và Trái Tim -->
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
@@ -48,7 +47,6 @@
             android:textColor="#F44336"/>
     </LinearLayout>
 
-    <!-- Khu vực Câu Hỏi chung -->
     <TextView
         android:id="@+id/tvQuestionTitle"
         android:layout_width="wrap_content"
@@ -72,9 +70,6 @@
         android:gravity="center"
         android:layout_marginBottom="24dp"/>
 
-    <!-- ============================================== -->
-    <!-- DẠNG 1: TRẮC NGHIỆM -->
-    <!-- ============================================== -->
     <LinearLayout
         android:id="@+id/layoutMultipleChoice"
         android:layout_width="match_parent"
@@ -130,9 +125,6 @@
             android:textColor="#37474F"/>
     </LinearLayout>
 
-    <!-- ============================================== -->
-    <!-- DẠNG 2: GÕ PHÍM TỰ LUẬN -->
-    <!-- ============================================== -->
     <LinearLayout
         android:id="@+id/layoutTyping"
         android:layout_width="match_parent"
@@ -153,9 +145,6 @@
             android:textColor="#1A1A1A"/>
     </LinearLayout>
 
-    <!-- ============================================== -->
-    <!-- DẠNG 3: KÉO THẢ XẾP CÂU (VỪA THÊM VÀO) 👉 -->
-    <!-- ============================================== -->
     <LinearLayout
         android:id="@+id/layoutSentenceArrange"
         android:layout_width="match_parent"
@@ -200,7 +189,6 @@
             app:chipSpacing="8dp"/>
     </LinearLayout>
 
-    <!-- Thông báo kết quả (Đúng/Sai) -->
     <TextView
         android:id="@+id/tvFeedback"
         android:layout_width="match_parent"
@@ -212,7 +200,6 @@
         android:layout_marginBottom="16dp"
         android:visibility="gone"/>
 
-    <!-- Nút KIỂM TRA -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCheck"
         android:layout_width="match_parent"
@@ -226,7 +213,6 @@
         android:textStyle="bold"
         android:elevation="4dp"/>
 
-    <!-- Pháo hoa 🎇 -->
     <nl.dionsegijn.konfetti.xml.KonfettiView
         android:id="@+id/konfettiView"
         android:layout_width="match_parent"
