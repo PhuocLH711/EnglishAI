@@ -1,14 +1,22 @@
 package adu.nttu.englishai.activities;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import adu.nttu.englishai.fragments.ToeicFragment;
+import androidx.core.content.ContextCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,30 +25,98 @@ import adu.nttu.englishai.R;
 import adu.nttu.englishai.fragments.GameFragment;
 import adu.nttu.englishai.fragments.HomeFragment;
 import adu.nttu.englishai.fragments.ProfileFragment;
+import adu.nttu.englishai.fragments.ToeicFragment;
 import adu.nttu.englishai.fragments.VocabularyFragment;
+import adu.nttu.englishai.notifications.RandomLearningReminderWorker;
+import adu.nttu.englishai.notifications.RandomReminderScheduler;
 
 public class MainActivity extends AppCompatActivity {
 
+    // =========================================================
+    // NOTIFICATION PERMISSION
+    // =========================================================
+    private ActivityResultLauncher<String>
+            notificationPermissionLauncher;
+
+    // =========================================================
+    // FIRESTORE
+    // =========================================================
     private FirebaseFirestore db;
 
-
+    // =========================================================
+    // LIFECYCLE
+    // =========================================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
+// =====================================================
+// 1. FIRESTORE
+// =====================================================
         db = FirebaseFirestore.getInstance();
 
-        // Cấu hình bong bóng AI
+// =====================================================
+// 2. ĐĂNG KÝ CALLBACK XIN QUYỀN NOTIFICATION
+// =====================================================
+        notificationPermissionLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestPermission(),
+                        isGranted -> {
+
+                            if (isGranted) {
+
+                                RandomReminderScheduler
+                                        .scheduleNextReminder(
+                                                MainActivity.this
+                                        );
+
+                                testNotificationNow();
+                            }
+                        }
+                );
+
+        // =====================================================
+        // 2. CÀI ĐẶT THÔNG BÁO RANDOM
+        // =====================================================
+        setupRandomNotification();
+
+        // =====================================================
+        // 3. TEST NOTIFICATION NGAY
+        // Chỉ dùng tạm để kiểm tra
+        // =====================================================
+        testNotificationNow();
+
+        // =====================================================
+        // 4. FIRESTORE
+        // =====================================================
+        db =
+                FirebaseFirestore.getInstance();
+
+        // =====================================================
+        // 5. AI TUTOR FLOATING BUTTON
+        // =====================================================
         setupDraggableAiTutor();
 
+        // =====================================================
+        // 6. BOTTOM NAVIGATION
+        // =====================================================
         BottomNavigationView bottomNav =
-                findViewById(R.id.bottom_navigation);
+                findViewById(
+                        R.id.bottom_navigation
+                );
 
         bottomNav.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
 
+            int itemId =
+                    item.getItemId();
+
+            // =================================================
+            // HOME
+            // =================================================
             if (itemId == R.id.nav_home) {
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(
@@ -50,8 +126,13 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
 
                 return true;
+            }
 
-            } else if (itemId == R.id.nav_vocabulary) {
+            // =================================================
+            // VOCABULARY
+            // =================================================
+            else if (itemId == R.id.nav_vocabulary) {
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(
@@ -61,8 +142,12 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
 
                 return true;
+            }
 
-            } else if (itemId == R.id.nav_toeic) {
+            // =================================================
+            // TOEIC
+            // =================================================
+            else if (itemId == R.id.nav_toeic) {
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -73,8 +158,13 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
 
                 return true;
+            }
 
-            } else if (itemId == R.id.nav_game) {
+            // =================================================
+            // GAME
+            // =================================================
+            else if (itemId == R.id.nav_game) {
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(
@@ -84,8 +174,13 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
 
                 return true;
+            }
 
-            } else if (itemId == R.id.nav_progress) {
+            // =================================================
+            // PROFILE / PROGRESS
+            // =================================================
+            else if (itemId == R.id.nav_progress) {
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(
@@ -100,112 +195,307 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Khi mở app lần đầu, hiển thị Trang chủ
+        // =====================================================
+        // 7. MỞ APP → TRANG HOME
+        // =====================================================
         if (savedInstanceState == null) {
-            bottomNav.setSelectedItemId(R.id.nav_home);
+
+            bottomNav.setSelectedItemId(
+                    R.id.nav_home
+            );
         }
     }
 
-    /**
-     * Hàm cấu hình logic di chuyển kéo thả tự do cho nút AI Tutor
-     * Tự động hút về mép trái hoặc phải gần nhất khi người dùng buông tay.
-     */
-    private void setupDraggableAiTutor() {
-        View layoutAiTutor = findViewById(R.id.layoutAiTutor);
-        if (layoutAiTutor == null) return;
+    // =========================================================================
+    // CÀI ĐẶT HỆ THỐNG THÔNG BÁO RANDOM
+    // =========================================================================
+    private void setupRandomNotification() {
 
-        // Xử lý sự kiện vuốt chạm di chuyển (Touch Event)
-        layoutAiTutor.setOnTouchListener(new View.OnTouchListener() {
-            private float dX, dY;
-            private float startX, startY;
-            private static final int CLICK_THRESHOLD = 15; // Ngưỡng pixel để phân biệt Bấm nhẹ hay Kéo di chuyển
+        // =========================================================
+        // ANDROID 13+
+        // Cần quyền POST_NOTIFICATIONS
+        // =========================================================
+        if (Build.VERSION.SDK_INT
+                >= Build.VERSION_CODES.TIRAMISU) {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Ghi lại tọa độ ban đầu khi ngón tay vừa chạm vào màn hình
-                        dX = view.getX() - event.getRawX();
-                        dY = view.getY() - event.getRawY();
-                        startX = event.getRawX();
-                        startY = event.getRawY();
-                        return true;
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED) {
 
-                    case MotionEvent.ACTION_MOVE:
-                        // Tính toán vị trí mới dựa trên đường di chuyển của ngón tay
-                        float newX = event.getRawX() + dX;
-                        float newY = event.getRawY() + dY;
+                // Đã có quyền
+                // → tạo lịch random 1 / 2 / 3 / 5 ngày
+                RandomReminderScheduler
+                        .scheduleNextReminder(
+                                this
+                        );
 
-                        // Ràng buộc không cho nút AI bị kéo văng ra ngoài mép màn hình
-                        View parent = (View) view.getParent();
-                        if (parent != null) {
-                            int parentWidth = parent.getWidth();
-                            int parentHeight = parent.getHeight();
-                            int bottomMargin = 220; // Trừ hao chiều cao của Bottom Navigation
-                            int topMargin = 50;     // Trừ hao thanh thông báo hệ thống phía trên
+            } else {
 
-                            newX = Math.max(0, Math.min(newX, parentWidth - view.getWidth()));
-                            newY = Math.max(topMargin, Math.min(newY, parentHeight - view.getHeight() - bottomMargin));
-                        }
-
-                        // Cập nhật vị trí tức thời cho nút AI
-                        view.setX(newX);
-                        view.setY(newY);
-                        return true;
-
-                    case MotionEvent.ACTION_UP:
-                        // Khi người dùng nhấc ngón tay ra khỏi màn hình
-                        float endX = event.getRawX();
-                        float endY = event.getRawY();
-                        float distance = (float) Math.hypot(endX - startX, endY - startY);
-
-                        if (distance < CLICK_THRESHOLD) {
-                            // Nếu khoảng cách di chuyển cực nhỏ -> Hiểu là hành động CLICK (Bấm nhẹ)
-                            view.performClick();
-                        } else {
-                            // Nếu khoảng cách lớn -> Hiểu là hành động KÉO THẢ -> Tự động trượt mượt mà về mép rìa gần nhất
-                            View parentView = (View) view.getParent();
-                            if (parentView != null) {
-                                int parentWidth = parentView.getWidth();
-                                float center = parentWidth / 2f;
-
-                                // Nếu tâm nút nằm lệch bên trái trục giữa thì hút về mép trái (cách 16dp), ngược lại hút về bên phải
-                                float targetX = (view.getX() + view.getWidth() / 2f < center)
-                                        ? 16f
-                                        : (parentWidth - view.getWidth() - 16f);
-
-                                // Thực hiện hiệu ứng trượt mượt mà trong 250 miligiây
-                                view.animate()
-                                        .x(targetX)
-                                        .setDuration(250)
-                                        .start();
-                            }
-                        }
-                        return true;
-                    default:
-                        return false;
-                }
+                // Chưa có quyền
+                // → hỏi người dùng
+                notificationPermissionLauncher
+                        .launch(
+                                Manifest.permission.POST_NOTIFICATIONS
+                        );
             }
-        });
 
-        // Xử lý hành động BẤM VÀO nút AI: Giữ nguyên hiệu ứng nhún nhảy phóng to thu nhỏ xịn sò của bạn!
+        } else {
+
+            // Android < 13 không cần runtime permission
+            RandomReminderScheduler
+                    .scheduleNextReminder(
+                            this
+                    );
+        }
+    }
+
+    // =========================================================================
+    // TEST NOTIFICATION NGAY
+    // =========================================================================
+    private void testNotificationNow() {
+
+        // Android 13+
+        if (Build.VERSION.SDK_INT
+                >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            }
+        }
+
+        OneTimeWorkRequest testNotificationRequest =
+                new OneTimeWorkRequest.Builder(
+                        RandomLearningReminderWorker.class
+                )
+                        .build();
+
+        WorkManager
+                .getInstance(this)
+                .enqueue(
+                        testNotificationRequest
+                );
+    }
+
+    // =========================================================================
+    // AI TUTOR - KÉO THẢ
+    // =========================================================================
+    private void setupDraggableAiTutor() {
+
+        View layoutAiTutor =
+                findViewById(
+                        R.id.layoutAiTutor
+                );
+
+        if (layoutAiTutor == null) {
+            return;
+        }
+
+        layoutAiTutor.setOnTouchListener(
+                new View.OnTouchListener() {
+
+                    private float dX;
+                    private float dY;
+
+                    private float startX;
+                    private float startY;
+
+                    private static final int CLICK_THRESHOLD =
+                            15;
+
+                    @Override
+                    public boolean onTouch(
+                            View view,
+                            MotionEvent event
+                    ) {
+
+                        switch (event.getActionMasked()) {
+
+                            // =================================================
+                            // TOUCH DOWN
+                            // =================================================
+                            case MotionEvent.ACTION_DOWN:
+
+                                dX =
+                                        view.getX()
+                                                - event.getRawX();
+
+                                dY =
+                                        view.getY()
+                                                - event.getRawY();
+
+                                startX =
+                                        event.getRawX();
+
+                                startY =
+                                        event.getRawY();
+
+                                return true;
+
+                            // =================================================
+                            // MOVE
+                            // =================================================
+                            case MotionEvent.ACTION_MOVE:
+
+                                float newX =
+                                        event.getRawX()
+                                                + dX;
+
+                                float newY =
+                                        event.getRawY()
+                                                + dY;
+
+                                View parent =
+                                        (View) view.getParent();
+
+                                if (parent != null) {
+
+                                    int parentWidth =
+                                            parent.getWidth();
+
+                                    int parentHeight =
+                                            parent.getHeight();
+
+                                    int bottomMargin =
+                                            220;
+
+                                    int topMargin =
+                                            50;
+
+                                    newX =
+                                            Math.max(
+                                                    0,
+                                                    Math.min(
+                                                            newX,
+                                                            parentWidth
+                                                                    - view.getWidth()
+                                                    )
+                                            );
+
+                                    newY =
+                                            Math.max(
+                                                    topMargin,
+                                                    Math.min(
+                                                            newY,
+                                                            parentHeight
+                                                                    - view.getHeight()
+                                                                    - bottomMargin
+                                                    )
+                                            );
+                                }
+
+                                view.setX(
+                                        newX
+                                );
+
+                                view.setY(
+                                        newY
+                                );
+
+                                return true;
+
+                            // =================================================
+                            // TOUCH UP
+                            // =================================================
+                            case MotionEvent.ACTION_UP:
+
+                                float endX =
+                                        event.getRawX();
+
+                                float endY =
+                                        event.getRawY();
+
+                                float distance =
+                                        (float) Math.hypot(
+                                                endX - startX,
+                                                endY - startY
+                                        );
+
+                                // =================================================
+                                // CLICK
+                                // =================================================
+                                if (distance < CLICK_THRESHOLD) {
+
+                                    view.performClick();
+
+                                }
+
+                                // =================================================
+                                // DRAG → HÚT VỀ MÉP
+                                // =================================================
+                                else {
+
+                                    View parentView =
+                                            (View) view.getParent();
+
+                                    if (parentView != null) {
+
+                                        int parentWidth =
+                                                parentView.getWidth();
+
+                                        float center =
+                                                parentWidth / 2f;
+
+                                        float targetX =
+                                                (
+                                                        view.getX()
+                                                                + view.getWidth() / 2f
+                                                                < center
+                                                )
+                                                        ? 16f
+                                                        : (
+                                                        parentWidth
+                                                        - view.getWidth()
+                                                        - 16f
+                                                );
+
+                                        view.animate()
+                                                .x(targetX)
+                                                .setDuration(250)
+                                                .start();
+                                    }
+                                }
+
+                                return true;
+
+                            default:
+
+                                return false;
+                        }
+                    }
+                }
+        );
+
+        // =========================================================
+        // CLICK AI TUTOR
+        // =========================================================
         layoutAiTutor.setOnClickListener(view -> {
+
             view.animate()
                     .scaleX(1.15f)
                     .scaleY(1.15f)
                     .setDuration(120)
                     .withEndAction(() -> {
+
                         view.animate()
                                 .scaleX(1f)
                                 .scaleY(1f)
                                 .setDuration(120)
                                 .withEndAction(() -> {
-                                    // Sau khi nhún nhảy xong thì chuyển sang màn hình cuộc hội thoại AI
-                                    Intent intent = new Intent(
-                                            MainActivity.this,
-                                            AiTutorActivity.class
+
+                                    Intent intent =
+                                            new Intent(
+                                                    MainActivity.this,
+                                                    AiTutorActivity.class
+                                            );
+
+                                    startActivity(
+                                            intent
                                     );
-                                    startActivity(intent);
                                 })
                                 .start();
                     })
@@ -213,21 +503,34 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Hàm tạo hiệu ứng nhún nhảy lơ lửng tại chỗ cho hình ảnh nhân vật AI (nếu dùng sau này)
-     */
-    private void startIdleAnimation(ImageView imageView) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(
-                imageView,
-                "translationY",
-                0f,
-                -12f,
-                0f
+    // =========================================================================
+    // HIỆU ỨNG FLOATING
+    // =========================================================================
+    private void startIdleAnimation(
+            ImageView imageView
+    ) {
+
+        ObjectAnimator animator =
+                ObjectAnimator.ofFloat(
+                        imageView,
+                        "translationY",
+                        0f,
+                        -12f,
+                        0f
+                );
+
+        animator.setDuration(
+                1800
         );
 
-        animator.setDuration(1800);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setRepeatMode(ValueAnimator.RESTART);
+        animator.setRepeatCount(
+                ValueAnimator.INFINITE
+        );
+
+        animator.setRepeatMode(
+                ValueAnimator.RESTART
+        );
+
         animator.start();
     }
 }

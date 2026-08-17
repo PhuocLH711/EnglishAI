@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FieldValue;
@@ -20,141 +21,226 @@ import java.util.HashMap;
 import java.util.Map;
 
 import adu.nttu.englishai.R;
+import adu.nttu.englishai.firebase.FirebaseAuthManager;
 
-// =========================================================================
-// REGISTER ACTIVITY: Màn hình Đăng ký tài khoản mới & Tạo hồ sơ Firestore
-// =========================================================================
 public class RegisterActivity extends AppCompatActivity {
 
-    // Các thành phần giao diện (UI Components)
+    // =========================================================
+    // UI
+    // =========================================================
     private EditText edtName;
     private EditText edtEmail;
     private EditText edtPassword;
-    private Button btnRegister;
+    private EditText edtConfirmPassword;
 
-    // Đối tượng quản lý xác thực (Auth) và Cơ sở dữ liệu đám mây (Firestore)
-    private FirebaseAuth firebaseAuth;
+    private MaterialButton btnRegister;
+    private TextView txtGoToLogin;
+
+    // =========================================================
+    // FIREBASE
+    // =========================================================
+    private FirebaseAuthManager authManager;
     private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register);
 
-        // 1. Ánh xạ các biến Java với ID thẻ trong file XML
-        edtName = findViewById(R.id.edtName);
-        edtEmail = findViewById(R.id.edtEmail);
-        edtPassword = findViewById(R.id.edtPassword);
-        btnRegister = findViewById(R.id.btnRegister);
+        // =====================================================
+        // 1. ÁNH XẠ VIEW
+        // =====================================================
+        edtName =
+                findViewById(R.id.edtName);
 
-        // 2. Khởi tạo đối tượng Firebase Auth và Firestore
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        edtEmail =
+                findViewById(R.id.edtEmail);
 
-        // 3. Gán sự kiện click cho nút Đăng ký
-        btnRegister.setOnClickListener(view -> registerUser());
+        edtPassword =
+                findViewById(R.id.edtPassword);
+
+        edtConfirmPassword =
+                findViewById(R.id.edtConfirmPassword);
+
+        btnRegister =
+                findViewById(R.id.btnRegister);
+
+        txtGoToLogin =
+                findViewById(R.id.txtGoToLogin);
+
+        // =====================================================
+        // 2. FIREBASE
+        // =====================================================
+        authManager =
+                new FirebaseAuthManager();
+
+        firestore =
+                FirebaseFirestore.getInstance();
+
+        // =====================================================
+        // 3. ĐĂNG KÝ
+        // =====================================================
+        btnRegister.setOnClickListener(
+                view -> registerUser()
+        );
+
+        // =====================================================
+        // 4. QUAY VỀ LOGIN
+        // =====================================================
+        txtGoToLogin.setOnClickListener(
+                view -> finish()
+        );
     }
 
-    // HÀM QUAN TRỌNG: Kiểm tra dữ liệu đầu vào và thực hiện luồng đăng ký 3 bước nối tiếp
+    // =========================================================================
+    // REGISTER
+    // =========================================================================
     private void registerUser() {
-        // Lấy dữ liệu người dùng gõ vào và cắt bỏ khoảng trắng thừa ở đầu/cuối bằng .trim()
-        String name = edtName.getText().toString().trim();
-        String email = edtEmail.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
 
-        // =========================================================================
-        // BƯỚC 1: VALIDATION - Kiểm tra tính hợp lệ của dữ liệu đầu vào
-        // =========================================================================
+        String name =
+                edtName
+                        .getText()
+                        .toString()
+                        .trim();
 
-        // Kiểm tra họ tên không được để trống
+        String email =
+                edtEmail
+                        .getText()
+                        .toString()
+                        .trim();
+
+        String password =
+                edtPassword
+                        .getText()
+                        .toString()
+                        .trim();
+
+        String confirmPassword =
+                edtConfirmPassword
+                        .getText()
+                        .toString()
+                        .trim();
+
+        // =====================================================
+        // NAME
+        // =====================================================
         if (TextUtils.isEmpty(name)) {
-            edtName.setError("Vui lòng nhập họ và tên");
-            edtName.requestFocus(); // Đưa con trỏ chuột về ô họ tên
-            return; // Dừng hàm ngay lập tức
+
+            edtName.setError(
+                    "Vui lòng nhập họ và tên"
+            );
+
+            edtName.requestFocus();
+
+            return;
         }
 
-        // Kiểm tra email không được để trống
+        // =====================================================
+        // EMAIL
+        // =====================================================
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError("Vui lòng nhập email");
+
+            edtEmail.setError(
+                    "Vui lòng nhập email"
+            );
+
             edtEmail.requestFocus();
+
             return;
         }
 
-        // Kiểm tra định dạng email chuẩn (phải có @, tên miền...) bằng Regular Expression
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError("Email không hợp lệ");
+        if (!Patterns.EMAIL_ADDRESS
+                .matcher(email)
+                .matches()) {
+
+            edtEmail.setError(
+                    "Email không hợp lệ"
+            );
+
             edtEmail.requestFocus();
+
             return;
         }
 
-        // Kiểm tra mật khẩu không được để trống
+        // =====================================================
+        // PASSWORD
+        // =====================================================
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError("Vui lòng nhập mật khẩu");
+
+            edtPassword.setError(
+                    "Vui lòng nhập mật khẩu"
+            );
+
             edtPassword.requestFocus();
+
             return;
         }
 
-        // Quy định bảo mật của Firebase Auth: Mật khẩu bắt buộc phải từ 6 ký tự trở lên
         if (password.length() < 6) {
-            edtPassword.setError("Mật khẩu phải có ít nhất 6 ký tự");
+
+            edtPassword.setError(
+                    "Mật khẩu phải có ít nhất 6 ký tự"
+            );
+
             edtPassword.requestFocus();
+
             return;
         }
 
-        // =========================================================================
-        // BƯỚC 2: KHÓA GIAO DIỆN - Tránh bấm liên tục gửi nhiều request khi mạng chậm
-        // =========================================================================
-        btnRegister.setEnabled(false);
-        btnRegister.setText("Đang đăng ký...");
+        // =====================================================
+        // CONFIRM PASSWORD
+        // =====================================================
+        if (TextUtils.isEmpty(confirmPassword)) {
 
-        // =========================================================================
-        // BƯỚC 3: GỌI FIREBASE AUTHENTICATION TẠO TÀI KHOẢN
-        // =========================================================================
-        // createUserWithEmailAndPassword: Gửi email & password lên server Google để tạo tài khoản
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            edtConfirmPassword.setError(
+                    "Vui lòng xác nhận mật khẩu"
+            );
+
+            edtConfirmPassword.requestFocus();
+
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+
+            edtConfirmPassword.setError(
+                    "Mật khẩu xác nhận không khớp"
+            );
+
+            edtConfirmPassword.requestFocus();
+
+            return;
+        }
+
+        // =====================================================
+        // LOADING
+        // =====================================================
+        setLoading(true);
+
+        // =====================================================
+        // FIREBASE AUTH
+        // =====================================================
+        authManager
+                .registerWithEmail(
+                        email,
+                        password
+                )
                 .addOnCompleteListener(task -> {
 
-                    if (task.isSuccessful()) {
-                        // Lấy đối tượng người dùng vừa đăng ký thành công
-                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    if (!task.isSuccessful()) {
 
-                        if (firebaseUser != null) {
+                        setLoading(false);
 
-                            // QUAN TRỌNG: Mặc định tài khoản mới tạo chỉ có Email/Pass, chưa có Tên.
-                            // UserProfileChangeRequest dùng để nhét Họ Tên (name) vào thẳng trong Token Authentication
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(name) // Gán tên người dùng vừa nhập vào đây
-                                    .build();
+                        String errorMessage =
+                                "Đăng ký thất bại";
 
-                            // Gửi yêu cầu cập nhật Profile lên Firebase Auth
-                            firebaseUser.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(updateTask -> {
-                                        // Sau khi cập nhật profile xong thì mới tiếp tục lưu vào Firestore và chuyển trang
-                                        // Đây là kỹ thuật Chaining Asynchronous Tasks (Nối tiếp các tác vụ bất đồng bộ)
-                                        saveUserToFirestore(
-                                                firebaseUser.getUid(), // Mã ID duy nhất (UUID) của user trên Firebase
-                                                name,
-                                                email
-                                        );
-                                    });
-                        } else {
-                            resetButton(); // Mở khóa nút bấm lại nếu lỗi
-
-                            Toast.makeText(
-                                    RegisterActivity.this,
-                                    "Không lấy được thông tin người dùng",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        }
-
-                    } else {
-                        resetButton(); // Mở khóa nút bấm lại cho người dùng thử lại
-
-                        String errorMessage = "Đăng ký thất bại";
-
-                        // Lấy câu lỗi chi tiết từ Firebase (ví dụ: Email đã tồn tại - The email address is already in use)
                         if (task.getException() != null) {
-                            errorMessage = task.getException().getMessage();
+
+                            errorMessage =
+                                    task
+                                            .getException()
+                                            .getMessage();
                         }
 
                         Toast.makeText(
@@ -162,56 +248,122 @@ public class RegisterActivity extends AppCompatActivity {
                                 errorMessage,
                                 Toast.LENGTH_LONG
                         ).show();
+
+                        return;
                     }
+
+                    FirebaseUser firebaseUser =
+                            authManager
+                                    .getCurrentUser();
+
+                    if (firebaseUser == null) {
+
+                        setLoading(false);
+
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "Không lấy được thông tin người dùng",
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                        return;
+                    }
+
+                    // =================================================
+                    // DISPLAY NAME
+                    // =================================================
+                    UserProfileChangeRequest profileUpdates =
+                            new UserProfileChangeRequest
+                                    .Builder()
+                                    .setDisplayName(name)
+                                    .build();
+
+                    firebaseUser
+                            .updateProfile(profileUpdates)
+                            .addOnCompleteListener(updateTask -> {
+
+                                saveUserToFirestore(
+                                        firebaseUser,
+                                        name,
+                                        email
+                                );
+                            });
                 });
     }
 
-    // HÀM QUAN TRỌNG: Lưu thông tin chi tiết (Role, Thời gian tạo...) vào Cloud Firestore
+    // =========================================================================
+    // SAVE USER TO FIRESTORE
+    // =========================================================================
     private void saveUserToFirestore(
-            String userId,
+            FirebaseUser firebaseUser,
             String name,
             String email
     ) {
-        // Tạo một gói dữ liệu dạng Key-Value (Map) để đóng gói thông tin hồ sơ
-        Map<String, Object> userData = new HashMap<>();
 
-        userData.put("uid", userId);
-        userData.put("name", name);
-        userData.put("email", email);
-        userData.put("role", "user"); // Phân quyền mặc định là học viên ("user")
+        String userId =
+                firebaseUser.getUid();
 
-        // FieldValue.serverTimestamp(): Lấy chính xác thời gian thực từ Máy chủ Google (Không dùng giờ điện thoại)
-        userData.put("createdAt", FieldValue.serverTimestamp());
+        Map<String, Object> userData =
+                new HashMap<>();
 
-        // Ghi dữ liệu vào collection "users", với tên Document ID chính là UID của người dùng
-        firestore.collection("users")
+        userData.put(
+                "uid",
+                userId
+        );
+
+        userData.put(
+                "name",
+                name
+        );
+
+        userData.put(
+                "email",
+                email
+        );
+
+        userData.put(
+                "role",
+                "user"
+        );
+
+        userData.put(
+                "authProvider",
+                "password"
+        );
+
+        userData.put(
+                "score",
+                0
+        );
+
+        userData.put(
+                "streak",
+                0
+        );
+
+        userData.put(
+                "emailVerified",
+                false
+        );
+
+        userData.put(
+                "createdAt",
+                FieldValue.serverTimestamp()
+        );
+
+        firestore
+                .collection("users")
                 .document(userId)
                 .set(userData)
                 .addOnSuccessListener(unused -> {
-                    // KHI CẢ AUTH VÀ FIRESTORE ĐỀU THÀNH CÔNG -> HOÀN TẤT ĐĂNG KÝ
-                    Toast.makeText(
-                            RegisterActivity.this,
-                            "Đăng ký thành công",
-                            Toast.LENGTH_SHORT
-                    ).show();
 
-                    // Chuyến xe Intent chuyển thẳng vào màn hình chính (MainActivity)
-                    Intent intent = new Intent(
-                            RegisterActivity.this,
-                            MainActivity.class
-                    );
-
-                    // Xóa sạch lịch sử màn hình cũ (Backstack), ngăn người dùng bấm nút Back quay lại trang Register/Login
-                    intent.setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK
-                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    );
-
-                    startActivity(intent);
-                    finish(); // Đóng hoàn toàn RegisterActivity
+                    // Firestore OK
+                    // → gửi email verification
+                    sendVerificationEmail();
                 })
                 .addOnFailureListener(exception -> {
-                    resetButton(); // Mở khóa nút nếu lưu Firestore thất bại
+
+                    setLoading(false);
 
                     Toast.makeText(
                             RegisterActivity.this,
@@ -222,9 +374,129 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    // Hàm phụ: Mở khóa nút bấm và trả lại chữ "Đăng ký" khi có lỗi xảy ra
-    private void resetButton() {
-        btnRegister.setEnabled(true);
-        btnRegister.setText("Đăng ký");
+    // =========================================================================
+    // SEND VERIFICATION EMAIL
+    // =========================================================================
+    private void sendVerificationEmail() {
+
+        FirebaseUser user =
+                authManager
+                        .getCurrentUser();
+
+        if (user == null) {
+
+            setLoading(false);
+
+            Toast.makeText(
+                    RegisterActivity.this,
+                    "Không tìm thấy tài khoản để gửi email xác minh",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        // CHỈ GỌI 1 LẦN
+        Task<Void> verificationTask =
+                authManager.sendVerificationEmail();
+
+        if (verificationTask == null) {
+
+            setLoading(false);
+
+            Toast.makeText(
+                    RegisterActivity.this,
+                    "Không thể gửi email xác minh",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        verificationTask
+                .addOnCompleteListener(task -> {
+
+                    setLoading(false);
+
+                    if (task.isSuccessful()) {
+
+                        // Đăng xuất để bắt buộc xác minh trước khi login
+                        authManager.logout();
+
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "Tạo tài khoản thành công. "
+                                        + "Vui lòng kiểm tra email để xác minh tài khoản.",
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                        goToLoginActivity();
+
+                    } else {
+
+                        String error =
+                                "Tạo tài khoản thành công nhưng không gửi được email xác minh.";
+
+                        if (task.getException() != null) {
+
+                            error =
+                                    task
+                                            .getException()
+                                            .getMessage();
+                        }
+
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                error,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
+    }
+
+    // =========================================================================
+    // LOGIN ACTIVITY
+    // =========================================================================
+    private void goToLoginActivity() {
+
+        Intent intent =
+                new Intent(
+                        RegisterActivity.this,
+                        LoginActivity.class
+                );
+
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+
+        startActivity(intent);
+
+        finish();
+    }
+
+    // =========================================================================
+    // LOADING
+    // =========================================================================
+    private void setLoading(
+            boolean loading
+    ) {
+
+        btnRegister.setEnabled(
+                !loading
+        );
+
+        if (loading) {
+
+            btnRegister.setText(
+                    "Đang tạo tài khoản..."
+            );
+
+        } else {
+
+            btnRegister.setText(
+                    "Tạo tài khoản"
+            );
+        }
     }
 }

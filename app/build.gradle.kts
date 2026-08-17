@@ -43,16 +43,27 @@ android {
     }
 }
 dependencies {
+
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    implementation("androidx.work:work-runtime:2.10.5")
+
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-
     implementation("com.google.code.gson:gson:2.11.0")
-
     implementation("androidx.recyclerview:recyclerview:1.4.0")
 
+    // =====================================================
+// GOOGLE SIGN-IN
+// =====================================================
+    implementation("androidx.credentials:credentials:1.6.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // =====================================================
+    // FIREBASE
+    // =====================================================
     implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
 
     implementation("com.google.firebase:firebase-auth")
@@ -62,23 +73,14 @@ dependencies {
     // Firebase AI Logic
     implementation("com.google.firebase:firebase-ai")
 
-    // App Check cho lúc chạy máy ảo/debug
     implementation("com.google.firebase:firebase-appcheck-debug")
 
-    // Firebase AI Logic Java cần Guava
     implementation("com.google.guava:guava:31.0.1-android")
-
-    // Dùng cho phản hồi dạng streaming
     implementation("org.reactivestreams:reactive-streams:1.0.4")
 
-    // Thư viện Firebase Storage lưu trữ ảnh
-    implementation("com.google.firebase:firebase-storage")
-
-    // Thư viện Glide giúp load ảnh siêu mượt và bo tròn
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
-    // Thư viện bắn pháo hoa siêu đẹp
     implementation("nl.dionsegijn:konfetti-xml:2.0.4")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

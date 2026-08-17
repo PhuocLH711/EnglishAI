@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="26dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="22dp">
+
+        <!-- ICON -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            app:cardBackgroundColor="#EAF4FF"
+            app:cardCornerRadius="35dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:contentDescription="Xác minh email"
+                android:src="@android:drawable/ic_dialog_email"
+                app:tint="#42A5F5" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- TITLE -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Xác minh email"
+            android:textColor="#172033"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- DESCRIPTION -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="Email của bạn chưa được xác minh. Hãy mở thư EnglishAI và nhấn nút xác minh, sau đó quay lại đây."
+            android:textColor="#788399"
+            android:textSize="14sp" />
+
+        <!-- EMAIL -->
+        <TextView
+            android:id="@+id/tvVerificationEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#F4F8FD"
+            android:gravity="center"
+            android:padding="14dp"
+            android:text="example@gmail.com"
+            android:textColor="#1976D2"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- TÔI ĐÃ XÁC MINH -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCheckVerified"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="22dp"
+            android:text="Tôi đã xác minh"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:backgroundTint="#42A5F5"
+            app:cornerRadius="16dp" />
+
+        <!-- RESEND -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResendVerification"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:text="Gửi lại email xác minh"
+            android:textAllCaps="false"
+            android:textColor="#1976D2"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:strokeColor="#90CAF9"
+            app:strokeWidth="1dp" />
+
+        <!-- CLOSE -->
+        <TextView
+            android:id="@+id/txtCloseVerification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:padding="8dp"
+            android:text="Để sau"
+            android:textColor="#788399"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

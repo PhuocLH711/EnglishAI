@@ -12,7 +12,20 @@
           "package_name": "adu.nttu.englishai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "784862520502-5tab0ot3l87nf80vf6k86174mc5mqo01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "adu.nttu.englishai",
+            "certificate_hash": "52e162702c4b543c904f89a6c505615be1923bc4"
+          }
+        },
+        {
+          "client_id": "784862520502-g2o2pt0tucrc0ttceveomm5ah6v4uv4q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDCWclDaUlEhQsV7IXJovPBulkcCFFMXuA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784862520502-g2o2pt0tucrc0ttceveomm5ah6v4uv4q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
