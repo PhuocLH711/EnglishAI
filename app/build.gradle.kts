@@ -22,8 +22,29 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // =====================================================
+    // SIGNING CONFIG CHO APP DEMO
+    // =====================================================
+    signingConfigs {
+        create("demo") {
+            storeFile = file("englishai-demo")
+            storePassword = "englishai123"
+            keyAlias = "englishai-demo"
+            keyPassword = "englishai123"
+        }
+    }
+
     buildTypes {
+
+        // Khi bấm Run ▶ trong Android Studio
+        debug {
+            signingConfig = signingConfigs.getByName("demo")
+        }
+
+        // Khi Generate Signed APK
         release {
+            signingConfig = signingConfigs.getByName("demo")
+
             optimization {
                 enable = false
             }
@@ -34,6 +55,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     sourceSets {
         getByName("main") {
             assets {
@@ -42,12 +64,14 @@ android {
         }
     }
 }
+
 dependencies {
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+
     implementation("androidx.work:work-runtime:2.10.5")
 
     implementation("com.google.android.flexbox:flexbox:3.0.0")
@@ -55,8 +79,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.4.0")
 
     // =====================================================
-// GOOGLE SIGN-IN
-// =====================================================
+    // GOOGLE SIGN-IN
+    // =====================================================
     implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
@@ -70,7 +94,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
 
-    // Firebase AI Logic
     implementation("com.google.firebase:firebase-ai")
 
     implementation("com.google.firebase:firebase-appcheck-debug")

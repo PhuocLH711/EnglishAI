@@ -1,5 +1,10 @@
 package adu.nttu.englishai.activities;
 
+import android.util.Log;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -32,6 +37,10 @@ import adu.nttu.englishai.notifications.RandomReminderScheduler;
 
 public class MainActivity extends AppCompatActivity {
 
+
+
+
+
     // =========================================================
     // NOTIFICATION PERMISSION
     // =========================================================
@@ -43,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     // =========================================================
     private FirebaseFirestore db;
 
+
+
+
     // =========================================================
     // LIFECYCLE
     // =========================================================
@@ -51,6 +63,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+// =====================================================
+// KIỂM TRA TÀI KHOẢN ĐANG ĐĂNG NHẬP
+// =====================================================
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+
+            Log.d("ADMIN_CHECK",
+                    "UID = " + currentUser.getUid());
+
+            Log.d("ADMIN_CHECK",
+                    "EMAIL = " + currentUser.getEmail());
+
+        } else {
+
+            Log.d("ADMIN_CHECK",
+                    "CHUA DANG NHAP");
+        }
 
 // =====================================================
 // 1. FIRESTORE

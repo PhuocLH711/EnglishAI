@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "784862520502-trh262qb333cjcfped5tc1kte2v4i9ii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "adu.nttu.englishai",
+            "certificate_hash": "354dbce5a0ea49e8ef8e21805a4246bb394b6d02"
+          }
+        },
+        {
           "client_id": "784862520502-g2o2pt0tucrc0ttceveomm5ah6v4uv4q.apps.googleusercontent.com",
           "client_type": 3
         }
