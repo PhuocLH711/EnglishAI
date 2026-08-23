@@ -17,6 +17,7 @@ public class AdminDashboardRepository {
         public int totalGrammar = 0;
         public int totalToeicTests = 0;
         public int totalToeicQuestions = 0;
+        public int totalSentenceRewrite = 0;
     }
 
     public interface StatsCallback {
@@ -33,7 +34,7 @@ public class AdminDashboardRepository {
         DashboardStats stats =
                 new DashboardStats();
 
-        // Có 5 nhóm dữ liệu cần tải
+        // Có 6 nhóm dữ liệu cần tải
         AtomicInteger completed =
                 new AtomicInteger(0);
 
@@ -48,10 +49,10 @@ public class AdminDashboardRepository {
         // =========================================================
         Runnable checkComplete = () -> {
 
-            if (completed.incrementAndGet() == 5) {
+            if (completed.incrementAndGet() == 6) {
 
                 // Nếu tất cả đều lỗi thì báo failure
-                if (failed.get() == 5
+                if (failed.get() == 6
                         && lastException[0] != null) {
 
                     callback.onFailure(
@@ -179,6 +180,26 @@ public class AdminDashboardRepository {
 
                     stats.totalToeicQuestions =
                             questions.size();
+
+                    checkComplete.run();
+                })
+                .addOnFailureListener(exception -> {
+
+                    failed.incrementAndGet();
+                    lastException[0] = exception;
+
+                    checkComplete.run();
+                });
+
+        // =========================================================
+        // SENTENCE REWRITE
+        // =========================================================
+        db.collection("sentenceRewriteExercises")
+                .get()
+                .addOnSuccessListener(rewrite -> {
+
+                    stats.totalSentenceRewrite =
+                            rewrite.size();
 
                     checkComplete.run();
                 })

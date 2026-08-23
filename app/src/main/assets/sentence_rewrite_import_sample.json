@@ -3,7 +3,7 @@
     "originalSentence": "I started learning English two years ago.",
     "prompt": "I have...",
     "answer": "I have learned English for two years.",
-    "explanation": "Dùng thì hiện tại hoàn thành với for + khoảng thời gian.",
+    "explanation": "Dùng hiện tại hoàn thành với for + khoảng thời gian.",
     "topic": "Present Perfect",
     "level": "Easy",
     "xp": 10
@@ -14,6 +14,438 @@
     "answer": "She has worked here since 2022.",
     "explanation": "Dùng hiện tại hoàn thành với since + mốc thời gian.",
     "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "I last saw Mary three months ago.",
+    "prompt": "I haven't...",
+    "answer": "I haven't seen Mary for three months.",
+    "explanation": "Chuyển 'last saw ... ago' sang hiện tại hoàn thành phủ định với for.",
+    "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "He began studying French in 2020.",
+    "prompt": "He has...",
+    "answer": "He has studied French since 2020.",
+    "explanation": "Since đi với mốc thời gian 2020.",
+    "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "This is my first visit to Da Nang.",
+    "prompt": "I have never...",
+    "answer": "I have never visited Da Nang before.",
+    "explanation": "First visit có thể đổi sang cấu trúc have never + V3 + before.",
+    "topic": "Present Perfect",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "I have never eaten sushi before.",
+    "prompt": "This is...",
+    "answer": "This is the first time I have eaten sushi.",
+    "explanation": "Never ... before ↔ This is the first time + hiện tại hoàn thành.",
+    "topic": "Present Perfect",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "Tom is taller than John.",
+    "prompt": "John...",
+    "answer": "John is shorter than Tom.",
+    "explanation": "Đảo đối tượng và dùng tính từ trái nghĩa để giữ nguyên nghĩa.",
+    "topic": "Comparatives",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "This book is more interesting than that one.",
+    "prompt": "That book...",
+    "answer": "That book is less interesting than this one.",
+    "explanation": "More interesting than ↔ less interesting than khi đổi vị trí hai đối tượng.",
+    "topic": "Comparatives",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "My mother cooks better than I do.",
+    "prompt": "I can't...",
+    "answer": "I can't cook as well as my mother does.",
+    "explanation": "So sánh hơn better than ↔ not as well as.",
+    "topic": "Comparatives",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "No student in the class is taller than Nam.",
+    "prompt": "Nam is...",
+    "answer": "Nam is the tallest student in the class.",
+    "explanation": "Chuyển so sánh hơn mang nghĩa tuyệt đối sang so sánh nhất.",
+    "topic": "Superlatives",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "The box is too heavy for me to carry.",
+    "prompt": "The box isn't...",
+    "answer": "The box isn't light enough for me to carry.",
+    "explanation": "Too + adjective ↔ not + adjective trái nghĩa + enough.",
+    "topic": "Too / Enough",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "She is too young to drive a car.",
+    "prompt": "She isn't...",
+    "answer": "She isn't old enough to drive a car.",
+    "explanation": "Too young to ↔ not old enough to.",
+    "topic": "Too / Enough",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "The coffee is too hot for me to drink.",
+    "prompt": "The coffee isn't...",
+    "answer": "The coffee isn't cool enough for me to drink.",
+    "explanation": "Too hot ↔ not cool enough.",
+    "topic": "Too / Enough",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "Although he was tired, he continued working.",
+    "prompt": "In spite of...",
+    "answer": "In spite of being tired, he continued working.",
+    "explanation": "Although + clause ↔ In spite of + noun/V-ing.",
+    "topic": "Concession",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "Although it was raining, they went out.",
+    "prompt": "Despite...",
+    "answer": "Despite the rain, they went out.",
+    "explanation": "Although + clause có thể đổi sang Despite + noun phrase.",
+    "topic": "Concession",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "Because it rained heavily, we stayed at home.",
+    "prompt": "Because of...",
+    "answer": "Because of the heavy rain, we stayed at home.",
+    "explanation": "Because + clause ↔ Because of + noun phrase.",
+    "topic": "Cause",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "Because he was ill, he didn't go to school.",
+    "prompt": "Because of...",
+    "answer": "Because of his illness, he didn't go to school.",
+    "explanation": "Đổi mệnh đề he was ill thành cụm danh từ his illness.",
+    "topic": "Cause",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "They are building a new school near my house.",
+    "prompt": "A new school...",
+    "answer": "A new school is being built near my house.",
+    "explanation": "Bị động hiện tại tiếp diễn: am/is/are being + V3.",
+    "topic": "Passive Voice",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "They built this bridge in 2010.",
+    "prompt": "This bridge...",
+    "answer": "This bridge was built in 2010.",
+    "explanation": "Bị động quá khứ đơn: was/were + V3.",
+    "topic": "Passive Voice",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "People speak English in many countries.",
+    "prompt": "English...",
+    "answer": "English is spoken in many countries.",
+    "explanation": "Bị động hiện tại đơn: am/is/are + V3.",
+    "topic": "Passive Voice",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "They will finish the project next week.",
+    "prompt": "The project...",
+    "answer": "The project will be finished next week.",
+    "explanation": "Bị động tương lai đơn: will be + V3.",
+    "topic": "Passive Voice",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "Someone has stolen my bike.",
+    "prompt": "My bike...",
+    "answer": "My bike has been stolen.",
+    "explanation": "Bị động hiện tại hoàn thành: has/have been + V3.",
+    "topic": "Passive Voice",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "You should study harder or you will fail the exam.",
+    "prompt": "If...",
+    "answer": "If you don't study harder, you will fail the exam.",
+    "explanation": "Or mang nghĩa cảnh báo có thể đổi sang câu điều kiện loại 1.",
+    "topic": "Conditionals",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "Hurry up or you will miss the bus.",
+    "prompt": "If...",
+    "answer": "If you don't hurry up, you will miss the bus.",
+    "explanation": "Mệnh lệnh + or ↔ If + phủ định, will + V.",
+    "topic": "Conditionals",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "Study hard and you will pass the exam.",
+    "prompt": "If...",
+    "answer": "If you study hard, you will pass the exam.",
+    "explanation": "Mệnh lệnh + and ↔ If + hiện tại đơn, will + V.",
+    "topic": "Conditionals",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "I don't have enough money, so I can't buy the laptop.",
+    "prompt": "If...",
+    "answer": "If I had enough money, I could buy the laptop.",
+    "explanation": "Tình huống không có thật ở hiện tại dùng câu điều kiện loại 2.",
+    "topic": "Conditionals",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "He doesn't study, so he gets bad marks.",
+    "prompt": "If...",
+    "answer": "If he studied, he wouldn't get bad marks.",
+    "explanation": "Đưa nguyên nhân hiện tại không có thật sang câu điều kiện loại 2.",
+    "topic": "Conditionals",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "I used to play football every afternoon.",
+    "prompt": "I don't...",
+    "answer": "I don't play football every afternoon anymore.",
+    "explanation": "Used to diễn tả thói quen trong quá khứ không còn ở hiện tại.",
+    "topic": "Used To",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "She no longer lives in this city.",
+    "prompt": "She used...",
+    "answer": "She used to live in this city.",
+    "explanation": "No longer ở hiện tại có thể đổi sang used to ở quá khứ.",
+    "topic": "Used To",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "When I was a child, I often visited my grandparents.",
+    "prompt": "I used...",
+    "answer": "I used to visit my grandparents when I was a child.",
+    "explanation": "Thói quen quá khứ thường xuyên có thể dùng used to.",
+    "topic": "Used To",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "He is a careful driver.",
+    "prompt": "He drives...",
+    "answer": "He drives carefully.",
+    "explanation": "Chuyển adjective + noun sang verb + adverb.",
+    "topic": "Word Form",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "She is a beautiful singer.",
+    "prompt": "She sings...",
+    "answer": "She sings beautifully.",
+    "explanation": "Beautiful là tính từ; bổ nghĩa cho động từ sing dùng beautifully.",
+    "topic": "Word Form",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "He speaks English fluently.",
+    "prompt": "He is...",
+    "answer": "He is a fluent English speaker.",
+    "explanation": "Chuyển adverb fluently sang adjective fluent.",
+    "topic": "Word Form",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "The test was so difficult that I couldn't finish it.",
+    "prompt": "The test was too...",
+    "answer": "The test was too difficult for me to finish.",
+    "explanation": "So + adjective + that ↔ too + adjective + for + object + to V.",
+    "topic": "So / Too",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "The room was so small that we couldn't stay there.",
+    "prompt": "The room was too...",
+    "answer": "The room was too small for us to stay in.",
+    "explanation": "So...that có thể đổi sang too...to khi giữ nguyên nghĩa.",
+    "topic": "So / Too",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "The water is so cold that I can't swim in it.",
+    "prompt": "The water is too...",
+    "answer": "The water is too cold for me to swim in.",
+    "explanation": "So cold that I can't ↔ too cold for me to.",
+    "topic": "So / Too",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "The last time I visited Hue was two years ago.",
+    "prompt": "I haven't...",
+    "answer": "I haven't visited Hue for two years.",
+    "explanation": "The last time ... ago ↔ haven't + V3 + for.",
+    "topic": "Present Perfect",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "It is three years since I last met him.",
+    "prompt": "I haven't...",
+    "answer": "I haven't met him for three years.",
+    "explanation": "It is + time + since + past ↔ haven't + V3 + for + time.",
+    "topic": "Present Perfect",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "He started living here five years ago.",
+    "prompt": "He has...",
+    "answer": "He has lived here for five years.",
+    "explanation": "Started ... ago ↔ has/have + V3 + for.",
+    "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "The film was very boring. We left early.",
+    "prompt": "Because...",
+    "answer": "Because the film was very boring, we left early.",
+    "explanation": "Kết hợp nguyên nhân-kết quả bằng Because + clause.",
+    "topic": "Sentence Combining",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "The weather was bad. We still went camping.",
+    "prompt": "Although...",
+    "answer": "Although the weather was bad, we still went camping.",
+    "explanation": "Kết hợp hai ý tương phản bằng Although.",
+    "topic": "Sentence Combining",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "The man is my teacher. He is standing over there.",
+    "prompt": "The man who...",
+    "answer": "The man who is standing over there is my teacher.",
+    "explanation": "Dùng đại từ quan hệ who cho người làm chủ ngữ.",
+    "topic": "Relative Clauses",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "I bought a book. It was very interesting.",
+    "prompt": "The book which...",
+    "answer": "The book which I bought was very interesting.",
+    "explanation": "Dùng which cho vật trong mệnh đề quan hệ.",
+    "topic": "Relative Clauses",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "This is the girl. Her father is a doctor.",
+    "prompt": "This is the girl whose...",
+    "answer": "This is the girl whose father is a doctor.",
+    "explanation": "Whose dùng để chỉ sở hữu trong mệnh đề quan hệ.",
+    "topic": "Relative Clauses",
+    "level": "Hard",
+    "xp": 20
+  },
+  {
+    "originalSentence": "Let's go to the cinema tonight.",
+    "prompt": "Why don't...",
+    "answer": "Why don't we go to the cinema tonight?",
+    "explanation": "Let's + V ↔ Why don't we + V?",
+    "topic": "Suggestions",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "How about going for a walk?",
+    "prompt": "Let's...",
+    "answer": "Let's go for a walk.",
+    "explanation": "How about + V-ing ↔ Let's + V.",
+    "topic": "Suggestions",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "You should see a doctor.",
+    "prompt": "If I were...",
+    "answer": "If I were you, I would see a doctor.",
+    "explanation": "Lời khuyên có thể đổi sang If I were you, I would...",
+    "topic": "Advice",
+    "level": "Medium",
+    "xp": 15
+  },
+  {
+    "originalSentence": "It isn't necessary for you to come early.",
+    "prompt": "You don't...",
+    "answer": "You don't have to come early.",
+    "explanation": "It isn't necessary ↔ don't have to.",
+    "topic": "Modals",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "It is necessary for students to wear uniforms.",
+    "prompt": "Students have...",
+    "answer": "Students have to wear uniforms.",
+    "explanation": "It is necessary for... ↔ have to.",
+    "topic": "Modals",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "Perhaps Tom will come to the party.",
+    "prompt": "Tom may...",
+    "answer": "Tom may come to the party.",
+    "explanation": "Perhaps + future possibility ↔ may + V.",
+    "topic": "Modals",
     "level": "Easy",
     "xp": 10
   }

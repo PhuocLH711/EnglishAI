@@ -36,10 +36,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private TextView tvDashboardToeic;
     private TextView tvDashboardToeicSub;
 
+    private TextView tvDashboardSentenceRewrite;
+
     private View barDashboardUsers;
     private View barDashboardVocabulary;
     private View barDashboardGrammar;
     private View barDashboardToeic;
+    private View barDashboardSentenceRewrite;
 
     private MaterialCardView cardAdminUsers;
     private MaterialCardView cardAdminVocabulary;
@@ -147,6 +150,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         R.id.tvDashboardToeicSub
                 );
 
+        tvDashboardSentenceRewrite =
+                findViewById(
+                        R.id.tvDashboardSentenceRewrite
+                );
+
         barDashboardUsers =
                 findViewById(
                         R.id.barDashboardUsers
@@ -165,6 +173,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
         barDashboardToeic =
                 findViewById(
                         R.id.barDashboardToeic
+                );
+
+        barDashboardSentenceRewrite =
+                findViewById(
+                        R.id.barDashboardSentenceRewrite
                 );
 
         cardAdminUsers =
@@ -381,6 +394,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         + " đề"
         );
 
+        tvDashboardSentenceRewrite.setText(
+                String.valueOf(
+                        stats.totalSentenceRewrite
+                )
+        );
+
         int maxValue =
                 Math.max(
                         1,
@@ -390,7 +409,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
                                         stats.totalVocabulary,
                                         Math.max(
                                                 stats.totalGrammar,
-                                                stats.totalToeicQuestions
+                                                Math.max(
+                                                        stats.totalToeicQuestions,
+                                                        stats.totalSentenceRewrite
+                                                )
                                         )
                                 )
                         )
@@ -419,6 +441,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 stats.totalToeicQuestions,
                 maxValue
         );
+
+        animateBar(
+                barDashboardSentenceRewrite,
+                stats.totalSentenceRewrite,
+                maxValue
+        );
     }
 
     private void animateBar(
@@ -429,7 +457,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         int minHeight =
                 dpToPx(
-                        22
+                        18
                 );
 
         int maxHeight =
