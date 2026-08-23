@@ -1,10 +1,5 @@
 package adu.nttu.englishai.activities;
 
-import android.util.Log;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -12,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,10 +16,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import adu.nttu.englishai.R;
@@ -32,14 +28,9 @@ import adu.nttu.englishai.fragments.HomeFragment;
 import adu.nttu.englishai.fragments.ProfileFragment;
 import adu.nttu.englishai.fragments.ToeicFragment;
 import adu.nttu.englishai.fragments.VocabularyFragment;
-import adu.nttu.englishai.notifications.RandomLearningReminderWorker;
 import adu.nttu.englishai.notifications.RandomReminderScheduler;
 
 public class MainActivity extends AppCompatActivity {
-
-
-
-
 
     // =========================================================
     // NOTIFICATION PERMISSION
@@ -52,45 +43,53 @@ public class MainActivity extends AppCompatActivity {
     // =========================================================
     private FirebaseFirestore db;
 
-
-
-
     // =========================================================
     // LIFECYCLE
     // =========================================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-// =====================================================
-// KIỂM TRA TÀI KHOẢN ĐANG ĐĂNG NHẬP
-// =====================================================
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // =====================================================
+        // KIỂM TRA TÀI KHOẢN ĐANG ĐĂNG NHẬP
+        // =====================================================
+        FirebaseUser currentUser =
+                FirebaseAuth
+                        .getInstance()
+                        .getCurrentUser();
 
         if (currentUser != null) {
 
-            Log.d("ADMIN_CHECK",
-                    "UID = " + currentUser.getUid());
+            Log.d(
+                    "ADMIN_CHECK",
+                    "UID = " + currentUser.getUid()
+            );
 
-            Log.d("ADMIN_CHECK",
-                    "EMAIL = " + currentUser.getEmail());
+            Log.d(
+                    "ADMIN_CHECK",
+                    "EMAIL = " + currentUser.getEmail()
+            );
 
         } else {
 
-            Log.d("ADMIN_CHECK",
-                    "CHUA DANG NHAP");
+            Log.d(
+                    "ADMIN_CHECK",
+                    "CHUA DANG NHAP"
+            );
         }
 
-// =====================================================
-// 1. FIRESTORE
-// =====================================================
-        db = FirebaseFirestore.getInstance();
+        // =====================================================
+        // 1. FIRESTORE
+        // =====================================================
+        db =
+                FirebaseFirestore.getInstance();
 
-// =====================================================
-// 2. ĐĂNG KÝ CALLBACK XIN QUYỀN NOTIFICATION
-// =====================================================
+        // =====================================================
+        // 2. ĐĂNG KÝ CALLBACK XIN QUYỀN NOTIFICATION
+        // =====================================================
         notificationPermissionLauncher =
                 registerForActivityResult(
                         new ActivityResultContracts.RequestPermission(),
@@ -98,136 +97,126 @@ public class MainActivity extends AppCompatActivity {
 
                             if (isGranted) {
 
+                                // Người dùng vừa cấp quyền
+                                // → tạo lịch đầu tiên
                                 RandomReminderScheduler
-                                        .scheduleNextReminder(
+                                        .scheduleInitialReminder(
                                                 MainActivity.this
                                         );
-
-                                testNotificationNow();
                             }
                         }
                 );
 
         // =====================================================
-        // 2. CÀI ĐẶT THÔNG BÁO RANDOM
+        // 3. CÀI ĐẶT THÔNG BÁO RANDOM
         // =====================================================
         setupRandomNotification();
 
         // =====================================================
-        // 3. TEST NOTIFICATION NGAY
-        // Chỉ dùng tạm để kiểm tra
-        // =====================================================
-        testNotificationNow();
-
-        // =====================================================
-        // 4. FIRESTORE
-        // =====================================================
-        db =
-                FirebaseFirestore.getInstance();
-
-        // =====================================================
-        // 5. AI TUTOR FLOATING BUTTON
+        // 4. AI TUTOR FLOATING BUTTON
         // =====================================================
         setupDraggableAiTutor();
 
         // =====================================================
-        // 6. BOTTOM NAVIGATION
+        // 5. BOTTOM NAVIGATION
         // =====================================================
         BottomNavigationView bottomNav =
                 findViewById(
                         R.id.bottom_navigation
                 );
 
-        bottomNav.setOnItemSelectedListener(item -> {
+        bottomNav.setOnItemSelectedListener(
+                item -> {
 
-            int itemId =
-                    item.getItemId();
+                    int itemId =
+                            item.getItemId();
 
-            // =================================================
-            // HOME
-            // =================================================
-            if (itemId == R.id.nav_home) {
+                    // =========================================
+                    // HOME
+                    // =========================================
+                    if (itemId == R.id.nav_home) {
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_container,
-                                new HomeFragment()
-                        )
-                        .commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(
+                                        R.id.fragment_container,
+                                        new HomeFragment()
+                                )
+                                .commit();
 
-                return true;
-            }
+                        return true;
+                    }
 
-            // =================================================
-            // VOCABULARY
-            // =================================================
-            else if (itemId == R.id.nav_vocabulary) {
+                    // =========================================
+                    // VOCABULARY
+                    // =========================================
+                    else if (itemId == R.id.nav_vocabulary) {
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_container,
-                                new VocabularyFragment()
-                        )
-                        .commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(
+                                        R.id.fragment_container,
+                                        new VocabularyFragment()
+                                )
+                                .commit();
 
-                return true;
-            }
+                        return true;
+                    }
 
-            // =================================================
-            // TOEIC
-            // =================================================
-            else if (itemId == R.id.nav_toeic) {
+                    // =========================================
+                    // TOEIC
+                    // =========================================
+                    else if (itemId == R.id.nav_toeic) {
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_container,
-                                new ToeicFragment()
-                        )
-                        .commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(
+                                        R.id.fragment_container,
+                                        new ToeicFragment()
+                                )
+                                .commit();
 
-                return true;
-            }
+                        return true;
+                    }
 
-            // =================================================
-            // GAME
-            // =================================================
-            else if (itemId == R.id.nav_game) {
+                    // =========================================
+                    // GAME
+                    // =========================================
+                    else if (itemId == R.id.nav_game) {
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_container,
-                                new GameFragment()
-                        )
-                        .commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(
+                                        R.id.fragment_container,
+                                        new GameFragment()
+                                )
+                                .commit();
 
-                return true;
-            }
+                        return true;
+                    }
 
-            // =================================================
-            // PROFILE / PROGRESS
-            // =================================================
-            else if (itemId == R.id.nav_progress) {
+                    // =========================================
+                    // PROFILE / PROGRESS
+                    // =========================================
+                    else if (itemId == R.id.nav_progress) {
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_container,
-                                new ProfileFragment()
-                        )
-                        .commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(
+                                        R.id.fragment_container,
+                                        new ProfileFragment()
+                                )
+                                .commit();
 
-                return true;
-            }
+                        return true;
+                    }
 
-            return false;
-        });
+                    return false;
+                }
+        );
 
         // =====================================================
-        // 7. MỞ APP → TRANG HOME
+        // 6. MỞ APP → TRANG HOME
         // =====================================================
         if (savedInstanceState == null) {
 
@@ -244,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
 
         // =========================================================
         // ANDROID 13+
-        // Cần quyền POST_NOTIFICATIONS
         // =========================================================
         if (Build.VERSION.SDK_INT
                 >= Build.VERSION_CODES.TIRAMISU) {
@@ -255,61 +243,34 @@ public class MainActivity extends AppCompatActivity {
             ) == PackageManager.PERMISSION_GRANTED) {
 
                 // Đã có quyền
-                // → tạo lịch random 1 / 2 / 3 / 5 ngày
+                // → chỉ tạo lịch nếu chưa có lịch đang chờ
                 RandomReminderScheduler
-                        .scheduleNextReminder(
+                        .scheduleInitialReminder(
                                 this
                         );
 
             } else {
 
                 // Chưa có quyền
-                // → hỏi người dùng
+                // → xin quyền
                 notificationPermissionLauncher
                         .launch(
                                 Manifest.permission.POST_NOTIFICATIONS
                         );
             }
 
-        } else {
+        }
 
-            // Android < 13 không cần runtime permission
+        // =========================================================
+        // ANDROID < 13
+        // =========================================================
+        else {
+
             RandomReminderScheduler
-                    .scheduleNextReminder(
+                    .scheduleInitialReminder(
                             this
                     );
         }
-    }
-
-    // =========================================================================
-    // TEST NOTIFICATION NGAY
-    // =========================================================================
-    private void testNotificationNow() {
-
-        // Android 13+
-        if (Build.VERSION.SDK_INT
-                >= Build.VERSION_CODES.TIRAMISU) {
-
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED) {
-
-                return;
-            }
-        }
-
-        OneTimeWorkRequest testNotificationRequest =
-                new OneTimeWorkRequest.Builder(
-                        RandomLearningReminderWorker.class
-                )
-                        .build();
-
-        WorkManager
-                .getInstance(this)
-                .enqueue(
-                        testNotificationRequest
-                );
     }
 
     // =========================================================================
@@ -346,9 +307,9 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (event.getActionMasked()) {
 
-                            // =================================================
+                            // =========================================
                             // TOUCH DOWN
-                            // =================================================
+                            // =========================================
                             case MotionEvent.ACTION_DOWN:
 
                                 dX =
@@ -367,9 +328,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 return true;
 
-                            // =================================================
+                            // =========================================
                             // MOVE
-                            // =================================================
+                            // =========================================
                             case MotionEvent.ACTION_MOVE:
 
                                 float newX =
@@ -429,9 +390,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 return true;
 
-                            // =================================================
+                            // =========================================
                             // TOUCH UP
-                            // =================================================
+                            // =========================================
                             case MotionEvent.ACTION_UP:
 
                                 float endX =
@@ -446,18 +407,17 @@ public class MainActivity extends AppCompatActivity {
                                                 endY - startY
                                         );
 
-                                // =================================================
+                                // =====================================
                                 // CLICK
-                                // =================================================
+                                // =====================================
                                 if (distance < CLICK_THRESHOLD) {
 
                                     view.performClick();
-
                                 }
 
-                                // =================================================
+                                // =====================================
                                 // DRAG → HÚT VỀ MÉP
-                                // =================================================
+                                // =====================================
                                 else {
 
                                     View parentView =
@@ -504,34 +464,40 @@ public class MainActivity extends AppCompatActivity {
         // =========================================================
         // CLICK AI TUTOR
         // =========================================================
-        layoutAiTutor.setOnClickListener(view -> {
+        layoutAiTutor.setOnClickListener(
+                view -> {
 
-            view.animate()
-                    .scaleX(1.15f)
-                    .scaleY(1.15f)
-                    .setDuration(120)
-                    .withEndAction(() -> {
+                    view.animate()
+                            .scaleX(1.15f)
+                            .scaleY(1.15f)
+                            .setDuration(120)
+                            .withEndAction(
+                                    () -> {
 
-                        view.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(120)
-                                .withEndAction(() -> {
+                                        view.animate()
+                                                .scaleX(1f)
+                                                .scaleY(1f)
+                                                .setDuration(120)
+                                                .withEndAction(
+                                                        () -> {
 
-                                    Intent intent =
-                                            new Intent(
-                                                    MainActivity.this,
-                                                    AiTutorActivity.class
-                                            );
+                                                            Intent intent =
+                                                                    new Intent(
+                                                                            MainActivity.this,
+                                                                            AiTutorActivity.class
+                                                                    );
 
-                                    startActivity(
-                                            intent
-                                    );
-                                })
-                                .start();
-                    })
-                    .start();
-        });
+                                                            startActivity(
+                                                                    intent
+                                                            );
+                                                        }
+                                                )
+                                                .start();
+                                    }
+                            )
+                            .start();
+                }
+        );
     }
 
     // =========================================================================

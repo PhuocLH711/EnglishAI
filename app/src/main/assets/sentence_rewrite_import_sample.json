@@ -1,0 +1,20 @@
+[
+  {
+    "originalSentence": "I started learning English two years ago.",
+    "prompt": "I have...",
+    "answer": "I have learned English for two years.",
+    "explanation": "Dùng thì hiện tại hoàn thành với for + khoảng thời gian.",
+    "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  },
+  {
+    "originalSentence": "She started working here in 2022.",
+    "prompt": "She has...",
+    "answer": "She has worked here since 2022.",
+    "explanation": "Dùng hiện tại hoàn thành với since + mốc thời gian.",
+    "topic": "Present Perfect",
+    "level": "Easy",
+    "xp": 10
+  }
+]

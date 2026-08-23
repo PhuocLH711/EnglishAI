@@ -21,18 +21,32 @@ import java.util.Random;
 import adu.nttu.englishai.R;
 import adu.nttu.englishai.activities.MainActivity;
 
-public class RandomLearningReminderWorker extends Worker {
+public class RandomLearningReminderWorker
+        extends Worker {
 
+    // =========================================================
+    // CHANNEL
+    // =========================================================
     private static final String CHANNEL_ID =
             "englishai_learning_reminder";
+
+    // Cố định ID để tránh notification cũ bị chất đống
+    private static final int NOTIFICATION_ID =
+            1001;
 
     public RandomLearningReminderWorker(
             @NonNull Context context,
             @NonNull WorkerParameters params
     ) {
-        super(context, params);
+        super(
+                context,
+                params
+        );
     }
 
+    // =========================================================
+    // WORK
+    // =========================================================
     @NonNull
     @Override
     public Result doWork() {
@@ -40,7 +54,9 @@ public class RandomLearningReminderWorker extends Worker {
         Context context =
                 getApplicationContext();
 
-        createNotificationChannel(context);
+        createNotificationChannel(
+                context
+        );
 
         // =====================================================
         // TIÊU ĐỀ NGẪU NHIÊN
@@ -59,7 +75,7 @@ public class RandomLearningReminderWorker extends Worker {
 
                 "Bạn ơi, học bài thôi 😎",
 
-                "EnglishAI có chuyện muốn nói 👀"
+                "Cùng học EnglishAI nhé ✨"
         };
 
         // =====================================================
@@ -69,43 +85,27 @@ public class RandomLearningReminderWorker extends Worker {
 
                 "Hôm nay bạn đã học tiếng Anh chưa? 👀",
 
-                "EnglishAI nhớ bạn rồi đó 🥹",
-
                 "5 phút thôi cũng được, vào học nha 📚",
 
-                "Streak đang đợi bạn 🔥",
+                "Một từ mới hôm nay cũng là một bước tiến rồi ✨",
 
-                "Một từ mới hôm nay cũng là tiến bộ rồi!",
-
-                "Có người định bỏ học tiếng Anh hôm nay kìa 👀",
-
-                "Não bạn đang chờ một chút English 🧠✨",
-
-                "Vào làm thử một câu TOEIC nào 😎",
-
-                "Bạn biến mất lâu quá rồi đó 👀",
+                "Vào làm thử vài câu TOEIC nào 😎",
 
                 "EnglishAI có bài đang chờ bạn nè 📖",
-
-                "Một ngày không học cũng được... nhưng 5 ngày thì hơi lâu nha 😭",
 
                 "Hôm nay thử học 10 từ mới nhé 🚀",
 
                 "Đừng để streak của bạn về 0 nha 🔥",
 
-                "5 phút EnglishAI rồi quay lại lướt điện thoại cũng được 😌",
-
-                "Tương lai của bạn đang cảm ơn 5 phút học hôm nay đó ✨",
-
-                "Có bài TOEIC muốn thách đấu với bạn 😎",
-
-                "Bạn còn nhớ EnglishAI không đó 🥹",
+                "Dành vài phút cho tiếng Anh hôm nay nhé 💙",
 
                 "Một chút tiếng Anh trước khi kết thúc ngày nhé 🌙",
 
-                "Học một câu thôi cũng được. Quan trọng là đừng bỏ cuộc 💪",
+                "Học một câu thôi cũng được. Quan trọng là duy trì mỗi ngày 💪",
 
-                "EnglishAI đang kiểm tra xem bạn còn chăm học không 👀"
+                "Bạn đã sẵn sàng cho một bài học mới chưa? 🎯",
+
+                "Mỗi ngày tiến bộ một chút cùng EnglishAI nhé 📚"
         };
 
         Random random =
@@ -126,7 +126,7 @@ public class RandomLearningReminderWorker extends Worker {
                         ];
 
         // =====================================================
-        // BẤM THÔNG BÁO → MỞ APP
+        // BẤM NOTIFICATION → MỞ APP
         // =====================================================
         Intent intent =
                 new Intent(
@@ -137,12 +137,13 @@ public class RandomLearningReminderWorker extends Worker {
         intent.setFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
         );
 
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(
                         context,
-                        0,
+                        1001,
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                                 | PendingIntent.FLAG_IMMUTABLE
@@ -157,7 +158,14 @@ public class RandomLearningReminderWorker extends Worker {
                         CHANNEL_ID
                 )
 
-                        // Chỉ còn 1 icon bên trái
+                        // =================================================
+                        // ICON ENGLISHAI BÊN TRÁI
+                        //
+                        // Android notification small icon bắt buộc
+                        // là icon đơn sắc.
+                        //
+                        // Không setLargeIcon để KHÔNG có ảnh bên phải.
+                        // =================================================
                         .setSmallIcon(
                                 R.drawable.ic_stat_englishai
                         )
@@ -173,14 +181,26 @@ public class RandomLearningReminderWorker extends Worker {
                         .setStyle(
                                 new NotificationCompat
                                         .BigTextStyle()
-                                        .bigText(message)
+                                        .bigText(
+                                                message
+                                        )
                         )
 
                         .setPriority(
                                 NotificationCompat.PRIORITY_DEFAULT
                         )
 
-                        .setAutoCancel(true)
+                        .setCategory(
+                                NotificationCompat.CATEGORY_REMINDER
+                        )
+
+                        .setAutoCancel(
+                                true
+                        )
+
+                        .setOnlyAlertOnce(
+                                true
+                        )
 
                         .setContentIntent(
                                 pendingIntent
@@ -197,32 +217,41 @@ public class RandomLearningReminderWorker extends Worker {
                     Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED) {
 
-                scheduleNext(context);
+                // Chưa có quyền
+                // vẫn tạo lịch cho lần kế tiếp
+                scheduleNext(
+                        context
+                );
 
                 return Result.success();
             }
         }
 
         // =====================================================
-        // HIỂN THỊ
+        // HIỂN THỊ NOTIFICATION
         // =====================================================
         NotificationManagerCompat
-                .from(context)
+                .from(
+                        context
+                )
                 .notify(
-                        (int) System.currentTimeMillis(),
+                        NOTIFICATION_ID,
                         builder.build()
                 );
 
         // =====================================================
-        // LÊN LỊCH LẦN TIẾP THEO
+        // SAU KHI GỬI XONG
+        // RANDOM TIẾP 1 / 2 / 3 / 5 NGÀY
         // =====================================================
-        scheduleNext(context);
+        scheduleNext(
+                context
+        );
 
         return Result.success();
     }
 
     // =========================================================
-    // CHANNEL
+    // TẠO NOTIFICATION CHANNEL
     // =========================================================
     private void createNotificationChannel(
             Context context
@@ -239,7 +268,7 @@ public class RandomLearningReminderWorker extends Worker {
                     );
 
             channel.setDescription(
-                    "Thông báo nhắc người dùng quay lại học tiếng Anh"
+                    "Nhắc bạn quay lại EnglishAI để duy trì việc học tiếng Anh."
             );
 
             NotificationManager manager =
@@ -257,7 +286,7 @@ public class RandomLearningReminderWorker extends Worker {
     }
 
     // =========================================================
-    // RANDOM LẦN TIẾP THEO
+    // LÊN LỊCH CHO LẦN SAU
     // =========================================================
     private void scheduleNext(
             Context context

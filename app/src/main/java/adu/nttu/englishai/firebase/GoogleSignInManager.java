@@ -54,14 +54,6 @@ public class GoogleSignInManager {
             GoogleSignInCallback callback
     ) {
 
-        // =========================================================
-        // BUTTON FLOW
-        //
-        // Quan trọng:
-        // Không dùng GetGoogleIdOption ở đây nữa.
-        //
-        // Vì app có nút "Tiếp tục với Google" riêng.
-        // =========================================================
         GetSignInWithGoogleOption googleOption =
                 new GetSignInWithGoogleOption.Builder(
                         activity.getString(
@@ -70,9 +62,6 @@ public class GoogleSignInManager {
                 )
                         .build();
 
-        // =========================================================
-        // TẠO REQUEST
-        // =========================================================
         GetCredentialRequest request =
                 new GetCredentialRequest.Builder()
                         .addCredentialOption(
@@ -80,9 +69,6 @@ public class GoogleSignInManager {
                         )
                         .build();
 
-        // =========================================================
-        // MỞ GOOGLE SIGN-IN
-        // =========================================================
         credentialManager.getCredentialAsync(
                 activity,
                 request,
@@ -93,9 +79,7 @@ public class GoogleSignInManager {
                         GetCredentialResponse,
                         GetCredentialException>() {
 
-                    // =================================================
-                    // GOOGLE TRẢ CREDENTIAL
-                    // =================================================
+
                     @Override
                     public void onResult(
                             GetCredentialResponse result

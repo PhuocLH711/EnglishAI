@@ -41,9 +41,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true">
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,9 +105,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true">
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -164,7 +160,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
         <!-- GAME 3: XẾP CÂU NGỮ PHÁP -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardGrammarSprint"
@@ -174,9 +169,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true">
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -231,9 +224,9 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- GAME 3: LẬT THẺ TÌM CẶP -->
+        <!-- GAME 4: VIẾT LẠI CÂU -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardMemoryMatch"
+            android:id="@+id/cardSentenceRewrite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -243,6 +236,73 @@
             app:cardBackgroundColor="#FFFFFF"
             android:clickable="true"
             android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:text="✍️"
+                    android:textSize="34sp"
+                    android:gravity="center"
+                    android:background="#E8EAF6"
+                    android:layout_marginEnd="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Viết Lại Câu"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A1A" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Viết câu mới đúng ngữ pháp nhưng vẫn giữ nguyên nghĩa."
+                        android:textSize="13sp"
+                        android:textColor="#757575"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnOpenSentenceRewrite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Viết ngay"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_quiz"
+                    android:backgroundTint="#5E35B1"
+                    android:paddingHorizontal="16dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- GAME 5: LẬT THẺ TÌM CẶP -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMemoryMatch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -297,7 +357,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- GAME 4: LUYỆN PHÁT ÂM (AI MICROPHONE) -->
+        <!-- GAME 6: LUYỆN PHÁT ÂM -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardSpeaking"
             android:layout_width="match_parent"
@@ -306,9 +366,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true">
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"

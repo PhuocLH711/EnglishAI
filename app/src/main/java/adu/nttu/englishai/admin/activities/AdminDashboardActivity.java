@@ -45,6 +45,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private MaterialCardView cardAdminVocabulary;
     private MaterialCardView cardAdminGrammar;
     private MaterialCardView cardAdminToeic;
+    private MaterialCardView cardAdminSentenceRewrite;
 
     private AdminAccessManager accessManager;
     private AdminDashboardRepository dashboardRepository;
@@ -185,6 +186,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 findViewById(
                         R.id.cardAdminToeic
                 );
+
+        cardAdminSentenceRewrite =
+                findViewById(
+                        R.id.cardAdminSentenceRewrite
+                );
     }
 
     private void checkPermission() {
@@ -285,6 +291,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
                                 new Intent(
                                         AdminDashboardActivity.this,
                                         ToeicAdminActivity.class
+                                )
+                        )
+        );
+
+        cardAdminSentenceRewrite.setOnClickListener(
+                view ->
+                        startActivity(
+                                new Intent(
+                                        AdminDashboardActivity.this,
+                                        SentenceRewriteManagementActivity.class
                                 )
                         )
         );

@@ -68,32 +68,26 @@ public class ConversationManager {
         );
     }
 
-    // =========================================================================
-    // HÀM 1: CHUẨN BỊ MỘT PHÒNG CHAT MỚI (LAZY INITIALIZATION)
-    // =========================================================================
-    // LƯU Ý QUAN TRỌNG: Hàm này CHỈ TẠO ID trong RAM điện thoại chứ CHƯA GỌI FIREBASE!
-    // Tránh việc người dùng bấm tạo phòng mới rồi thoát ra ngay làm database bị rác phòng trống.
+
     public void startNewConversation(
             @NonNull String topicCode,
             @NonNull String topicName
     ) {
-        // Tạo một mã UUID ngẫu nhiên duy nhất cho phòng chat
+
         currentConversationId =
                 UUID.randomUUID().toString();
 
         currentTopicCode = topicCode;
         currentTopicName = topicName;
 
-        // Đặt lại cờ: Phòng này mới chỉ ở trên RAM, chưa có trên Cloud Firestore
+
         conversationCreated = false;
         isCreatingConversation = false;
 
-        pendingMessages.clear(); // Xóa sạch hàng đợi tin nhắn cũ
+        pendingMessages.clear();
     }
 
-    // =========================================================================
-    // HÀM 2: MỞ LẠI MỘT PHÒNG CHAT CŨ TỪ LỊCH SỬ
-    // =========================================================================
+
     public void openExistingConversation(
             @NonNull String conversationId,
             @NonNull String topicCode,
@@ -103,61 +97,51 @@ public class ConversationManager {
         currentTopicCode = topicCode;
         currentTopicName = topicName;
 
-        // Đặt cờ = true vì phòng cũ này chắc chắn đã tồn tại trên Firebase rồi
+
         conversationCreated = true;
         isCreatingConversation = false;
 
         pendingMessages.clear();
     }
-
-    // =========================================================================
-    // HÀM QUAN TRỌNG NHẤT: ĐIỀU PHỐI LƯU TIN NHẮN (MESSAGE ROUTER & BUFFERING)
-    // =========================================================================
     public void saveMessage(
             @NonNull AiMessage message
     ) {
-        // Kiểm tra bảo mật: Nếu chưa đăng nhập thì không lưu vào Cloud
+
         if (!chatRepository.isUserLoggedIn()) {
             return;
         }
 
-        // TRƯỜNG HỢP 1: Nếu phòng chat đã được tạo thành công trên Firebase từ trước
-        // -> Gửi thẳng tin nhắn này lên Cloud lưu luôn
+
         if (conversationCreated) {
             saveMessageDirectly(message);
             return;
         }
 
-        // TRƯỜNG HỢP 2: Phòng chat CHƯA CÓ trên Cloud (Đây là tin nhắn đầu tiên của phòng mới)
-        // -> Nhốt tạm tin nhắn này vào hàng đợi bộ nhớ tạm (pendingMessages)
+
         pendingMessages.add(message);
 
-        // CƠ CHẾ KHÓA CHẶN (Race Condition Protection):
-        // Nếu hệ thống đang trong quá trình gọi mạng tạo phòng rồi thì không gọi tạo nữa, chỉ chờ thôi
+
         if (isCreatingConversation) {
             return;
         }
 
-        // BÍ KÍP ĐỒ ÁN: Chỉ khi tin nhắn này là do NGƯỜI DÙNG gửi (isUser = true) thì mới kích hoạt tạo phòng!
-        // Nếu là lời chào tự động của AI thì bỏ qua, không tạo phòng trên Firebase.
+
         if (!message.isUser()) {
             return;
         }
 
-        // Bắt đầu gọi truy vấn lên Firebase để tạo phòng chat thực tế
+
         createConversation(message);
     }
 
-    // =========================================================================
-    // HÀM QUAN TRỌNG: TẠO PHÒNG CHAT TRÊN CLOUD & XẢ HÀNG ĐỢI (BUFFER FLUSHING)
-    // =========================================================================
+
     private void createConversation(
             @NonNull AiMessage firstUserMessage
     ) {
-        // Bật cờ khóa: Đang gọi mạng tạo phòng, các tin nhắn đến sau hãy chờ trong hàng đợi
+
         isCreatingConversation = true;
 
-        // Tự động sinh tiêu đề phòng chat dựa vào câu hỏi đầu tiên của người dùng
+
         String title =
                 ConversationTitleGenerator.generate(
                         firstUserMessage.getContent()

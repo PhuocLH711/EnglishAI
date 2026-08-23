@@ -187,7 +187,6 @@
                         android:orientation="horizontal"
                         android:weightSum="4">
 
-                        <!-- USERS -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -231,7 +230,6 @@
 
                         </LinearLayout>
 
-                        <!-- VOCABULARY -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -274,7 +272,6 @@
 
                         </LinearLayout>
 
-                        <!-- GRAMMAR -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -317,7 +314,6 @@
 
                         </LinearLayout>
 
-                        <!-- TOEIC -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -459,7 +455,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="24dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="#FFFFFF"
@@ -475,6 +470,33 @@
                     android:gravity="center_vertical"
                     android:padding="18dp"
                     android:text="📘   TOEIC"
+                    android:textColor="#292B3D"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAdminSentenceRewrite"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="19dp"
+                app:cardElevation="0dp"
+                app:rippleColor="#F0EDFF"
+                app:strokeColor="#E6E7F1"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:padding="18dp"
+                    android:text="✍️   Viết lại câu"
                     android:textColor="#292B3D"
                     android:textSize="16sp"
                     android:textStyle="bold" />

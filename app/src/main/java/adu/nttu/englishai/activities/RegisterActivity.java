@@ -122,9 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .toString()
                         .trim();
 
-        // =====================================================
-        // NAME
-        // =====================================================
+
         if (TextUtils.isEmpty(name)) {
 
             edtName.setError(
@@ -136,9 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // =====================================================
-        // EMAIL
-        // =====================================================
+
         if (TextUtils.isEmpty(email)) {
 
             edtEmail.setError(
@@ -163,9 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // =====================================================
-        // PASSWORD
-        // =====================================================
+
         if (TextUtils.isEmpty(password)) {
 
             edtPassword.setError(
@@ -188,9 +182,6 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // =====================================================
-        // CONFIRM PASSWORD
-        // =====================================================
         if (TextUtils.isEmpty(confirmPassword)) {
 
             edtConfirmPassword.setError(

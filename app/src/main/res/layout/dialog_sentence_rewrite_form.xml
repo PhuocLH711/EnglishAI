@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <EditText
+            android:id="@+id/edtOriginal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Câu gốc"/>
+
+        <EditText
+            android:id="@+id/edtPrompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Bắt đầu bằng..."/>
+
+        <EditText
+            android:id="@+id/edtAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Đáp án đúng"/>
+
+        <EditText
+            android:id="@+id/edtExplanation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Giải thích"/>
+
+        <EditText
+            android:id="@+id/edtTopic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Chủ đề, ví dụ Present Perfect"/>
+
+        <EditText
+            android:id="@+id/edtLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Mức độ, ví dụ Easy"/>
+
+        <EditText
+            android:id="@+id/edtXp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="XP, mặc định 10"
+            android:inputType="number"/>
+
+    </LinearLayout>
+</ScrollView>

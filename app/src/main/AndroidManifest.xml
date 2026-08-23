@@ -32,9 +32,11 @@
         <activity
             android:name=".admin.activities.GrammarManagementActivity"
             android:exported="false" />
+
         <activity
             android:name=".admin.activities.VocabularyManagementActivity"
             android:exported="false" />
+
         <activity
             android:name=".admin.activities.UserManagementActivity"
             android:exported="false" />
@@ -50,6 +52,15 @@
         <activity
             android:name=".admin.activities.ToeicImportActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".admin.activities.SentenceRewriteManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.activities.SentenceRewriteImportActivity"
+            android:exported="false" />
+
 
         <!-- ================= STUDENT ================= -->
         <activity
